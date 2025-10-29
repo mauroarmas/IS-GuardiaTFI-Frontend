@@ -19,8 +19,9 @@ function ModuloPacientes() {
 
   const fetchData = async () => {
     try {
-      console.log(`${import.meta.env.VITE_BACKEND_URL}/pacientes`);
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/paciente`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/paciente`
+      );
 
       setPacientes(response.data);
     } catch (error) {
@@ -55,7 +56,6 @@ function ModuloPacientes() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
 
   return (
     <div className="backPrincipal ">
@@ -107,7 +107,6 @@ function ModuloPacientes() {
                   <td>{paciente.nombre}</td>
                   <td>{paciente.obraSocial}</td>
                   <td>{paciente.domicilio}</td>
-
                 </tr>
               ))}
             </tbody>

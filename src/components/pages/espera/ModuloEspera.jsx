@@ -3,93 +3,61 @@ import {
   Table,
   DropdownButton,
   Dropdown,
-  Form,
-  Modal,
-  Button,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
-import Swal from "sweetalert2";
 import axios from "axios";
-import { formatDate } from "../../../helpers/functions";
 import { useForm } from "react-hook-form";
-import PruebaGrafico from "./PruebaGrafico";
+import Grafico from "./Grafico";
 
 function App() {
   const {
   } = useForm();
 
-  const [proyects, setProyects] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const [incomes, setIncomes] = useState([]);
   const [filter, setFilter] = useState("todos");
   const [chartData, setChartData] = useState({});
 
-  const fetchProyects = async (status) => {
-    const endpoint =
-      status === "todos"
-        ? "http://localhost:8080/api/proyecto"
-        : `http://localhost:8080/api/proyecto/${status}`;
+  const fetchIncomes = async () => {
+
+    const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`
+
     try {
       const response = await axios.get(endpoint);
-      const proyectos =
-        status === "todos" ? response.data : response.data.proyectoEStado;
-      setProyects(proyectos);
+      setIncomes(response.data);
+      console.log(response.data.map(i => i.nivelEmergencia));
 
-      // Calcular la cantidad de proyectos por estado
-      const resumen = proyectos.reduce(
-        (acc, proyecto) => {
-          acc[proyecto.estadoProyecto] =
-            (acc[proyecto.estadoProyecto] || 0) + 1;
+
+      // Gráfico de niveles de urgencia
+      const resumen = response.data.reduce(
+        (acc, ingreso) => {
+          acc[ingreso.nivelEmergencia] =
+            (acc[ingreso.nivelEmergencia] || 0) + 1;
           return acc;
         },
-        { "en planificacion": 0, "en curso": 0, terminado: 0 }
+        { Emergencia: 0, Crítica: 0, Urgencia: 0, "Urgencia Menor": 0, "Sin Urgencia": 0 }
       );
-
       setChartData({
-        labels: ["En Planificación", "En Curso", "Terminado"],
+        labels: ["Crítica", "Emergencia", "Urgencia", "Urgencia Menor", "Sin Urgencia"],
         data: [
-          resumen["en planificacion"],
-          resumen["en curso"],
-          resumen["terminado"],
+          resumen["Crítica"],
+          resumen["Emergencia"],
+          resumen["Urgencia"],
+          resumen["Urgencia Menor"],
+          resumen["Sin Urgencia"],
         ],
       });
+      console.log(chartData.data);
+
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleFilterChange = (newFilter) => {
-    setFilter(newFilter);
-    fetchProyects(newFilter); // Llama al fetch con el nuevo filtro
-    setCurrentPage(1); // Reinicia la paginación
-  };
-
-
   useEffect(() => {
-    fetchProyects(filter); // Llama al fetch inicial con el filtro actual
-  }, [filter]);
-
-  // Paginación
-  const [currentPage, setCurrentPage] = useState(1);
-  const proyectsPerPage = 10; // Define el número de filas por página
-  const indexOfLastProyect = currentPage * proyectsPerPage;
-  const indexOfFirstProyect = indexOfLastProyect - proyectsPerPage;
-  const filteredProyects = proyects.filter(
-    (proyect) =>
-      proyect.nombreProyecto.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      proyect.idProyecto.toString().includes(searchTerm)
-  );
-  const currentProyects = filteredProyects.slice(
-    indexOfFirstProyect,
-    indexOfLastProyect
-  );
-  const totalPages = Math.ceil(filteredProyects.length / proyectsPerPage);
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-  //Fin Paginación
+    fetchIncomes();
+  }, []);
 
   return (
     <div className="backPrincipal ">
@@ -115,7 +83,7 @@ function App() {
               id="state-dropdown"
               title={`Filtrar por estado: ${filter}`}
               className="mb-3"
-              onSelect={handleFilterChange}
+              // onSelect={handleFilterChange}
             >
               <Dropdown.Item eventKey="todos">Todos</Dropdown.Item>
               <Dropdown.Item eventKey="en planificacion">
@@ -133,20 +101,21 @@ function App() {
                 <thead>
                   <tr>
                     <th style={{ width: "5%" }}>ID</th>
-                    <th>Nombre Proyecto</th>
-                    <th style={{ width: "12%" }}>Fecha </th>
-                    <th style={{ width: "13%" }}>Cliente</th>
+                    <th>Nivel de Urgencia</th>
+                    <th>Paciente</th>
+                    <th style={{ width: "12%" }}>Informe </th>
+                    <th style={{ width: "13%" }}>Estado</th>
 
                   </tr>
                 </thead>
                 <tbody>
-                  {currentProyects.map((proyect) => (
-                    <tr key={proyect.idProyecto} style={{ width: "5%" }}>
-                      <td>{proyect.idProyecto}</td>
-                      <td>{proyect.nombreProyecto}</td>
-                      <td>{formatDate(proyect.fechaInicio)}</td>
-
-                      <td>{proyect.cuitCliente}</td>
+                  {incomes.map((ingreso) => (
+                    <tr key={ingreso.id} style={{ width: "5%" }}>
+                      <td>{ingreso.id}</td>
+                      <td>{ingreso.nivelEmergencia}</td>
+                      <td>{ingreso.pacienteId}</td>
+                      <td>{ingreso.informe}</td>
+                      <td>{ingreso.estadoIngreso}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -154,54 +123,13 @@ function App() {
             </div>
             <div className="w-25 mx-auto">
               <h4 className="text-center mt-3">Niveles de Urgencia</h4>
-              <PruebaGrafico
+              <Grafico
                 arrayLabels={chartData.labels || []}
                 arrayData={chartData.data || []}
               />
             </div>
           </div>
 
-
-          {/* Paginación */}
-          <nav aria-label="Paginación">
-            <ul className="pagination justify-content-center">
-              <li className={`page-item ${currentPage === 1 && "disabled"}`}>
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
-                  Anterior
-                </button>
-              </li>
-              {[...Array(totalPages)].map((_, index) => (
-                <li
-                  key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => handlePageChange(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages && "disabled"
-                }`}
-              >
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
-                  Siguiente
-                </button>
-              </li>
-            </ul>
-          </nav>
         </div>
       </Container>
     </div>
