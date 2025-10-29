@@ -1,0 +1,61 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  
+}
+.contenido{
+  position: relative;
+}
+h2{
+  font-family: "Oswald", sans-serif;
+}
+
+.backPrincipal {
+  margin: 0;
+  width: 100%;
+  background-image: url("../assets/back.svg"); 
+  background-size: cover; 
+  background-position: bottom; 
+  background-repeat: no-repeat; 
+  min-height: 100vh; 
+
+}
+
+
+.imgprincipal {
+  width: 200px;
+  height: 50px;
+}
+.fixed-table {
+  table-layout: fixed;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+.dropdown-menu {
+  z-index: 1050;    /* Asegura que el menú esté encima de otros elementos */
+}
+
+
+.imgNavbar {
+  width: 75px;
+  height: 60px;
+}
+.indexTitle{
+  margin: 45px 0 25px 55px;
+}
+.abWidth{
+  width: 10px;
+}
+
+#loginButtom{
+  color: #3e72af;
+  font-size: 38px;
+}
+#signUpButtom{
+  color: #3e72af;
+  font-size: 27px;
+  margin-right: 10px;
+  margin-top: 2px;
+}

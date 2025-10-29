@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+.admin-title {
+  font-family: "Rubik", sans-serif;
+}
+
+.table-container {
+  font-family: "Lato", sans-serif;
+}
+
+.mainContainer {
+  margin-bottom: 100px;
+}
+
+.filterContainer {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Rubik", sans-serif;
+}
+
+.search-bar {
+  width: 57%;
+}
+
+#state-dropdown {
+  background-color: #f7e9b7;
+  color: #004b81;
+  border: solid 1px #f7e9b7;
+}
+
+#state-dropdown .dropdown-item {
+  color: #004b81;
+}
+
+#state-dropdown .dropdown-item:hover {
+  background-color: #41bcc5;
+}
+
+.btn-blue-outline {
+  border: 1px solid #004b81;
+  color: #004b81;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Rubik", sans-serif;
+}
+
+.btn-blue-outline:hover {
+  background-color: #0064ab;
+  color: white;
+  font-family: "Rubik", sans-serif;
+}
+
+.btn-dar-alta {
+  background-color: #004b81;
+  border: solid 1px #004b81;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Rubik", sans-serif;
+}
+
+.btn-dar-alta:hover {
+  background-color: #0064ab;
+  border: solid 1px #0064ab;
+  font-family: "Rubik", sans-serif;
+}
+
+#custom-dropdown {
+  background-color: #f7e9b7;
+  color: #004b81;
+  border: solid 1px #f7e9b7;
+}
+
+#custom-dropdown .dropdown-item {
+  color: #004b81;
+}
+
+#custom-dropdown .dropdown-item:hover {
+  background-color: #41bcc5;
+}

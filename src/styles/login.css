@@ -1,0 +1,29 @@
+.contenidoLogin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  background-color: #ffffff;
+  padding: 5vh;
+  border-radius: 10px;
+  box-shadow: 6px 5px 14px 0px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 6px 5px 14px 0px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 6px 5px 14px 0px rgba(0, 0, 0, 0.4);
+}
+.contenidoLogin h2{
+    color: #1265c4;
+}
+.formularioLogin{
+
+    width: 95%;
+}
+.formularioLogin label{
+    color: #1265c4;
+}
+.imgLogin {
+  width: 175px;
+  height: 175px;
+  margin: 0px;
+}
+
