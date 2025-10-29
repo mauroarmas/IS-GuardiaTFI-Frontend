@@ -72,7 +72,7 @@ function RegistrarPaciente() {
       <Container className="mt-2 contenedor">
         {/* Titulo */}
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <h2>Registrar Ingreso</h2>
+          <h2>Registrar Paciente</h2>
         </div>
 
         {/* Formulario */}
@@ -235,7 +235,7 @@ function RegistrarPaciente() {
                 </p>
               )}
               <div>
-                <button type="submit">Registrar Ingreso</button>
+                <button type="submit">Registrar Paciente</button>
               </div>
             </div>
           </form>

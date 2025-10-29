@@ -18,7 +18,7 @@ const SideBar = () => {
     <aside
       className={[
         isMini ? "mini" : "",
-        location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/"
+        location.pathname === "/login" || location.pathname === "/signup"
           ? "d-none"
           : "",
       ].join(" ")}
@@ -29,9 +29,9 @@ const SideBar = () => {
       <div className="link">
         <ul className="min-vh-100 d-flex flex-column justify-content-center position-fixed">
           <li
-            className={location.pathname.includes("/moduloEspera") ? "active" : ""}
+            className={!location.pathname.includes("moduloPacientes") ? "active" : ""}
           >
-            <Link to="/moduloEspera">
+            <Link to="/">
               <i class="bi bi-clipboard2-pulse-fill"></i>
               {!isMini && <label className="me-5">En espera</label>}
             </Link>

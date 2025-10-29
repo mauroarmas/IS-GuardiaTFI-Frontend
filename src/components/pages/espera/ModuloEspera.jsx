@@ -22,12 +22,8 @@ function App() {
 
   const [proyects, setProyects] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [noMembersMessage, setNoMembersMessage] = useState("");
-  const [modalShow, setModalShow] = useState(false);
-  const [smShow, setSmShow] = useState(false);
+
   const [filter, setFilter] = useState("todos");
-  const [proyectoFactura, setProyectoFactura] = useState("");
   const [chartData, setChartData] = useState({});
 
   const fetchProyects = async (status) => {
@@ -105,7 +101,7 @@ function App() {
             <div>
               <Link
                 className="btn btn-primary "
-                to="/moduloEspera/registrarIngreso"
+                to="/registrarIngreso"
               >
                 <i className="bi bi-person-plus"></i> Nuevo Ingreso
               </Link>

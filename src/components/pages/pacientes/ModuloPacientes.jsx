@@ -14,19 +14,19 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 function ModuloPacientes() {
-  const [clients, setClients] = useState([]);
+  const [pacientes, setPacientes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/clientes");
-      setClients(response.data);
+      console.log(`${import.meta.env.VITE_BACKEND_URL}/pacientes`);
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/paciente`);
+
+      setPacientes(response.data);
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.error("Error fetching patients:", error);
     }
   };
-
-
 
   useEffect(() => {
     fetchData();
@@ -34,23 +34,23 @@ function ModuloPacientes() {
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const clientsPerPage = 10;
-  const indexOfLastClient = currentPage * clientsPerPage;
-  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+  const patientsPerPage = 10;
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
 
   // Filtrado dinámico
-  const filteredClients = clients.filter(
-    (client) =>
-      client.nombreCliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.cuitCliente.toString().includes(searchTerm)
+  const filteredPatients = pacientes.filter(
+    (paciente) =>
+      paciente.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      paciente.cuil.toString().includes(searchTerm)
   );
 
-  const currentClients = filteredClients.slice(
-    indexOfFirstClient,
-    indexOfLastClient
+  const currentPatients = filteredPatients.slice(
+    indexOfFirstPatient,
+    indexOfLastPatient
   );
 
-  const totalPages = Math.ceil(filteredClients.length / clientsPerPage);
+  const totalPages = Math.ceil(filteredPatients.length / patientsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -69,7 +69,7 @@ function ModuloPacientes() {
         <div className="filterContainer mt-2">
           <Form.Control
             type="text"
-            placeholder="Buscar por nombre o CUIL"
+            placeholder="Buscar por Apellido o CUIL"
             className="mb-2 search-bar"
             value={searchTerm}
             onChange={(e) => {
@@ -93,22 +93,21 @@ function ModuloPacientes() {
             <thead>
               <tr>
                 <th>CUIL</th>
-                <th>Nombre Completo</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Dirección</th>
-
+                <th>Apellido</th>
+                <th>Nombre</th>
+                <th>Obra Social</th>
+                <th>Domicilio</th>
               </tr>
             </thead>
             <tbody>
-              {currentClients.map((client) => (
-                <tr key={client.cuitCliente}>
-                  <td>{client.cuitCliente}</td>
-                  <td>{client.nombreCliente}</td>
-                  <td>{client.telefonoCliente}</td>
-                  <td>{client.correoCliente}</td>
-                  <td>{client.direccion}</td>
-                  
+              {currentPatients.map((paciente) => (
+                <tr key={paciente.id}>
+                  <td>{paciente.cuil}</td>
+                  <td>{paciente.apellido}</td>
+                  <td>{paciente.nombre}</td>
+                  <td>{paciente.obraSocial}</td>
+                  <td>{paciente.domicilio}</td>
+
                 </tr>
               ))}
             </tbody>

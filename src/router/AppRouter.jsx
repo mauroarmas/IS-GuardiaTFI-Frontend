@@ -29,13 +29,13 @@ const AppRouter = () => {
 
         <Route
           exact
-          path="/moduloEspera"
+          path="/"
           element={<ModuloEspera></ModuloEspera>}
         ></Route>
 
         <Route
           exact
-          path="/moduloEspera/registrarIngreso"
+          path="/registrarIngreso"
           element={<RegistrarIngreso></RegistrarIngreso>}
         ></Route>
 

@@ -1,0 +1,38 @@
+{
+  "paciente": [
+    { "id": "1", "nombre": "Juan", "apellido": "Perez", "cuil": "20-12345678-9", "obraSocial": "OSDE", "domicilio": "Calle Falsa 123" },
+    { "id": "2", "nombre": "Maria", "apellido": "Gomez", "cuil": "20-87654321-0", "obraSocial": "Swiss Medical", "domicilio": "Avenida Siempre Viva 742" },
+    { "id": "3", "nombre": "Carlos", "apellido": "Lopez", "cuil": "27-11223344-5", "obraSocial": "Galeno", "domicilio": "Boulevard Central 456" },
+    { "id": "4", "nombre": "Ana", "apellido": "Martinez", "cuil": "23-55667788-1", "obraSocial": "Medifé", "domicilio": "Calle Luna 789" }
+  ],
+
+  "ingreso": [
+
+    {
+        "id": "1", 
+        "pacienteId": "1", 
+        "enfermeraId": "5", 
+        "fechaIngreso": "2024-06-15T10:30:00Z", 
+        "informe": "Paciente con dolor abdominal", 
+        "nivelEmergencia": "Alto", 
+        "temperatura": 38.5, 
+        "frecuenciaCardiaca": 90, 
+        "frecuenciaRespiratoria": 20, 
+        "tensionArterial": "120/80", 
+        "estadoIngreso": "En Espera"
+    },
+    {
+        "id": "2", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Medio", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    }
+  ]
+}
