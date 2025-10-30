@@ -4,31 +4,35 @@ import logo from "../../assets/logo.png";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import Register from "./Register";
 
 function Login() {
-  const [body, setBody] = useState({ nombreUsuario: "", pass: "" });
+  const [body, setBody] = useState({
+    email: "",
+    pass: "",
+    rol: "medico",
+  });
   const [loading, setLoading] = useState(false);
 
   const inputChange = (e) => {
-    console.log(body);
     setBody({
       ...body,
       [e.target.name]: e.target.value,
     });
   };
 
+  const handleRoleChange = (rol) => {
+    setBody({ ...body, rol });
+  };
+
   const iniciarSesion = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("Iniciar Sesion: ", body);
+    console.log("Iniciar Sesión:", body);
     axios
       .post("http://localhost:8080/api/usuario/login", body)
-      .then(({data}) => {
-        console.log("Respuesta completa:", data);
-        console.log("Usuario recibido:", data.nombreUsuario);
+      .then(({ data }) => {
         if (data) {
-          localStorage.setItem("usuario", JSON.stringify(data.nombreUsuario));
+          localStorage.setItem("usuario", JSON.stringify(data.email));
           window.location.href = "/";
         } else {
           Swal.fire({
@@ -38,17 +42,14 @@ function Login() {
           });
         }
       })
-      .catch(({response}) => {
-        console.error("Error al iniciar sesion: ", response);
+      .catch(() => {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Usuario o contraseña incorrectos",
+          text: "Usuario o contraseña inválidos",
         });
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -60,22 +61,48 @@ function Login() {
 
   return (
     <div className="backPrincipal d-flex flex-column justify-content-center align-items-center">
-      <div className="contenidoLogin">
-        <img src={logo} alt="Logo" className="imgLogin" />
-        <h2 className="text-center mt-4">Iniciar Sesión</h2>
-        <div className="d-flex justify-content-center mt-4 w-100">
-          <form className="formularioLogin" onSubmit={iniciarSesion}>
-            <div className="mb-3">
-              <label htmlFor="nombreUsuario" className="form-label">
-                Usuario
+      <div>
+        <img src={logo} alt="Logo" className="imgLogin mb-3" />
+      </div>
+      <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
+        <div className="w-100">
+          <h3 className="text-center">Iniciar Sesión</h3>
+
+          {/* Selector de tipo de usuario */}
+          <div className="d-flex justify-content-center w-50 mt-3 ">
+            <button
+              type="button"
+              className={`btn btn-sm ${
+                body.rol === "medico" ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => handleRoleChange("medico")}
+            >
+              Médico
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm ${
+                body.rol === "enfermero" ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => handleRoleChange("enfermero")}
+            >
+              Enfermero
+            </button>
+          </div>
+
+          {/* Formulario */}
+          <form onSubmit={iniciarSesion} className="border p-3 formularioLogin">
+            <div className="mb-1">
+              <label htmlFor="email" className="form-label">
+                Email
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="nombreUsuario"
-                value={body.nombreUsuario}
+                id="email"
+                name="email"
+                value={body.email}
                 onChange={inputChange}
-                name="nombreUsuario"
                 required
               />
             </div>
@@ -87,16 +114,16 @@ function Login() {
                 type="password"
                 className="form-control"
                 id="pass"
+                name="pass"
                 value={body.pass}
                 onChange={inputChange}
-                name="pass"
                 required
               />
             </div>
             <div className="d-flex justify-content-center mt-2">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary w-100"
                 disabled={loading}
               >
                 {loading ? "Cargando..." : "Iniciar Sesión"}
@@ -104,16 +131,15 @@ function Login() {
             </div>
           </form>
 
-          
-
+          <div className="text-center mt-4">
+            <Link to="/signup">
+              <span>
+                <i className="bi bi-person-circle me-1 login-icon"></i>
+                ¿No tienes cuenta? Regístrate
+              </span>
+            </Link>
+          </div>
         </div>
-
-        <Link to="/signup" className="mt-5 text-dark btn">
-            <div className="d-flex justify-content-between align-items-center me-3">
-              <i className="bi bi-person-circle " id="signUpButtom"></i>
-              <span className="text-primary">¿No tienes cuenta? Registrate!</span>
-            </div>
-          </Link>
       </div>
     </div>
   );

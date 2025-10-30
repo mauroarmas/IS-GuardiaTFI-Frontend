@@ -29,7 +29,9 @@ const SideBar = () => {
       <div className="link">
         <ul className="min-vh-100 d-flex flex-column justify-content-center position-fixed">
           <li
-            className={!location.pathname.includes("moduloPacientes") ? "active" : ""}
+            className={
+              !location.pathname.includes("moduloPacientes") ? "active" : ""
+            }
           >
             <Link to="/">
               <i class="bi bi-clipboard2-pulse-fill"></i>
@@ -38,13 +40,23 @@ const SideBar = () => {
           </li>
 
           <li
-            className={location.pathname.includes("/moduloPacientes") ? "active" : ""}
+            className={
+              location.pathname.includes("/moduloPacientes") ? "active" : ""
+            }
           >
             <Link to="/moduloPacientes">
               <i className="bi bi-people-fill"></i>
               {!isMini && <label className="me-5">Pacientes</label>}
             </Link>
           </li>
+          <div className="mt-auto">
+            <li>
+              <Link to="/login">
+                <i className="bi bi-people-fill"></i>
+                {!isMini && <label className="me-5">Iniciar Sesión</label>}
+              </Link>
+            </li>
+          </div>
         </ul>
       </div>
     </aside>

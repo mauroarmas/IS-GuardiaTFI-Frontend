@@ -1,8 +1,8 @@
 .contenidoLogin {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 30%;
   background-color: #ffffff;
   padding: 5vh;
@@ -11,19 +11,34 @@
   -webkit-box-shadow: 6px 5px 14px 0px rgba(0, 0, 0, 0.4);
   -moz-box-shadow: 6px 5px 14px 0px rgba(0, 0, 0, 0.4);
 }
-.contenidoLogin h2{
-    color: #1265c4;
+span {
+  color: #1265c4;
+  text-decoration: underline;
 }
-.formularioLogin{
-
-    width: 95%;
+h3 {
+  color: rgb(7, 103, 153);
 }
-.formularioLogin label{
-    color: #1265c4;
+.formularioLogin {
+  width: 95%;
+}
+.formularioLogin label ,.login-icon{
+  color: rgb(7, 103, 153);
 }
 .imgLogin {
-  width: 175px;
-  height: 175px;
+  width: 125px;
+  height: 125px;
   margin: 0px;
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:hover,
+.btn-outline-primary {
+  border-radius: 0%;
+}
+.btn-outline-primary {
+  /* color: #212529; */
+  color: rgb(7, 103, 153);
+  border-color: rgb(222, 226, 230);
 }
 

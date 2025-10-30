@@ -1,5 +1,5 @@
 import React from "react";
-import { Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import { Container } from "react-bootstrap";
 
@@ -38,15 +38,11 @@ const Grafico = ({ arrayLabels = [], arrayData = [] }) => {
       legend: {
         position: "bottom",
       },
-
     },
+    
   };
 
-  return (
-    <Container>
-      <Pie data={data} options={options} />
-    </Container>
-  );
+  return <Doughnut data={data} options={options} />;
 };
 
 export default Grafico;

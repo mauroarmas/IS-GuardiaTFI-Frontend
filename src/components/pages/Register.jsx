@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 function Register() {
   const [body, setBody] = useState({
-    nombreUsuario: "",
+    email: "",
     pass: "",
     emailUsuario: "",
     rolUsuario: "admin",
@@ -78,22 +78,25 @@ function Register() {
 
   return (
     <div className="backPrincipal d-flex flex-column justify-content-center align-items-center">
-      <div className="contenidoLogin">
-        <img src={logo} alt="Logo" className="imgLogin" />
-        <h2 className="text-center mt-4">Registrarse</h2>
-        <div className="d-flex justify-content-center mt-4 w-100">
-          <form className="formularioLogin" onSubmit={iniciarSesion}>
+      <div>
+        <img src={logo} alt="Logo" className="imgLogin mb-3" />
+      </div>
+      <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
+        <div className="w-100">
+          <h3 className="text-center mt-4">Registrarse</h3>
+          <div className="d-flex justify-content-center mt-4 w-100"></div>
+          <form className="formularioLogin border p-3" onSubmit={iniciarSesion}>
             <div className="mb-3">
-              <label htmlFor="nombreUsuario" className="form-label">
+              <label htmlFor="email" className="form-label">
                 Usuario
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="nombreUsuario"
-                value={body.nombreUsuario}
+                id="email"
+                value={body.email}
                 onChange={inputChange}
-                name="nombreUsuario"
+                name="email"
                 required
               />
             </div>
@@ -152,8 +155,8 @@ function Register() {
                 onChange={inputChange}
                 name="rolUsuario"
               >
-                <option value="admin">Administrador</option>
-                <option value="user">Usuario</option>
+                <option value="admin">Médico</option>
+                <option value="user">Enfermero</option>
               </select>
             </div>
 
