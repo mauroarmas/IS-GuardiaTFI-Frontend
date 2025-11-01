@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 30%;
+  width: 35%;
   background-color: #ffffff;
   padding: 5vh;
   border-radius: 10px;
@@ -18,9 +18,7 @@ span {
 h3 {
   color: rgb(7, 103, 153);
 }
-.formularioLogin {
-  width: 95%;
-}
+
 .formularioLogin label ,.login-icon{
   color: rgb(7, 103, 153);
 }
@@ -28,6 +26,12 @@ h3 {
   width: 125px;
   height: 125px;
   margin: 0px;
+}
+.imgRegister {
+  width: 300px;
+  height: 300px;
+  /* margin-left: 90px; */
+  margin-bottom: 80px;
 }
 
 .btn-primary,

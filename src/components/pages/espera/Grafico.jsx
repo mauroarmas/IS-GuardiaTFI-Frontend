@@ -7,11 +7,17 @@ import { Container } from "react-bootstrap";
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 const Grafico = ({ arrayLabels = [], arrayData = [] }) => {
+  // Construir labels que incluyan el conteo al lado: "Etiqueta (n)"
+  const labelsWithCounts = Array.isArray(arrayLabels)
+    ? arrayLabels.map((label, idx) => {
+        const val = Array.isArray(arrayData) && arrayData[idx] != null ? arrayData[idx] : 0;
+        return `${label} ${val}`;
+      })
+    : [];
   const data = {
-    labels: arrayLabels,
+    labels: labelsWithCounts,
     datasets: [
       {
-        label: "Cantidad de Ingresos",
         data: arrayData,
         backgroundColor: [
           "rgba(255, 31, 31, 0.6)",
@@ -33,10 +39,15 @@ const Grafico = ({ arrayLabels = [], arrayData = [] }) => {
   };
 
   const options = {
-    responsive: true,
+
     plugins: {
       legend: {
-        position: "bottom",
+        // Mostrar la leyenda en forma de lista vertical
+        position: "right",
+        labels: {
+          boxWidth: 12,
+          padding: 8,
+        },
       },
     },
     

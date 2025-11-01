@@ -59,12 +59,31 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: "Rubik", sans-serif;
+  padding: 0.5rem 1.6rem;
+  border-radius: 5px;
+
 }
 
 .btn-dar-alta:hover {
   background-color: #0064ab;
   border: solid 1px #0064ab;
   font-family: "Rubik", sans-serif;
+}
+
+.btnDatosTabla {
+  background-color: transparent;
+  color: #004b81;
+  border: solid 1px #004b81;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.2rem 0.8rem;
+  border-radius: 5px;
+
+}
+
+.btnDatosTabla:hover {
+  background-color: #0064ab;
+  color: white;
 }
 
 #custom-dropdown {

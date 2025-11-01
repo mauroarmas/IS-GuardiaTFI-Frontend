@@ -8,8 +8,7 @@ function Register() {
   const [body, setBody] = useState({
     email: "",
     pass: "",
-    emailUsuario: "",
-    rolUsuario: "admin",
+    rol: "medico",
   });
   const [confirmPass, setConfirmPass] = useState(""); // Estado para la confirmación de contraseña
   const [loading, setLoading] = useState(false);
@@ -23,6 +22,9 @@ function Register() {
 
   const handleConfirmPassChange = (e) => {
     setConfirmPass(e.target.value);
+  };
+    const handleRoleChange = (rol) => {
+    setBody({ ...body, rol });
   };
 
   const iniciarSesion = (e) => {
@@ -77,99 +79,111 @@ function Register() {
   }, []);
 
   return (
-    <div className="backPrincipal d-flex flex-column justify-content-center align-items-center">
-      <div>
-        <img src={logo} alt="Logo" className="imgLogin mb-3" />
+    <div className="backPrincipal d-flex flex-row justify-content-center align-items-center">
+      <div className="w-50 d-flex justify-content-center">
+        <img src={logo} alt="Logo" className="imgRegister" />
       </div>
       <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
         <div className="w-100">
-          <h3 className="text-center mt-4">Registrarse</h3>
-          <div className="d-flex justify-content-center mt-4 w-100"></div>
-          <form className="formularioLogin border p-3" onSubmit={iniciarSesion}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Usuario
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="email"
-                value={body.email}
-                onChange={inputChange}
-                name="email"
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="emailUsuario" className="form-label">
-                Correo Electrónico:
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="emailUsuario"
-                value={body.emailUsuario}
-                onChange={inputChange}
-                name="emailUsuario"
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="pass" className="form-label">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="pass"
-                value={body.pass}
-                onChange={inputChange}
-                name="pass"
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="confirmPass" className="form-label">
-                Confirmar Contraseña
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPass"
-                value={confirmPass}
-                onChange={handleConfirmPassChange}
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="rolUsuario" className="form-label">
-                Rol:
-              </label>
-
-              <select
-                className="form-select"
-                value={body.rolUsuario}
-                onChange={inputChange}
-                name="rolUsuario"
-              >
-                <option value="admin">Médico</option>
-                <option value="user">Enfermero</option>
-              </select>
-            </div>
-
-            <div className="d-flex justify-content-center mt-2">
+          <h3 className="text-center">Registro de Usuario</h3>
+            {/* Selector de tipo de usuario */}
+            <div className="d-flex justify-content-center w-50 mt-3 ">
               <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={loading}
+                type="button"
+                className={`btn btn-sm ${
+                  body.rol === "medico" ? "btn-primary" : "btn-outline-primary"
+                }`}
+                onClick={() => handleRoleChange("medico")}
               >
-                {loading ? "Cargando..." : "Registrarse"}
+                Médico
+              </button>
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  body.rol === "enfermero"
+                    ? "btn-primary"
+                    : "btn-outline-primary"
+                }`}
+                onClick={() => handleRoleChange("enfermero")}
+              >
+                Enfermero
               </button>
             </div>
-          </form>
+          {/* <div className="d-flex justify-content-center mt-4 w-100"> */}
+            <form
+              className="formularioLogin border p-3"
+              onSubmit={iniciarSesion}
+            >
+              <div className="mb-1">
+                <label htmlFor="emailUsuario" className="form-label">
+                  Correo Electrónico:
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="emailUsuario"
+                  value={body.emailUsuario}
+                  onChange={inputChange}
+                  name="emailUsuario"
+                  required
+                />
+              </div>
+
+              <div className="mb-1">
+                <label htmlFor="matricula" className="form-label">
+                  Matricula:
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="matricula"
+                  value={body.matricula}
+                  onChange={inputChange}
+                  name="matricula"
+                  required
+                />
+              </div>
+
+              <div className="mb-1">
+                <label htmlFor="pass" className="form-label">
+                  Contraseña
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="pass"
+                  value={body.pass}
+                  onChange={inputChange}
+                  name="pass"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="confirmPass" className="form-label">
+                  Confirmar Contraseña
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="confirmPass"
+                  value={confirmPass}
+                  onChange={handleConfirmPassChange}
+                  required
+                />
+              </div>
+
+              <div className="d-flex justify-content-center mt-2">
+                <button
+                  type="submit"
+                  className="btn btn-primary w-50 rounded-2"
+                  disabled={loading}
+                >
+                  {loading ? "Cargando..." : "Registrarse"}
+                </button>
+              </div>
+            </form>
+          {/* </div> */}
         </div>
       </div>
     </div>

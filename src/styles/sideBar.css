@@ -46,7 +46,7 @@ ul li a {
 
 ul li a.active,
 ul li a:hover {
-  background-color: #c7c7c7;
+  background-color: rgb(241,245,249);;
   color: #000;
 
 }
@@ -101,7 +101,7 @@ ul li a label {
 }
 
 ul li.active {
-  background-color: #c7c7c7; /* Color de fondo resaltado */
+  background-color: rgb(241,245,249); /* Color de fondo resaltado */
   color: #000;
   border-radius: 0.5rem;
   cursor: pointer;

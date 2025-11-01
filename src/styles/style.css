@@ -39,8 +39,10 @@ h2, h3{
 
 
 .imgNavbar {
-  width: 75px;
-  height: 70px;
+  width: 62px;
+  height: 57px;
+  padding: 2px;
+  margin-left: 4px;
 }
 .indexTitle{
   margin: 45px 0 25px 55px;
@@ -51,11 +53,24 @@ h2, h3{
 
 #loginButtom{
   color: #3e72af;
-  font-size: 38px;
+  font-size: 33px;
 }
 #signUpButtom{
   color: #3e72af;
   font-size: 27px;
   margin-right: 10px;
   margin-top: 2px;
+}
+
+.contenedorGrafico{
+  max-height: 225px;
+  min-width: 300px;
+}
+.btnNuevoIngreso{
+  width: 100%;
+  margin-left: auto;
+}
+.span-urgency{
+  color: #212529;
+  text-decoration: none;
 }

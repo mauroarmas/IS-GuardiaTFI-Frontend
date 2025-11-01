@@ -7,7 +7,72 @@
   ],
 
   "ingreso": [
+        {
+        "id": "2", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Crítica", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    },
 
+    {
+        "id": "1", 
+        "pacienteId": "1", 
+        "enfermeraId": "5", 
+        "fechaIngreso": "2024-06-15T10:30:00Z", 
+        "informe": "Paciente con dolor abdominal", 
+        "nivelEmergencia": "Emergencia", 
+        "temperatura": 38.5, 
+        "frecuenciaCardiaca": 90, 
+        "frecuenciaRespiratoria": 20, 
+        "tensionArterial": "120/80", 
+        "estadoIngreso": "En Espera"
+    },
+    {
+        "id": "2", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Crítica", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    },
+    {
+        "id": "1", 
+        "pacienteId": "1", 
+        "enfermeraId": "5", 
+        "fechaIngreso": "2024-06-15T10:30:00Z", 
+        "informe": "Paciente con dolor abdominal", 
+        "nivelEmergencia": "Emergencia", 
+        "temperatura": 38.5, 
+        "frecuenciaCardiaca": 90, 
+        "frecuenciaRespiratoria": 20, 
+        "tensionArterial": "120/80", 
+        "estadoIngreso": "En Espera"
+    },
+    {
+        "id": "2", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Crítica", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    },
     {
         "id": "1", 
         "pacienteId": "1", 

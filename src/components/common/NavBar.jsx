@@ -29,10 +29,10 @@ const NavBar = () => {
         className={
           location.pathname === "/login" || location.pathname === "/signup"
             ? "d-none"
-            : "d-flex justify-content-between align-items-center navbar"
+            : "d-flex justify-content-between align-items-center "
         }
       >
-        <div className="img-fluid ms-3">
+        <div className="img-fluid">
           <Link to="/">
             <img src={logo} alt="logo" className="imgNavbar" />
           </Link>

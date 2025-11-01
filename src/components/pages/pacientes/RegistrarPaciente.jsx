@@ -14,37 +14,23 @@ function RegistrarPaciente() {
     reset,
   } = useForm();
 
-
-  const onSubmit = async (data) => {
-    const direccionCompleta = `${data.direc}, ${data.prov}`;
-    delete data.direc;
-    delete data.prov;
-    const datosFormateados = { ...data, direccion: direccionCompleta };
-
-    const clienteData = {
-      cuitCliente: datosFormateados.cuitCliente,
-      nombreCliente: datosFormateados.nombreCliente,
-      telefonoCliente: datosFormateados.telefonoCliente,
-      correoCliente: datosFormateados.correoCliente,
-      direccion: datosFormateados.direccion,
-    };
+  const onSubmit = async (pacienteData) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/clientes",
-        clienteData
+        "http://localhost:8080/api/pacientes",
+        pacienteData
       );
 
       Swal.fire({
-        title: "Cliente agregado",
-        text: "El cliente se agregó exitosamente.",
+        title: "Paciente agregado",
+        text: "El paciente se agregó exitosamente.",
         icon: "success",
       });
 
-      console.log("Cliente agregado exitosamente:", response.data);
       reset();
     } catch (error) {
-      console.error("Error al agregar el cliente:", error);
+      console.error("Error al agregar el paciente:", error);
 
       if (error.response) {
         console.log("Error response data:", error.response.data);
@@ -52,19 +38,17 @@ function RegistrarPaciente() {
           icon: "error",
           title: "Algo salió mal!",
           text:
-            "Hubo un error al agregar el cliente: " +
+            "Hubo un error al agregar el paciente: " +
             (error.response.data.message || "Error desconocido"),
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Algo salió mal!",
-          text: "Hubo un error desconocido al agregar el cliente",
+          text: "Hubo un error desconocido al agregar el paciente",
         });
       }
     }
-
-    console.log("Datos del formulario:", datosFormateados);
   };
 
   return (
@@ -86,18 +70,18 @@ function RegistrarPaciente() {
                 <div className="w-100">
                   <input
                     type="text"
-                    placeholder="CUIT*"
+                    placeholder="CUIL*"
                     className="w-100"
-                    {...register("cuitCliente", {
-                      required: "El CUIT es obligatorio",
+                    {...register("cuilPaciente", {
+                      required: "El CUIL es obligatorio",
                       pattern: {
                         value: /^\d{11}$/,
                         message: "El formato del CUIL no es válido",
                       },
                     })}
                   />
-                  {errors.cuitCliente ? (
-                    <p className="text-danger">{errors.cuitCliente.message}</p>
+                  {errors.cuilPaciente ? (
+                    <p className="text-danger">{errors.cuilPaciente.message}</p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                   )}
@@ -105,35 +89,56 @@ function RegistrarPaciente() {
                 <div className="w-100">
                   <input
                     type="text"
-                    placeholder="Nombre completo*"
+                    placeholder="Nombre *"
                     className="w-100"
-                    {...register("nombreCliente", {
-                      required: "El nombre completo es obligatorio",
+                    {...register("nombrePaciente", {
+                      required: "El nombre es obligatorio",
                       pattern: {
                         value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
                         message:
-                          "El nombre completo solo puede contener letras y espacios",
+                          "El nombre solo puede contener letras y espacios",
                       },
                     })}
                   />
-                  {errors.nombreCliente ? (
+                  {errors.nombrePaciente ? (
                     <p className="text-danger">
-                      {errors.nombreCliente.message}
+                      {errors.nombrePaciente.message}
                     </p>
                   ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                    <p>&nbsp;</p> 
+                  )}
+                </div>
+                <div className="w-100">
+                  <input
+                    type="text"
+                    placeholder="Apellido *"
+                    className="w-100"
+                    {...register("apellidoPaciente", {
+                      required: "El apellido es obligatorio",
+                      pattern: {
+                        value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
+                        message:
+                          "El apellido solo puede contener letras y espacios",
+                      },
+                    })}
+                  />
+                  {errors.apellidoPaciente ? (
+                    <p className="text-danger">
+                      {errors.apellidoPaciente.message}
+                    </p>
+                  ) : (
+                    <p>&nbsp;</p> 
                   )}
                 </div>
               </div>
 
-              <div className="form-row"></div>
               <div className="form-row">
                 <div className="w-100">
                   <input
                     type="email"
                     placeholder="Email*"
                     className="w-100"
-                    {...register("correoCliente", {
+                    {...register("correoPaciente", {
                       required: "El email es obligatorio",
                       pattern: {
                         value:
@@ -143,9 +148,9 @@ function RegistrarPaciente() {
                     })}
                   />
 
-                  {errors.correoCliente ? (
+                  {errors.correoPaciente ? (
                     <p className="text-danger">
-                      {errors.correoCliente.message}
+                      {errors.correoPaciente.message}
                     </p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
@@ -156,7 +161,7 @@ function RegistrarPaciente() {
                     type="tel"
                     placeholder="Número de teléfono*"
                     className="w-100"
-                    {...register("telefonoCliente", {
+                    {...register("telefonoPaciente", {
                       required: "El número de teléfono es obligatorio",
                       pattern: {
                         value: /^\d{10,15}$/,
@@ -165,9 +170,9 @@ function RegistrarPaciente() {
                     })}
                   />
 
-                  {errors.telefonoCliente ? (
+                  {errors.telefonoPaciente ? (
                     <p className="text-danger">
-                      {errors.telefonoCliente.message}
+                      {errors.telefonoPaciente.message}
                     </p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
@@ -178,20 +183,20 @@ function RegistrarPaciente() {
                 <div className="w-50">
                   <input
                     type="text"
-                    placeholder="Dirección*"
+                    placeholder="Domicilio*"
                     className="w-100"
-                    {...register("direc", {
-                      required: "La dirección es obligatoria",
+                    {...register("domicilio", {
+                      required: "El domicilio es obligatorio",
                     })}
                   />
-                  {errors.direc ? (
-                    <p className="text-danger">{errors.direc.message}</p>
+                  {errors.domicilio ? (
+                    <p className="text-danger">{errors.domicilio.message}</p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                   )}
                 </div>
 
-                <div className="d-flex w-50">
+                {/* <div className="d-flex w-50">
                   <label htmlFor="provincia" className="mt-1 text-muted">
                     Provincia:
                   </label>
@@ -220,7 +225,7 @@ function RegistrarPaciente() {
                       <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 

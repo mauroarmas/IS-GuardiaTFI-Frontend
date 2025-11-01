@@ -91,7 +91,7 @@ function Login() {
           </div>
 
           {/* Formulario */}
-          <form onSubmit={iniciarSesion} className="border p-3 formularioLogin">
+          <form onSubmit={iniciarSesion} className="border p-3">
             <div className="mb-1">
               <label htmlFor="email" className="form-label">
                 Email
@@ -123,7 +123,7 @@ function Login() {
             <div className="d-flex justify-content-center mt-2">
               <button
                 type="submit"
-                className="btn btn-primary w-100"
+                className="btn btn-primary w-50 rounded-2"
                 disabled={loading}
               >
                 {loading ? "Cargando..." : "Iniciar Sesión"}

@@ -26,7 +26,7 @@ const SideBar = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="link">
+      <div className="link d-flex flex-column justify-content-between min-vh-100 position-fixed">
         <ul className="min-vh-100 d-flex flex-column justify-content-center position-fixed">
           <li
             className={
@@ -49,14 +49,6 @@ const SideBar = () => {
               {!isMini && <label className="me-5">Pacientes</label>}
             </Link>
           </li>
-          <div className="mt-auto">
-            <li>
-              <Link to="/login">
-                <i className="bi bi-people-fill"></i>
-                {!isMini && <label className="me-5">Iniciar Sesión</label>}
-              </Link>
-            </li>
-          </div>
         </ul>
       </div>
     </aside>
