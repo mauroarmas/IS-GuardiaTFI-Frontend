@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "../../assets/logo.png";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -7,7 +6,6 @@ const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ✅ Manejo seguro del localStorage (puede venir null)
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const rol = user?.rol || null;

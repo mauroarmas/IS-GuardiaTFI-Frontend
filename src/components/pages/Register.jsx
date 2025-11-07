@@ -5,6 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import "../../styles/login.css";
 import logo from "../../assets/logo.png";
+import Input from "../common/Input";
 
 function Register() {
   const [role, setRole] = useState("medico");
@@ -81,17 +82,18 @@ function Register() {
           ))}
         </div>
 
-        <form className="formularioLogin border p-3 w-100" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="formularioLogin border p-3 w-100"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {/* Email */}
           <div className="mb-2">
-            <label htmlFor="email" className="form-label">
-              Correo Electrónico:
-            </label>
-            <input
+            <Input
+              className="w-100"
+              label="Correo Electrónico"
               type="email"
-              className="form-control"
-              id="email"
-              {...register("email", {
+              placeholder="Ingresa tu email"
+              registerObject={register("email", {
                 required: "El email es obligatorio",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -99,19 +101,18 @@ function Register() {
                 },
               })}
             />
-            {errors.email && <p className="text-danger">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-danger">{errors.email.message}</p>
+            )}
           </div>
 
           {/* Password */}
           <div className="mb-2">
-            <label htmlFor="password" className="form-label">
-              Contraseña (min. 8 caracteres):
-            </label>
-            <input
+            <Input
+              label="Contraseña"
               type="password"
-              className="form-control"
-              id="password"
-              {...register("password", {
+              placeholder="Ingresa tu contraseña"
+              registerObject={register("password", {
                 required: "La contraseña es obligatoria",
                 minLength: {
                   value: 8,
@@ -119,19 +120,22 @@ function Register() {
                 },
               })}
             />
-            {errors.password && <p className="text-danger">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-danger">{errors.password.message}</p>
+            )}
+            {errors.confirmPassword && (
+              <p className="text-danger">{errors.confirmPassword.message}</p>
+            )}
           </div>
 
           {/* Confirmar password */}
           <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirmar Contraseña:
-            </label>
-            <input
+
+            <Input
+              label="Contraseña"
               type="password"
-              className="form-control"
-              id="confirmPassword"
-              {...register("confirmPassword", {
+              placeholder="Ingresa tu contraseña"
+              registerObject={register("confirmPassword", {
                 required: "Debes confirmar la contraseña",
                 validate: (value) =>
                   value === password || "Las contraseñas no coinciden",

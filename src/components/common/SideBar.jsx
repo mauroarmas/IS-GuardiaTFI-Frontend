@@ -18,7 +18,7 @@ const SideBar = () => {
     <aside
       className={[
         isMini ? "mini" : "",
-        location.pathname === "/login" || location.pathname === "/signup"
+        location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/unauthorized"
           ? "d-none"
           : "",
       ].join(" ")}

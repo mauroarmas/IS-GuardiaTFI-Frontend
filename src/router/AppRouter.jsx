@@ -3,43 +3,62 @@ import { Route, Routes } from "react-router-dom";
 import NavBar from "../components/common/NavBar";
 import ModuloPacientes from "../components/pages/pacientes/ModuloPacientes";
 import RegistrarPaciente from "../components/pages/pacientes/RegistrarPaciente";
-
-
 import ModuloEspera from "../components/pages/espera/ModuloEspera";
 import Login from "../components/pages/Login";
 import Register from "../components/pages/Register";
 import RegistrarIngreso from "../components/pages/espera/RegistrarIngreso";
+import ProtectedRoute from "../components/common/ProtectedRoute";
+import Unauthorized from "../components/common/Unauthorized";
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<NavBar className="navbar "></NavBar>}>
+        {/* Rutas públicas */}
         <Route exact path="/login" element={<Login></Login>}></Route>
         <Route exact path="/signup" element={<Register></Register>}></Route>
+
+        {/* Rutas protegidas para usuarios logueados */}
+        <Route
+          exact
+          path="/"
+          element={
+            <ProtectedRoute>
+              <ModuloEspera></ModuloEspera>
+            </ProtectedRoute>
+          }
+        ></Route>
+
+        {/* Rutas protegidas según el rol */}
         <Route
           exact
           path="/moduloPacientes"
-          element={<ModuloPacientes></ModuloPacientes>}
+          element={
+            <ProtectedRoute allowedRoles={["enfermero"]}>
+              <ModuloPacientes></ModuloPacientes>
+            </ProtectedRoute>
+          }
         ></Route>
         <Route
           exact
           path="/moduloPacientes/registrarPaciente"
-          element={<RegistrarPaciente editar={false}></RegistrarPaciente>}
+          element={
+            <ProtectedRoute allowedRoles={["enfermero"]}>
+              <RegistrarPaciente></RegistrarPaciente>
+            </ProtectedRoute>
+          }
         ></Route>
-
-        <Route
-          exact
-          path="/"
-          element={<ModuloEspera></ModuloEspera>}
-        ></Route>
-
         <Route
           exact
           path="/registrarIngreso"
-          element={<RegistrarIngreso></RegistrarIngreso>}
+          element={
+            <ProtectedRoute allowedRoles={["enfermero"]}>
+              <RegistrarIngreso></RegistrarIngreso>
+            </ProtectedRoute>
+          }
         ></Route>
-
       </Route>
+      <Route path="/unauthorized" element={<Unauthorized />} />
     </Routes>
   );
 };

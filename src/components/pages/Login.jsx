@@ -5,6 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import Input from "../common/Input";
 
 function Login() {
   const [role, setRole] = useState("medico");
@@ -153,15 +154,13 @@ function Login() {
 
           {/* Formulario */}
           <form onSubmit={handleSubmit(onSubmit)} className="border p-3">
-            <div className="mb-1">
-              <label htmlFor="email" className="form-label">
-                Correo Electrónico:
-              </label>
-              <input
+            <div className="mb-1 ">
+              <Input
+                className="w-100"
+                label="Correo Electrónico"
                 type="email"
-                className="form-control"
-                id="email"
-                {...register("email", {
+                placeholder="Ingresa tu email"
+                registerObject={register("email", {
                   required: "El email es obligatorio",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -174,14 +173,12 @@ function Login() {
               )}
             </div>
             <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Contraseña
-              </label>
-              <input
+
+              <Input
+                label="Contraseña"
                 type="password"
-                className="form-control"
-                id="password"
-                {...register("password", {
+                placeholder="Ingresa tu contraseña"
+                registerObject={register("password", {
                   required: "La contraseña es obligatoria",
                   minLength: {
                     value: 8,
