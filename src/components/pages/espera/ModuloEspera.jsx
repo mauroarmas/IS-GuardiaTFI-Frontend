@@ -1,15 +1,12 @@
 import {
   Container,
   Table,
-  DropdownButton,
-  Dropdown,
   Modal,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
 import axios from "axios";
-import { useForm } from "react-hook-form";
 import Grafico from "./Grafico";
 
 function App() {
