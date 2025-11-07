@@ -1,55 +1,122 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/login.css";
 import logo from "../../assets/logo.png";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 function Login() {
-  const [body, setBody] = useState({
-    email: "",
-    pass: "",
-    rol: "medico",
-  });
+  const [role, setRole] = useState("medico");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const endpoint = `${import.meta.env.VITE_BACKEND_URL}/auth/login`;
 
-  const inputChange = (e) => {
-    setBody({
-      ...body,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleRoleChange = (rol) => {
-    setBody({ ...body, rol });
-  };
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      const datos = {
+        email: data.email,
+        password: data.password,
+        rol: role,
+      };
+      const response = await axios.post(endpoint, datos);
+      if (!response?.data) {
+        throw new Error("Respuesta vacía del servidor");
+      }
 
-  const iniciarSesion = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    console.log("Iniciar Sesión:", body);
-    axios
-      .post("http://localhost:8080/api/usuario/login", body)
-      .then(({ data }) => {
-        if (data) {
-          localStorage.setItem("usuario", JSON.stringify(data.email));
-          window.location.href = "/";
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error en la respuesta del servidor",
-            text: "Intente de nuevo más tarde",
-          });
-        }
-      })
-      .catch(() => {
+      console.log("Respuesta del servidor:", response);
+
+      const { token, user, message } = response.data;
+
+      if (message && !token) {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Usuario o contraseña inválidos",
+          text: message || "Credenciales incorrectas",
         });
-      })
-      .finally(() => setLoading(false));
+        return;
+      }
+
+      if (!token || !user) {
+        throw new Error("El servidor no envió los datos esperados");
+      }
+
+      if (token && user) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        Swal.fire({
+          icon: "success",
+          title: "Inicio de sesión exitoso",
+          showConfirmButton: false,
+          timer: 1100,
+        });
+
+        navigate("/");
+      } else {
+        throw new Error("El servidor no respondió con los datos esperados");
+      }
+    } catch (error) {
+      console.error("Error en login:", error);
+
+      // ✅ Manejo de errores específicos de Axios / servidor
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          // Errores del backend (por ejemplo, 400, 401)
+          const { status, data } = error.response;
+
+          if (status === 401 || status === 400) {
+            Swal.fire({
+              icon: "error",
+              title: "Credenciales incorrectas",
+              text: data?.message || "Verifica tu email o contraseña.",
+            });
+          } else if (status >= 500) {
+            Swal.fire({
+              icon: "error",
+              title: "Error del servidor",
+              text: "Ocurrió un problema en el servidor. Intenta más tarde.",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error desconocido",
+              text: data?.message || "No se pudo iniciar sesión.",
+            });
+          }
+        } else if (error.request) {
+          // No se recibió respuesta
+          Swal.fire({
+            icon: "error",
+            title: "Sin conexión",
+            text: "No se pudo contactar con el servidor.",
+          });
+        } else {
+          // Error al configurar la petición
+          Swal.fire({
+            icon: "error",
+            title: "Error interno",
+            text: error.message,
+          });
+        }
+      } else {
+        // Otros errores no relacionados con Axios
+        Swal.fire({
+          icon: "error",
+          title: "Error inesperado",
+          text: error.message || "Algo salió mal.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -69,56 +136,62 @@ function Login() {
           <h3 className="text-center">Iniciar Sesión</h3>
 
           {/* Selector de tipo de usuario */}
-          <div className="d-flex justify-content-center w-50 mt-3 ">
-            <button
-              type="button"
-              className={`btn btn-sm ${
-                body.rol === "medico" ? "btn-primary" : "btn-outline-primary"
-              }`}
-              onClick={() => handleRoleChange("medico")}
-            >
-              Médico
-            </button>
-            <button
-              type="button"
-              className={`btn btn-sm ${
-                body.rol === "enfermero" ? "btn-primary" : "btn-outline-primary"
-              }`}
-              onClick={() => handleRoleChange("enfermero")}
-            >
-              Enfermero
-            </button>
+          <div className="d-flex justify-content-center w-50 mt-3">
+            {["medico", "enfermero"].map((r) => (
+              <button
+                key={r}
+                type="button"
+                className={`btn btn-sm ${
+                  role === r ? "btn-primary" : "btn-outline-primary"
+                }`}
+                onClick={() => setRole(r)}
+              >
+                {r.charAt(0).toUpperCase() + r.slice(1)}
+              </button>
+            ))}
           </div>
 
           {/* Formulario */}
-          <form onSubmit={iniciarSesion} className="border p-3">
+          <form onSubmit={handleSubmit(onSubmit)} className="border p-3">
             <div className="mb-1">
               <label htmlFor="email" className="form-label">
-                Email
+                Correo Electrónico:
               </label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 id="email"
-                name="email"
-                value={body.email}
-                onChange={inputChange}
-                required
+                {...register("email", {
+                  required: "El email es obligatorio",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Formato de email no válido",
+                  },
+                })}
               />
+              {errors.email && (
+                <p className="text-danger">{errors.email.message}</p>
+              )}
             </div>
             <div className="mb-3">
-              <label htmlFor="pass" className="form-label">
+              <label htmlFor="password" className="form-label">
                 Contraseña
               </label>
               <input
                 type="password"
                 className="form-control"
-                id="pass"
-                name="pass"
-                value={body.pass}
-                onChange={inputChange}
-                required
+                id="password"
+                {...register("password", {
+                  required: "La contraseña es obligatoria",
+                  minLength: {
+                    value: 8,
+                    message: "Debe tener al menos 8 caracteres",
+                  },
+                })}
               />
+              {errors.password && (
+                <p className="text-danger">{errors.password.message}</p>
+              )}
             </div>
             <div className="d-flex justify-content-center mt-2">
               <button

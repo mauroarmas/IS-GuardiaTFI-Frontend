@@ -6,7 +6,11 @@ import Swal from "sweetalert2";
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const usuario = localStorage.getItem("usuario");
+
+  // ✅ Manejo seguro del localStorage (puede venir null)
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const rol = user?.rol || null;
 
   const handleLogout = () => {
     Swal.fire({
@@ -17,59 +21,60 @@ const NavBar = () => {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("usuario"); // Elimina el usuario de localStorage
-        navigate("/login"); // Redirige al login
+        localStorage.removeItem("user");
+        navigate("/login");
       }
     });
   };
 
+  // Ocultar NavBar en login/signup
+  if (location.pathname === "/login" || location.pathname === "/signup") {
+    return <Outlet />;
+  }
+
   return (
     <>
-      <div
-        className={
-          location.pathname === "/login" || location.pathname === "/signup"
-            ? "d-none"
-            : "d-flex justify-content-between align-items-center "
-        }
-      >
+      <div className="d-flex justify-content-between align-items-center">
+        {/* Logo */}
         <div className="img-fluid">
           <Link to="/">
             <img src={logo} alt="logo" className="imgNavbar" />
           </Link>
         </div>
 
-        {usuario ? (
+        {/* Usuario */}
+        {rol ? (
           <div className="d-flex align-items-center flex-column ms-5">
-            <i className="bi bi-person-circle " id="loginButtom"></i>
-            <h6>Bienvenido {usuario}</h6>
+            <i className="bi bi-person-circle" id="loginButtom"></i>
+            <h6>Bienvenido {rol}</h6>
           </div>
         ) : (
           <div></div>
         )}
 
-        <div className="d-flex align-items-center">
-          {usuario ? (
-            <Link className="text-decoration-none text-dark btn">
-              <div
-                className="d-flex justify-content-between align-items-center me-3"
-                onClick={handleLogout}
-              >
-                <i className="bi bi-box-arrow-right me-2" id="loginButtom"></i>
-                <span>Cerrar Sesión</span>
-              </div>
+        {/* Botón login/logout */}
+        <div>
+          {rol ? (
+            <Link
+              onClick={handleLogout}
+              className="btn text-dark text-decoration-none d-flex align-items-center"
+            >
+              <i className="bi bi-box-arrow-right me-2" id="loginButtom"></i>
+              <span>Cerrar Sesión</span>
             </Link>
           ) : (
-            <Link to="/login" className="text-decoration-none text-dark btn">
-              <div className="d-flex justify-content-between align-items-center me-3">
-                <i className="bi bi-door-open me-2" id="loginButtom"></i>
-                <span>Iniciar Sesión</span>
-              </div>
+            <Link
+              to="/login"
+              className="btn text-dark text-decoration-none d-flex align-items-center"
+            >
+              <i className="bi bi-door-open me-2" id="loginButtom"></i>
+              <span>Iniciar Sesión</span>
             </Link>
           )}
         </div>
       </div>
 
-      <Outlet></Outlet>
+      <Outlet />
     </>
   );
 };
