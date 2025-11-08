@@ -240,7 +240,7 @@ function RegistrarPaciente() {
                 </p>
               )}
               <div>
-                <button type="submit">Registrar Paciente</button>
+                <button type="submit" className="login-btn px-3">Registrar Paciente</button>
               </div>
             </div>
           </form>

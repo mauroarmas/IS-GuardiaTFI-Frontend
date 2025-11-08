@@ -67,23 +67,30 @@ function Register() {
         <h3 className="text-center">Registro de Usuario</h3>
 
         {/* Selector de rol */}
-        <div className="d-flex justify-content-center w-50 mt-3">
-          {["medico", "enfermero"].map((r) => (
-            <button
-              key={r}
-              type="button"
-              className={`btn btn-sm ${
-                role === r ? "btn-primary" : "btn-outline-primary"
-              }`}
-              onClick={() => setRole(r)}
+        <div className="w-100 d-flex flex-column align-items-center mt-3">
+          <span className="span1 mb-2">Indicar Tipo de usuario:</span>
+
+          <div className="role-toggle">
+            <div
+              className={`toggle-option ${role === "medico" ? "active" : ""}`}
+              onClick={() => setRole("medico")}
             >
-              {r.charAt(0).toUpperCase() + r.slice(1)}
-            </button>
-          ))}
+              Médico
+            </div>
+            <div
+              className={`toggle-option ${
+                role === "enfermero" ? "active" : ""
+              }`}
+              onClick={() => setRole("enfermero")}
+            >
+              Enfermero
+            </div>
+            <div className={`toggle-indicator ${role}`}></div>
+          </div>
         </div>
 
         <form
-          className="formularioLogin border p-3 w-100"
+          className="formularioLogin p-1 w-100"
           onSubmit={handleSubmit(onSubmit)}
         >
           {/* Email */}
@@ -130,7 +137,6 @@ function Register() {
 
           {/* Confirmar password */}
           <div className="mb-3">
-
             <Input
               label="Contraseña"
               type="password"
@@ -146,13 +152,15 @@ function Register() {
             )}
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary w-50 rounded-2 mx-auto d-block"
-            disabled={loading}
-          >
-            {loading ? "Cargando..." : "Registrarse"}
-          </button>
+          <div className="d-flex justify-content-center mx-auto mt-3 w-50">
+              <button
+                type="submit"
+                className={`login-btn ${loading ? "loading" : ""}`}
+                disabled={loading}
+              >
+                {loading ? "Cargando..." : "Registrarse"}
+              </button>
+            </div>
         </form>
       </div>
     </div>

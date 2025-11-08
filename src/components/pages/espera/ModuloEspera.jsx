@@ -1,8 +1,4 @@
-import {
-  Container,
-  Table,
-  Modal,
-} from "react-bootstrap";
+import { Container, Table, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
@@ -14,7 +10,11 @@ function App() {
   const [pacienteSiguiente, setPacienteSiguiente] = useState(null);
   const [chartData, setChartData] = useState({});
   const [modalShow, setModalShow] = useState(false);
-  const [selectedIncome, setSelectedIncome] = useState(null); // 👈 Nuevo estado
+  const [selectedIncome, setSelectedIncome] = useState(null);
+
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const rol = user?.rol || null;
 
   const fetchIncomes = async () => {
     const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -69,15 +69,37 @@ function App() {
   function getColorByUrgencyLevel(level) {
     switch (level) {
       case "Crítica":
-        return <span className="span-urgency"><i class="bi bi-circle-fill" style={{ color: "red" }}></i> {level}</span>
+        return (
+          <span className="span-urgency">
+            <i class="bi bi-circle-fill" style={{ color: "red" }}></i> {level}
+          </span>
+        );
       case "Emergencia":
-        return <span className="span-urgency"><i class="bi bi-circle-fill" style={{ color: "orange" }}></i> {level}</span>;
+        return (
+          <span className="span-urgency">
+            <i class="bi bi-circle-fill" style={{ color: "orange" }}></i>{" "}
+            {level}
+          </span>
+        );
       case "Urgencia":
-        return <span className="span-urgency"><i class="bi bi-circle-fill" style={{ color: "yellow" }}></i> {level}</span>;
+        return (
+          <span className="span-urgency">
+            <i class="bi bi-circle-fill" style={{ color: "yellow" }}></i>{" "}
+            {level}
+          </span>
+        );
       case "Urgencia Menor":
-        return <span className="span-urgency"><i class="bi bi-circle-fill" style={{ color: "green" }}></i> {level}</span>;
+        return (
+          <span className="span-urgency">
+            <i class="bi bi-circle-fill" style={{ color: "green" }}></i> {level}
+          </span>
+        );
       case "Sin Urgencia":
-        return <span className="span-urgency"><i class="bi bi-circle-fill" style={{ color: "blue" }}></i> {level}</span>;
+        return (
+          <span className="span-urgency">
+            <i class="bi bi-circle-fill" style={{ color: "blue" }}></i> {level}
+          </span>
+        );
       default:
         return <p style={{ color: "black" }}>No definido</p>;
     }
@@ -96,9 +118,12 @@ function App() {
             <div className="d-flex flex-column w-25">
               <h2>Cola de Espera</h2>
               <div className="mt-4">
-                <Link className="w-100 btn-dar-alta" to="/registrarIngreso">
-                  <i className="bi bi-person-plus"></i> Nuevo Ingreso
-                </Link>
+                {rol !== "enfermero" ? null : (
+                  <Link className="login-btn" to="/registrarIngreso">
+                    <i className="bi bi-person-plus"></i> Nuevo Ingreso
+                  </Link>
+                )}
+
               </div>
             </div>
 
@@ -122,12 +147,14 @@ function App() {
                   </h5>
                   <p className="card-text">{incomes[0]?.informe}</p>
                   <div className="d-flex justify-content-between">
-                    <a href="#" className="btn-dar-alta">
-                      Atender
-                    </a>
-                    {/* 👇 Pasamos el primer ingreso */}
+                    {rol !== "medico" ? null :(
+                      <a href="#" className="login-btn">
+                        Atender
+                      </a>
+                    )}
+
                     <a
-                      className="btn-dar-alta"
+                      className="login-btn"
                       onClick={() => handleShowModal(incomes[0])}
                     >
                       Ver Datos
@@ -156,7 +183,6 @@ function App() {
                       <td>{ingreso.id}</td>
                       <td>{ingreso.nivelEmergencia}</td>
                       <td className="text-center">
-
                         <a
                           className="btnDatosTabla"
                           onClick={() => handleShowModal(ingreso)}
@@ -172,7 +198,6 @@ function App() {
             </div>
           </div>
 
-          {/* 👇 Pasamos el objeto seleccionado al modal */}
           <ModalDatos
             show={modalShow}
             onHide={() => setModalShow(false)}
@@ -217,7 +242,7 @@ function ModalDatos({ show, onHide, income }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onHide} className="w-auto mx-auto btn-dar-alta">
+        <button onClick={onHide} className="mx-auto login-btn">
           Cerrar
         </button>
       </Modal.Footer>

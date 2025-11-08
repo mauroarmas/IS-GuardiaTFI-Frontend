@@ -6,6 +6,11 @@ const SideBar = () => {
   const [isMini, setIsMini] = useState(true);
   const location = useLocation(); // Obtenemos la ubicación actual
 
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const rol = user?.rol || null;
+
+
   const handleMouseEnter = () => {
     setIsMini(false); // Expande el sidebar cuando el cursor está sobre él
   };
@@ -39,16 +44,18 @@ const SideBar = () => {
             </Link>
           </li>
 
-          <li
-            className={
-              location.pathname.includes("/moduloPacientes") ? "active" : ""
-            }
-          >
-            <Link to="/moduloPacientes">
-              <i className="bi bi-people-fill"></i>
-              {!isMini && <label className="me-5">Pacientes</label>}
-            </Link>
-          </li>
+          {rol !== "enfermero" ? null : (
+            <li
+              className={
+                location.pathname.includes("/moduloPacientes") ? "active" : ""
+              }
+            >
+              <Link to="/moduloPacientes">
+                <i className="bi bi-people-fill"></i>
+                {!isMini && <label className="me-5">Pacientes</label>}
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </aside>

@@ -137,23 +137,30 @@ function Login() {
           <h3 className="text-center">Iniciar Sesión</h3>
 
           {/* Selector de tipo de usuario */}
-          <div className="d-flex justify-content-center w-50 mt-3">
-            {["medico", "enfermero"].map((r) => (
-              <button
-                key={r}
-                type="button"
-                className={`btn btn-sm ${
-                  role === r ? "btn-primary" : "btn-outline-primary"
-                }`}
-                onClick={() => setRole(r)}
+          <div className="w-100 d-flex flex-column align-items-center mt-3">
+            <span className="span1 mb-2">Indicar Tipo de usuario:</span>
+
+            <div className="role-toggle">
+              <div
+                className={`toggle-option ${role === "medico" ? "active" : ""}`}
+                onClick={() => setRole("medico")}
               >
-                {r.charAt(0).toUpperCase() + r.slice(1)}
-              </button>
-            ))}
+                Médico
+              </div>
+              <div
+                className={`toggle-option ${
+                  role === "enfermero" ? "active" : ""
+                }`}
+                onClick={() => setRole("enfermero")}
+              >
+                Enfermero
+              </div>
+              <div className={`toggle-indicator ${role}`}></div>
+            </div>
           </div>
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit(onSubmit)} className="border p-3">
+          <form onSubmit={handleSubmit(onSubmit)} className=" p-1">
             <div className="mb-1 ">
               <Input
                 className="w-100"
@@ -173,7 +180,6 @@ function Login() {
               )}
             </div>
             <div className="mb-3">
-
               <Input
                 label="Contraseña"
                 type="password"
@@ -190,10 +196,10 @@ function Login() {
                 <p className="text-danger">{errors.password.message}</p>
               )}
             </div>
-            <div className="d-flex justify-content-center mt-2">
+            <div className="d-flex justify-content-center mx-auto mt-3 w-50">
               <button
                 type="submit"
-                className="btn btn-primary w-50 rounded-2"
+                className={`login-btn ${loading ? "loading" : ""}`}
                 disabled={loading}
               >
                 {loading ? "Cargando..." : "Iniciar Sesión"}
@@ -201,7 +207,7 @@ function Login() {
             </div>
           </form>
 
-          <div className="text-center mt-4">
+          <div className="text-center mt-2">
             <Link to="/signup">
               <span>
                 <i className="bi bi-person-circle me-1 login-icon"></i>

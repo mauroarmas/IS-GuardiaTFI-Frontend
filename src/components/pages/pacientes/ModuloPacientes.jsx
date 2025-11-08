@@ -79,7 +79,7 @@ function ModuloPacientes() {
           />
           <div>
             <Link
-              className="btn btn-primary"
+              className="login-btn px-3"
               to="/moduloPacientes/registrarPaciente"
             >
               <i className="bi bi-person-plus"></i> Dar de alta un paciente

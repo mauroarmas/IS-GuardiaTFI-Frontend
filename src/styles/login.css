@@ -46,3 +46,177 @@ h3 {
   border-color: rgb(222, 226, 230);
 }
 
+ .form__group {
+    position: relative;
+    padding: 20px 0 0;
+    width: 100%;
+  }
+
+  .form__field {
+    font-family: inherit;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 17px;
+    color: #212529;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+
+  .form__field::placeholder {
+    color: transparent;
+  }
+
+  .form__field:placeholder-shown ~ .form__label {
+    font-size: 17px;
+    cursor: text;
+    top: 20px;
+  }
+
+  .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: rgb(7, 103, 153);
+    pointer-events: none;
+  }
+
+  .form__field:focus {
+    padding-bottom: 6px;
+    border-width: 3px;
+    border-image: linear-gradient(to right, #6fc5ffff, rgb(7, 103, 153));
+    border-image-slice: 1;
+  }
+
+  .form__field:focus ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 17px;
+    color: rgb(7, 103, 153);
+    font-weight: 700;
+  }
+
+  /* reset input */
+  .form__field:required, .form__field:invalid {
+    box-shadow: none;
+  }
+
+  .span1{
+        font-size: 17px;
+    color: rgb(7, 103, 153);
+    text-decoration: none;
+  }
+
+  /* === Selector moderno de rol === */
+.role-toggle {
+  position: relative;
+  display: flex;
+  background: #e8f1ff;
+  border-radius: 50px;
+  width: 220px;
+  height: 40px;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid #c2d6f7;
+  transition: all 0.3s ease;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  line-height: 40px;
+  color: #076799;
+  font-weight: 600;
+  z-index: 2;
+  transition: color 0.3s ease;
+  user-select: none;
+}
+
+.toggle-option.active {
+  color: white;
+}
+
+.toggle-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  width: 50%;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #6fc5ff, #076799);
+  transition: all 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.toggle-indicator.medico {
+  left: 3px;
+}
+
+.toggle-indicator.enfermero {
+  left: calc(50% - 3px);
+}
+
+/* === Botón moderno estilo gradiente === */
+/* === Botón moderno estilo gradiente compacto === */
+.login-btn {
+  background: linear-gradient(135deg, #6fc5ff, #076799);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem; /* texto proporcional */
+  border: none;
+  border-radius: 40px;
+  min-width: 160px;
+  min-height: 36px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(7, 103, 153, 0.25);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* efecto de brillo animado */
+.login-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: all 0.5s ease;
+}
+
+.login-btn:hover::after {
+  left: 100%;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(7, 103, 153, 0.35);
+}
+
+.login-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(7, 103, 153, 0.25);
+}
+
+/* Estado de carga */
+.login-btn.loading {
+  background: #a3d9f7;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
