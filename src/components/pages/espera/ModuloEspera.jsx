@@ -3,18 +3,19 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
 import axios from "axios";
-import Grafico from "./Grafico";
+import Grafico from "../../common/Grafico";
+import { getTokenObject } from "../../../helpers/functions";
+import Swal from "sweetalert2";
 
 function App() {
   const [incomes, setIncomes] = useState([]);
   const [pacienteSiguiente, setPacienteSiguiente] = useState(null);
   const [chartData, setChartData] = useState({});
   const [modalShow, setModalShow] = useState(false);
+  const [modalAtencionShow, setModalAtencionShow] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState(null);
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-  const rol = user?.rol || null;
+  const rol = getTokenObject()?.rol;
 
   const fetchIncomes = async () => {
     const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -64,6 +65,24 @@ function App() {
   const handleShowModal = (income) => {
     setSelectedIncome(income);
     setModalShow(true);
+  };
+
+  const handleShowModalAtencion = (income) => {
+    Swal.fire({
+      title: "¿Desea atender a este paciente?",
+      text: "Quitará al paciente de la lista de espera y no podrá cancelar la atención una vez iniciada.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Sí, atender paciente",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setSelectedIncome(income);
+        setModalAtencionShow(true);
+      }
+    });
+
   };
 
   function getColorByUrgencyLevel(level) {
@@ -116,14 +135,13 @@ function App() {
           <div className="d-flex align-items-center">
             {/* Titulo */}
             <div className="d-flex flex-column w-25">
-              <h2>Cola de Espera</h2>
+              <h2 className="text-center">Cola de Espera</h2>
               <div className="mt-4">
                 {rol !== "enfermero" ? null : (
                   <Link className="login-btn" to="/registrarIngreso">
-                    <i className="bi bi-person-plus"></i> Nuevo Ingreso
+                    <i class="bi bi-arrow-right-square me-2"></i> Nuevo Ingreso
                   </Link>
                 )}
-
               </div>
             </div>
 
@@ -147,9 +165,12 @@ function App() {
                   </h5>
                   <p className="card-text">{incomes[0]?.informe}</p>
                   <div className="d-flex justify-content-between">
-                    {rol !== "medico" ? null :(
-                      <a href="#" className="login-btn">
-                        Atender
+                    {rol !== "medico" ? null : (
+                      <a
+                        className="login-btn"
+                        onClick={() => handleShowModalAtencion(incomes[0])}
+                      >
+                        <i className="bi bi-clipboard-plus me-2"></i> Atender
                       </a>
                     )}
 
@@ -157,7 +178,7 @@ function App() {
                       className="login-btn"
                       onClick={() => handleShowModal(incomes[0])}
                     >
-                      Ver Datos
+                      <i className="bi bi-activity me-2"></i> Ver Datos
                     </a>
                   </div>
                 </div>
@@ -181,13 +202,15 @@ function App() {
                   {incomes.map((ingreso) => (
                     <tr key={ingreso.id}>
                       <td>{ingreso.id}</td>
-                      <td>{ingreso.nivelEmergencia}</td>
+                      <td>
+                        {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
+                      </td>
                       <td className="text-center">
                         <a
                           className="btnDatosTabla"
                           onClick={() => handleShowModal(ingreso)}
                         >
-                          Ver Datos
+                          Ver
                         </a>
                       </td>
                       <td>{ingreso.informe}</td>
@@ -201,6 +224,11 @@ function App() {
           <ModalDatos
             show={modalShow}
             onHide={() => setModalShow(false)}
+            income={selectedIncome}
+          />
+          <ModalAtencion
+            show={modalAtencionShow}
+            onHide={() => setModalAtencionShow(false)}
             income={selectedIncome}
           />
         </div>
@@ -241,6 +269,21 @@ function ModalDatos({ show, onHide, income }) {
           <p>No hay datos disponibles.</p>
         )}
       </Modal.Body>
+      <Modal.Footer>
+        <button onClick={onHide} className="mx-auto login-btn">
+          Cerrar
+        </button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+function ModalAtencion({ show, onHide, income }) {
+  return (
+    <Modal show={show} onHide={onHide} fullscreen={true}>
+      <Modal.Header>
+        <Modal.Title className="text-center">Nueva Atención</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="d-flex flex-column align-items-center"></Modal.Body>
       <Modal.Footer>
         <button onClick={onHide} className="mx-auto login-btn">
           Cerrar

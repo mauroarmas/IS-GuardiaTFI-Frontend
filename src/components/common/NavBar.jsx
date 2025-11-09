@@ -1,14 +1,14 @@
 import logo from "../../assets/logo.png";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getTokenObject } from "../../helpers/functions";
 
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-  const rol = user?.rol || null;
+  const tokenObject = getTokenObject();
+  const rol = tokenObject ? tokenObject.rol : null;
 
   const handleLogout = () => {
     Swal.fire({

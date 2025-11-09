@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import "../../styles/sideBar.css";
+import { getTokenObject } from "../../helpers/functions";
 
 const SideBar = () => {
   const [isMini, setIsMini] = useState(true);
   const location = useLocation(); // Obtenemos la ubicación actual
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-  const rol = user?.rol || null;
-
+  const tokenObject = getTokenObject();
+  const rol = tokenObject ? tokenObject.rol : null;
 
   const handleMouseEnter = () => {
     setIsMini(false); // Expande el sidebar cuando el cursor está sobre él

@@ -68,7 +68,7 @@ function Register() {
 
         {/* Selector de rol */}
         <div className="w-100 d-flex flex-column align-items-center mt-3">
-          <span className="span1 mb-2">Indicar Tipo de usuario:</span>
+          <span className="span1 mb-2">Indicar tipo de usuario:</span>
 
           <div className="role-toggle">
             <div

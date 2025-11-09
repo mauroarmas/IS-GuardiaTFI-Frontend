@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import Input from "../common/Input";
 
 function Login() {
-  const [role, setRole] = useState("medico");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const endpoint = `${import.meta.env.VITE_BACKEND_URL}/auth/login`;
@@ -25,7 +24,6 @@ function Login() {
       const datos = {
         email: data.email,
         password: data.password,
-        rol: role,
       };
       const response = await axios.post(endpoint, datos);
       if (!response?.data) {
@@ -34,7 +32,8 @@ function Login() {
 
       console.log("Respuesta del servidor:", response);
 
-      const { token, user, message } = response.data;
+      const { token, message } = response.data;
+      console.log("Token recibido:", token);
 
       if (message && !token) {
         Swal.fire({
@@ -44,14 +43,9 @@ function Login() {
         });
         return;
       }
-
-      if (!token || !user) {
-        throw new Error("El servidor no envió los datos esperados");
-      }
-
-      if (token && user) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+      if (token) {
+        localStorage.setItem("token", token.accessToken);
+        navigate("/");
 
         Swal.fire({
           icon: "success",
@@ -59,8 +53,6 @@ function Login() {
           showConfirmButton: false,
           timer: 1100,
         });
-
-        navigate("/");
       } else {
         throw new Error("El servidor no respondió con los datos esperados");
       }
@@ -120,13 +112,6 @@ function Login() {
     }
   };
 
-  useEffect(() => {
-    const usuario = JSON.parse(localStorage.getItem("usuario")) || null;
-    if (usuario) {
-      window.location.href = "/";
-    }
-  }, []);
-
   return (
     <div className="backPrincipal d-flex flex-column justify-content-center align-items-center">
       <div>
@@ -135,29 +120,6 @@ function Login() {
       <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
         <div className="w-100">
           <h3 className="text-center">Iniciar Sesión</h3>
-
-          {/* Selector de tipo de usuario */}
-          <div className="w-100 d-flex flex-column align-items-center mt-3">
-            <span className="span1 mb-2">Indicar Tipo de usuario:</span>
-
-            <div className="role-toggle">
-              <div
-                className={`toggle-option ${role === "medico" ? "active" : ""}`}
-                onClick={() => setRole("medico")}
-              >
-                Médico
-              </div>
-              <div
-                className={`toggle-option ${
-                  role === "enfermero" ? "active" : ""
-                }`}
-                onClick={() => setRole("enfermero")}
-              >
-                Enfermero
-              </div>
-              <div className={`toggle-indicator ${role}`}></div>
-            </div>
-          </div>
 
           {/* Formulario */}
           <form onSubmit={handleSubmit(onSubmit)} className=" p-1">

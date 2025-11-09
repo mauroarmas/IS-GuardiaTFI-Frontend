@@ -1,17 +1,12 @@
 import {
   Container,
   Table,
-  DropdownButton,
-  Dropdown,
   Form,
-  Modal,
-  Button,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
 import axios from "axios";
-import Swal from "sweetalert2";
 
 function ModuloPacientes() {
   const [pacientes, setPacientes] = useState([]);
@@ -82,7 +77,7 @@ function ModuloPacientes() {
               className="login-btn px-3"
               to="/moduloPacientes/registrarPaciente"
             >
-              <i className="bi bi-person-plus"></i> Dar de alta un paciente
+              <i className="bi bi-person-plus me-2"></i> Dar de alta un paciente
             </Link>
           </div>
         </div>

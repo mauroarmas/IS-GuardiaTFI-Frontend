@@ -1,17 +1,17 @@
-import React from "react";
 import { Navigate } from "react-router-dom";
+import React from "react";
+import { getTokenObject } from "../../helpers/functions";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const tokenObject = getTokenObject();
 
   // No hay usuario logueado → redirige al login
-  if (!user) {
+  if (!tokenObject) {
     return <Navigate to="/login" replace />;
   }
 
   // Si hay roles permitidos y el del usuario no está incluido → acceso denegado
-  if (allowedRoles && !allowedRoles.includes(user.rol)) {
+  if (allowedRoles && !allowedRoles.includes(tokenObject.rol)) {
     return <Navigate to="/unauthorized" replace />;
   }
 
