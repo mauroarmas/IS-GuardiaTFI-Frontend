@@ -43,7 +43,7 @@ const Grafico = ({ arrayLabels = [], arrayData = [] }) => {
     plugins: {
       legend: {
         // Mostrar la leyenda en forma de lista vertical
-        position: "right",
+        position: "left",
         labels: {
           boxWidth: 12,
           padding: 8,

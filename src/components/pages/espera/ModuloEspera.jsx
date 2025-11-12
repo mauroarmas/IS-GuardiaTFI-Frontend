@@ -1,5 +1,5 @@
 import { Container, Table, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
 import axios from "axios";
@@ -14,8 +14,14 @@ function App() {
   const [modalShow, setModalShow] = useState(false);
   const [modalAtencionShow, setModalAtencionShow] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState(null);
+  const navigate = useNavigate();
 
   const rol = getTokenObject()?.rol;
+
+  const cerrarConsulta = () => {
+    setModalAtencionShow(false);
+     navigate(0);
+  }
 
   const fetchIncomes = async () => {
     const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -82,7 +88,6 @@ function App() {
         setModalAtencionShow(true);
       }
     });
-
   };
 
   function getColorByUrgencyLevel(level) {
@@ -134,7 +139,7 @@ function App() {
         <div>
           <div className="d-flex align-items-center">
             {/* Titulo */}
-            <div className="d-flex flex-column w-25">
+            <div className="d-flex flex-column w-25 me-5">
               <h2 className="text-center">Cola de Espera</h2>
               <div className="mt-4">
                 {rol !== "enfermero" ? null : (
@@ -146,16 +151,17 @@ function App() {
             </div>
 
             {/* Gráfico */}
-            <div className="contenedorGrafico">
+            <div className="contenedorGrafico ms-1">
               <Grafico
                 arrayLabels={chartData.labels || []}
                 arrayData={chartData.data || []}
               />
             </div>
 
+            {/* Card */}
             <div className="card w-50">
               <div className="card-header">
-                <strong>Paciente Siguiente: </strong>
+                <strong>Siguiente en Espera: </strong>
                 {getColorByUrgencyLevel(incomes[0]?.nivelEmergencia)}
               </div>
               <div className="card-body">
@@ -228,7 +234,7 @@ function App() {
           />
           <ModalAtencion
             show={modalAtencionShow}
-            onHide={() => setModalAtencionShow(false)}
+            onHide={cerrarConsulta}
             income={selectedIncome}
           />
         </div>
@@ -285,7 +291,7 @@ function ModalAtencion({ show, onHide, income }) {
       </Modal.Header>
       <Modal.Body className="d-flex flex-column align-items-center"></Modal.Body>
       <Modal.Footer>
-        <button onClick={onHide} className="mx-auto login-btn">
+        <button onClick={onHide} className="ms-auto login-btn w-auto">
           Cerrar
         </button>
       </Modal.Footer>
