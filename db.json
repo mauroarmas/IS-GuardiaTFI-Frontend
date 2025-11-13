@@ -8,7 +8,7 @@
 
   "ingreso": [
         {
-        "id": "2", 
+        "id": "1", 
         "pacienteId": "2", 
         "enfermeraId": "6", 
         "fechaIngreso": "2024-06-16T11:00:00Z", 
@@ -22,7 +22,7 @@
     },
 
     {
-        "id": "1", 
+        "id": "2", 
         "pacienteId": "1", 
         "enfermeraId": "5", 
         "fechaIngreso": "2024-06-15T10:30:00Z", 
@@ -33,74 +33,74 @@
         "frecuenciaRespiratoria": 20, 
         "tensionArterial": "120/80", 
         "estadoIngreso": "En Espera"
-    },
-    {
-        "id": "2", 
-        "pacienteId": "2", 
-        "enfermeraId": "6", 
-        "fechaIngreso": "2024-06-16T11:00:00Z", 
-        "informe": "Paciente con fractura de brazo", 
-        "nivelEmergencia": "Crítica", 
-        "temperatura": 37.0, 
-        "frecuenciaCardiaca": 80, 
-        "frecuenciaRespiratoria": 18, 
-        "tensionArterial": "118/76", 
-        "estadoIngreso": "En Espera" 
-    },
-    {
-        "id": "1", 
-        "pacienteId": "1", 
-        "enfermeraId": "5", 
-        "fechaIngreso": "2024-06-15T10:30:00Z", 
-        "informe": "Paciente con dolor abdominal", 
-        "nivelEmergencia": "Emergencia", 
-        "temperatura": 38.5, 
-        "frecuenciaCardiaca": 90, 
-        "frecuenciaRespiratoria": 20, 
-        "tensionArterial": "120/80", 
-        "estadoIngreso": "En Espera"
-    },
-    {
-        "id": "2", 
-        "pacienteId": "2", 
-        "enfermeraId": "6", 
-        "fechaIngreso": "2024-06-16T11:00:00Z", 
-        "informe": "Paciente con fractura de brazo", 
-        "nivelEmergencia": "Crítica", 
-        "temperatura": 37.0, 
-        "frecuenciaCardiaca": 80, 
-        "frecuenciaRespiratoria": 18, 
-        "tensionArterial": "118/76", 
-        "estadoIngreso": "En Espera" 
-    },
-    {
-        "id": "1", 
-        "pacienteId": "1", 
-        "enfermeraId": "5", 
-        "fechaIngreso": "2024-06-15T10:30:00Z", 
-        "informe": "Paciente con dolor abdominal", 
-        "nivelEmergencia": "Emergencia", 
-        "temperatura": 38.5, 
-        "frecuenciaCardiaca": 90, 
-        "frecuenciaRespiratoria": 20, 
-        "tensionArterial": "120/80", 
-        "estadoIngreso": "En Espera"
-    },
-    {
-        "id": "2", 
-        "pacienteId": "2", 
-        "enfermeraId": "6", 
-        "fechaIngreso": "2024-06-16T11:00:00Z", 
-        "informe": "Paciente con fractura de brazo", 
-        "nivelEmergencia": "Crítica", 
-        "temperatura": 37.0, 
-        "frecuenciaCardiaca": 80, 
-        "frecuenciaRespiratoria": 18, 
-        "tensionArterial": "118/76", 
-        "estadoIngreso": "En Espera" 
     },
     {
         "id": "3", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Crítica", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    },
+    {
+        "id": "4", 
+        "pacienteId": "1", 
+        "enfermeraId": "5", 
+        "fechaIngreso": "2024-06-15T10:30:00Z", 
+        "informe": "Paciente con dolor abdominal", 
+        "nivelEmergencia": "Emergencia", 
+        "temperatura": 38.5, 
+        "frecuenciaCardiaca": 90, 
+        "frecuenciaRespiratoria": 20, 
+        "tensionArterial": "120/80", 
+        "estadoIngreso": "En Espera"
+    },
+    {
+        "id": "5", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Crítica", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    },
+    {
+        "id": "6", 
+        "pacienteId": "1", 
+        "enfermeraId": "5", 
+        "fechaIngreso": "2024-06-15T10:30:00Z", 
+        "informe": "Paciente con dolor abdominal", 
+        "nivelEmergencia": "Emergencia", 
+        "temperatura": 38.5, 
+        "frecuenciaCardiaca": 90, 
+        "frecuenciaRespiratoria": 20, 
+        "tensionArterial": "120/80", 
+        "estadoIngreso": "En Espera"
+    },
+    {
+        "id": "7", 
+        "pacienteId": "2", 
+        "enfermeraId": "6", 
+        "fechaIngreso": "2024-06-16T11:00:00Z", 
+        "informe": "Paciente con fractura de brazo", 
+        "nivelEmergencia": "Crítica", 
+        "temperatura": 37.0, 
+        "frecuenciaCardiaca": 80, 
+        "frecuenciaRespiratoria": 18, 
+        "tensionArterial": "118/76", 
+        "estadoIngreso": "En Espera" 
+    },
+    {
+        "id": "8", 
         "pacienteId": "3", 
         "enfermeraId": "5", 
         "fechaIngreso": "2024-06-17T09:15:00Z", 
@@ -113,7 +113,7 @@
         "estadoIngreso": "En Espera" 
     },
     {
-        "id": "4", 
+        "id": "9", 
         "pacienteId": "4", 
         "enfermeraId": "6", 
         "fechaIngreso": "2024-06-18T14:45:00Z", 
@@ -126,7 +126,7 @@
         "estadoIngreso": "En Espera" 
     },
     {
-        "id": "5", 
+        "id": "10", 
         "pacienteId": "1", 
         "enfermeraId": "5", 
         "fechaIngreso": "2024-06-19T08:30:00Z", 
@@ -139,7 +139,7 @@
         "estadoIngreso": "En Espera"
     },
     {
-        "id": "6", 
+        "id": "11", 
         "pacienteId": "2", 
         "enfermeraId": "6", 
         "fechaIngreso": "2024-06-20T12:00:00Z", 
@@ -152,7 +152,7 @@
         "estadoIngreso": "En Espera"
     },
     {
-        "id": "7", 
+        "id": "12", 
         "pacienteId": "3", 
         "enfermeraId": "5", 
         "fechaIngreso": "2024-06-21T15:30:00Z", 

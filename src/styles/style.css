@@ -18,7 +18,13 @@ h2, h3{
   background-size: cover; 
   background-position: bottom; 
   background-repeat: no-repeat; 
-  min-height: 92vh; 
+  min-height: 100vh; 
+
+}
+.contenedorGrafico {
+  width: 250px;
+  height: 250px;
+  display: flex;
 
 }
 

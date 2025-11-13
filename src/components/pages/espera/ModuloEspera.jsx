@@ -20,8 +20,8 @@ function App() {
 
   const cerrarConsulta = () => {
     setModalAtencionShow(false);
-     navigate(0);
-  }
+    navigate(0);
+  };
 
   const fetchIncomes = async () => {
     const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -95,33 +95,33 @@ function App() {
       case "Crítica":
         return (
           <span className="span-urgency">
-            <i class="bi bi-circle-fill" style={{ color: "red" }}></i> {level}
+            <i className="bi bi-circle-fill" style={{ color: "red" }}></i> {level}
           </span>
         );
       case "Emergencia":
         return (
           <span className="span-urgency">
-            <i class="bi bi-circle-fill" style={{ color: "orange" }}></i>{" "}
+            <i className="bi bi-circle-fill" style={{ color: "orange" }}></i>{" "}
             {level}
           </span>
         );
       case "Urgencia":
         return (
           <span className="span-urgency">
-            <i class="bi bi-circle-fill" style={{ color: "yellow" }}></i>{" "}
+            <i className="bi bi-circle-fill" style={{ color: "yellow" }}></i>{" "}
             {level}
           </span>
         );
       case "Urgencia Menor":
         return (
           <span className="span-urgency">
-            <i class="bi bi-circle-fill" style={{ color: "green" }}></i> {level}
+            <i className="bi bi-circle-fill" style={{ color: "green" }}></i> {level}
           </span>
         );
       case "Sin Urgencia":
         return (
           <span className="span-urgency">
-            <i class="bi bi-circle-fill" style={{ color: "blue" }}></i> {level}
+            <i className="bi bi-circle-fill" style={{ color: "blue" }}></i> {level}
           </span>
         );
       default:
@@ -139,19 +139,19 @@ function App() {
         <div>
           <div className="d-flex align-items-center">
             {/* Titulo */}
-            <div className="d-flex flex-column w-25 me-5">
-              <h2 className="text-center">Cola de Espera</h2>
+            <div className="d-flex flex-column w-25">
+              <h2>Cola de Espera</h2>
               <div className="mt-4">
                 {rol !== "enfermero" ? null : (
-                  <Link className="login-btn" to="/registrarIngreso">
-                    <i class="bi bi-arrow-right-square me-2"></i> Nuevo Ingreso
+                  <Link className="login-btn w-50 " to="/registrarIngreso">
+                    <i className="bi bi-arrow-right-square me-2"></i> Nuevo Ingreso
                   </Link>
                 )}
               </div>
             </div>
 
             {/* Gráfico */}
-            <div className="contenedorGrafico ms-1">
+            <div className="contenedorGrafico w-25">
               <Grafico
                 arrayLabels={chartData.labels || []}
                 arrayData={chartData.data || []}
@@ -165,29 +165,33 @@ function App() {
                 {getColorByUrgencyLevel(incomes[0]?.nivelEmergencia)}
               </div>
               <div className="card-body">
-                <div>
-                  <h5 className="card-title">
-                    {pacienteSiguiente?.nombre} {pacienteSiguiente?.apellido}
-                  </h5>
-                  <p className="card-text">{incomes[0]?.informe}</p>
-                  <div className="d-flex justify-content-between">
-                    {rol !== "medico" ? null : (
+                {incomes.length === 0 ? (
+                  <p>No hay pacientes en espera.</p>
+                ) : (
+                  <div>
+                    <h5 className="card-title">
+                      {pacienteSiguiente?.nombre} {pacienteSiguiente?.apellido}
+                    </h5>
+                    <p className="card-text">{incomes[0]?.informe}</p>
+                    <div className="d-flex justify-content-between">
+                      {rol !== "medico" ? null : (
+                        <a
+                          className="login-btn"
+                          onClick={() => handleShowModalAtencion(incomes[0])}
+                        >
+                          <i className="bi bi-clipboard-plus me-2"></i> Atender
+                        </a>
+                      )}
+
                       <a
                         className="login-btn"
-                        onClick={() => handleShowModalAtencion(incomes[0])}
+                        onClick={() => handleShowModal(incomes[0])}
                       >
-                        <i className="bi bi-clipboard-plus me-2"></i> Atender
+                        <i className="bi bi-activity me-2"></i> Ver Datos
                       </a>
-                    )}
-
-                    <a
-                      className="login-btn"
-                      onClick={() => handleShowModal(incomes[0])}
-                    >
-                      <i className="bi bi-activity me-2"></i> Ver Datos
-                    </a>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -207,7 +211,7 @@ function App() {
                 <tbody>
                   {incomes.map((ingreso) => (
                     <tr key={ingreso.id}>
-                      <td>{ingreso.id}</td>
+                      <td>{ingreso.pacienteId}</td>
                       <td>
                         {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
                       </td>

@@ -43,7 +43,7 @@ const SideBar = () => {
         //         }
         //       >
         //         <Link to="/">
-        //           <i class="bi bi-clipboard2-pulse-fill"></i>
+        //           <i className="bi bi-clipboard2-pulse-fill"></i>
         //           {!isMini && <label className="me-5">En espera</label>}
         //         </Link>
         //       </li>

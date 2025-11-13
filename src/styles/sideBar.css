@@ -9,7 +9,7 @@
 }
 
 aside {
-  background: linear-gradient(180deg, rgb(62,114,175) 0%, rgb(45,95,155) 100%);
+  background: linear-gradient(135deg, #3fa4e7, #00306e);
   color: white;
   width: 16rem;
   display: grid;
@@ -17,7 +17,7 @@ aside {
   padding: 0.75rem;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-  transition: width 0.35s ease, padding 0.35s ease;
+  transition: width 0.30s ease, padding 0.30s ease;
 }
 
 a {
@@ -34,7 +34,7 @@ ul {
 ul li a {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem 0;
   border-radius: 0.75rem;
   cursor: pointer;
   margin-block: 0.35rem;
@@ -65,7 +65,7 @@ ul li a i {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.35s ease;
+  transition: transform 0.30s ease;
 }
 
 /* Ícono con efecto hover */
@@ -98,6 +98,7 @@ ul li a label {
 }
 
 .mini ul li a:hover {
+  border-radius: 0.75rem;
   background-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
@@ -105,7 +106,7 @@ ul li a label {
 /* Sutil animación al abrir/cerrar */
 aside,
 .mini {
-  transition: width 0.35s ease-in-out;
+  transition: width 0.40s ease-in-out;
 }
 
 /* Agregamos efecto de “brillo” al pasar */
@@ -118,7 +119,7 @@ ul li a::after {
   width: 0;
   background: rgba(255, 255, 255, 0.25);
   border-radius: 0.75rem;
-  transition: width 0.35s ease;
+  transition: width 0.30s ease;
   z-index: 0;
 }
 ul li a:hover::after {

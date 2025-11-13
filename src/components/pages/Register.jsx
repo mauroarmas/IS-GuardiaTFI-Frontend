@@ -42,6 +42,14 @@ function Register() {
     } catch (error) {
       const message =
         error.response?.data?.message || "Error desconocido al registrarse";
+      if (error.response?.data.statusCode == 400) {
+        Swal.fire({
+          icon: "error",
+          title: "Algo salió mal!",
+          text: "Ya está registrado un usuario con ese correo electrónico.",
+        });
+        return;
+      }
       Swal.fire({
         icon: "error",
         title: "Algo salió mal!",
@@ -153,14 +161,14 @@ function Register() {
           </div>
 
           <div className="d-flex justify-content-center mx-auto mt-3 w-50">
-              <button
-                type="submit"
-                className={`login-btn ${loading ? "loading" : ""}`}
-                disabled={loading}
-              >
-                {loading ? "Cargando..." : "Registrarse"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              className={`login-btn ${loading ? "loading" : ""}`}
+              disabled={loading}
+            >
+              {loading ? "Cargando..." : "Registrarse"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

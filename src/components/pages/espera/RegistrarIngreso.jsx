@@ -236,7 +236,7 @@ function RegistrarIngreso() {
                 </p>
               )}
               <div>
-                <button type="submit">Registrar Ingreso</button>
+                <button type="submit" className="login-btn">Registrar Ingreso</button>
               </div>
             </div>
           </form>
