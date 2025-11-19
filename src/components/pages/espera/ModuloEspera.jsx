@@ -198,14 +198,14 @@ function App() {
 
           <div className="d-flex">
             {/* Tabla */}
-            <div className="table-responsive table-container fixed-height-table">
-              <Table responsive striped bordered hover className="fixed-table">
+            <div className="table-responsive table-container w-100">
+              <Table responsive striped bordered hover>
                 <thead>
-                  <tr className="text-center">
-                    <th style={{ width: "3%" }}>ID</th>
-                    <th style={{ width: "12%" }}>Triage</th>
-                    <th style={{ width: "12%" }}>Datos de Ingreso</th>
-                    <th style={{ width: "60%" }}>Informe</th>
+                  <tr>
+                    <th style={{ width: "5%" }}>ID</th>
+                    <th style={{ width: "15%" }}>Triage</th>
+                    <th style={{ width: "15%" }}>Datos de Ingreso</th>
+                    <th>Informe</th>
                   </tr>
                 </thead>
                 <tbody>

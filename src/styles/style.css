@@ -21,42 +21,12 @@ h2, h3{
   min-height: 100vh; 
 
 }
-.contenedorGrafico {
-  width: 250px;
-  height: 250px;
-  display: flex;
-
-}
-
-
-.imgprincipal {
-  width: 200px;
-  height: 50px;
-}
-.fixed-table {
-  table-layout: fixed;
-  height: 100%;
-  position: relative;
-  z-index: 1;
-}
-.dropdown-menu {
-  z-index: 1050;    /* Asegura que el menú esté encima de otros elementos */
-}
-
-
 .imgNavbar {
   width: 62px;
   height: 57px;
   padding: 2px;
   margin-left: 4px;
 }
-.indexTitle{
-  margin: 45px 0 25px 55px;
-}
-.abWidth{
-  width: 10px;
-}
-
 #loginButtom{
   color: #3e72af;
   font-size: 33px;
@@ -67,20 +37,14 @@ h2, h3{
   margin-right: 10px;
   margin-top: 2px;
 }
-
 .contenedorGrafico{
   max-height: 225px;
   min-width: 300px;
-}
-.btnNuevoIngreso{
-  width: 100%;
-  margin-left: auto;
 }
 .span-urgency{
   color: #212529;
   text-decoration: none;
 }
-
 .card{
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
 }

@@ -1,4 +1,3 @@
-import logo from "../../assets/logo.png";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getTokenObject } from "../../helpers/functions";
@@ -19,7 +18,7 @@ const NavBar = () => {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("user");
+        localStorage.removeItem("token");
         navigate("/login");
       }
     });
@@ -36,7 +35,7 @@ const NavBar = () => {
         {/* Logo */}
         <div className="img-fluid">
           <Link to="/">
-            <img src={logo} alt="logo" className="imgNavbar" />
+            <img src="/logo.png" alt="logo" className="imgNavbar" />
           </Link>
         </div>
 

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import "../../styles/login.css";
-import logo from "../../assets/logo.png";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
@@ -115,7 +114,7 @@ function Login() {
   return (
     <div className="backPrincipal d-flex flex-column justify-content-center align-items-center">
       <div>
-        <img src={logo} alt="Logo" className="imgLogin mb-3" />
+        <img src="/logo.png" alt="Logo" className="imgLogin mb-3" />
       </div>
       <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
         <div className="w-100">

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "../../styles/login.css";
-import logo from "../../assets/logo.png";
 import Input from "../common/Input";
 
 function Register() {
@@ -68,7 +67,7 @@ function Register() {
   return (
     <div className="backPrincipal d-flex justify-content-center align-items-center">
       <div className="w-50 d-flex justify-content-center">
-        <img src={logo} alt="Logo" className="imgRegister" />
+        <img src="/public/logo.png" alt="Logo" className="imgRegister" />
       </div>
 
       <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
