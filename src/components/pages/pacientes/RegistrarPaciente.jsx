@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import "../../../styles/modulos.css";
 import "../../../styles/registroForm.css";
 import { useForm } from "react-hook-form";
-import { provincias } from "../../../helpers/provincias";
+import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -65,7 +65,7 @@ function RegistrarPaciente() {
             onSubmit={handleSubmit(onSubmit)}
             className="h-100 d-flex flex-column justify-content-between"
           >
-            <div>
+            {/* <div>
               <div className="form-row">
                 <div className="w-100">
                   <input
@@ -196,40 +196,10 @@ function RegistrarPaciente() {
                   )}
                 </div>
 
-                {/* <div className="d-flex w-50">
-                  <label htmlFor="provincia" className="mt-1 text-muted">
-                    Provincia:
-                  </label>
-                  <div className="ms-auto w-50">
-                    <select
-                      className="form-control"
-                      id="provincia"
-                      {...register("prov", {
-                        required: "La provincia es obligatoria",
-                        validate: (value) =>
-                          value !== "" ||
-                          "Debe seleccionar una provincia válida",
-                      })}
-                      defaultValue=""
-                    >
-                      <option value="">Selecciona una provincia</option>
-                      {provincias.map((provincia) => (
-                        <option key={provincia} value={provincia}>
-                          {provincia}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.prov ? (
-                      <p className="text-danger">{errors.prov.message}</p>
-                    ) : (
-                      <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
-                    )}
-                  </div>
-                </div> */}
               </div>
-            </div>
+            </div> */}
 
-            <div className="d-flex justify-content-between">
+            {/* <div className="d-flex justify-content-between">
               {Object.keys(errors).length > 0 ? (
                 <p className="note error">
                   Hay errores en el formulario. Por favor verifica los campos.
@@ -242,7 +212,7 @@ function RegistrarPaciente() {
               <div>
                 <button type="submit" className="login-btn px-3"> <i className="bi bi-person-plus me-2"></i> Registrar Paciente</button>
               </div>
-            </div>
+            </div> */}
           </form>
         </div>
       </Container>

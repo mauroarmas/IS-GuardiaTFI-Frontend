@@ -142,7 +142,7 @@ function App() {
             <div className="d-flex flex-column w-25">
               <h2>Cola de Espera</h2>
               <div className="mt-4">
-                {rol !== "enfermero" ? null : (
+                {rol !== "ENFERMERO" ? null : (
                   <Link className="login-btn w-50 " to="/registrarIngreso">
                     <i className="bi bi-arrow-right-square me-2"></i> Nuevo Ingreso
                   </Link>
@@ -174,7 +174,7 @@ function App() {
                     </h5>
                     <p className="card-text">{incomes[0]?.informe}</p>
                     <div className="d-flex justify-content-between">
-                      {rol !== "medico" ? null : (
+                      {rol !== "MEDICO" ? null : (
                         <a
                           className="login-btn"
                           onClick={() => handleShowModalAtencion(incomes[0])}

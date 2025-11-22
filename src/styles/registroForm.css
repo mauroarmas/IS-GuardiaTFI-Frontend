@@ -15,14 +15,16 @@
 
 .form-row {
     display: flex;
-    gap: 10px;
-    margin-bottom: 5px;
 }
 
-.form-row input {
+.form-row input, .form-row textarea {
     width: 48%;
     padding: 8px;
     font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.inputPresionArterial{
     border: 1px solid #ccc;
     border-radius: 4px;
 }

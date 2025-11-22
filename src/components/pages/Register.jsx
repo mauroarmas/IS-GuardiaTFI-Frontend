@@ -26,11 +26,23 @@ function Register() {
     try {
       setLoading(true);
 
-      const response = await axios.post(endpoint, {
-        email: data.email,
-        password: data.password,
-        rol: role,
-      });
+      const id = parseInt(data.idProfesional, 10);
+
+      if (role === "medico") {
+        await axios.post(endpoint, {
+          email: data.email,
+          password: data.password,
+          rol: role,
+          medicoId: id,
+        });
+      } else {
+        await axios.post(endpoint, {
+          email: data.email,
+          password: data.password,
+          rol: role,
+          enfermeraId: id,
+        });
+      }
 
       Swal.fire({
         title: "Registro Completo",
@@ -41,14 +53,6 @@ function Register() {
     } catch (error) {
       const message =
         error.response?.data?.message || "Error desconocido al registrarse";
-      if (error.response?.data.statusCode == 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salió mal!",
-          text: "Ya está registrado un usuario con ese correo electrónico.",
-        });
-        return;
-      }
       Swal.fire({
         icon: "error",
         title: "Algo salió mal!",
@@ -117,6 +121,22 @@ function Register() {
             />
             {errors.email && (
               <p className="text-danger">{errors.email.message}</p>
+            )}
+          </div>
+
+          {/* idProfesional */}
+          <div className="mb-2">
+            <Input
+              className="w-100"
+              label="idProfesional"
+              type="text"
+              placeholder="Ingrese idProfesional de profesional"
+              registerObject={register("idProfesional", {
+                required: "La idProfesional es obligatoria",
+              })}
+            />
+            {errors.idProfesional && (
+              <p className="text-danger">{errors.idProfesional.message}</p>
             )}
           </div>
 

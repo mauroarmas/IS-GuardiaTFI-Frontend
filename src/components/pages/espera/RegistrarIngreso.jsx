@@ -2,12 +2,13 @@ import { Container } from "react-bootstrap";
 import "../../../styles/modulos.css";
 import "../../../styles/registroForm.css";
 import { useForm } from "react-hook-form";
-import { provincias } from "../../../helpers/provincias";
+import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import { getTokenObject } from "../../../helpers/functions";
 
 function RegistrarIngreso() {
+  const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
   const {
     register,
     handleSubmit,
@@ -15,37 +16,40 @@ function RegistrarIngreso() {
     reset,
   } = useForm();
 
-
   const onSubmit = async (data) => {
-    const direccionCompleta = `${data.direc}, ${data.prov}`;
-    delete data.direc;
-    delete data.prov;
-    const datosFormateados = { ...data, direccion: direccionCompleta };
-
-    const clienteData = {
-      cuitCliente: datosFormateados.cuitCliente,
-      nombreCliente: datosFormateados.nombreCliente,
-      telefonoCliente: datosFormateados.telefonoCliente,
-      correoCliente: datosFormateados.correoCliente,
-      direccion: datosFormateados.direccion,
-    };
-
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/clientes",
-        clienteData
+      const idEnfermera = getTokenObject()?.idProfesional;
+      const nivelEmergenciaSeleccionado = nivelesEmergencia.find(
+        (nivel) => nivel.nombre === data.nivelEmergencia
       );
 
-      Swal.fire({
-        title: "Cliente agregado",
-        text: "El cliente se agregó exitosamente.",
-        icon: "success",
-      });
+      const datosEnviar = {
+        cuilPaciente: data.cuilPaciente,
+        idEnfermera: idEnfermera,
+        nivelEmergencia: nivelEmergenciaSeleccionado.id,
+        informe: data.informe,
+        temperatura: parseFloat(data.temperatura),
+        frecuenciaCardiaca: parseInt(data.frecuenciaCardiaca, 10),
+        frecuenciaRespiratoria: parseInt(data.frecuenciaRespiratoria, 10),
+        presionSistolica: parseInt(data.presionSistolica, 10),
+        presionDiastolica: parseInt(data.presionDiastolica, 10),
+      };
+      console.log("Datos a enviar", datosEnviar);
+      const response = await axios.post(endpoint, datosEnviar);
 
-      console.log("Cliente agregado exitosamente:", response.data);
+      if (response && response.data) {
+        Swal.fire({
+          title: "Ingreso agregado",
+          text: "El ingreso se agregó exitosamente.",
+          icon: "success",
+        });
+      } else {
+        console.warn("Respuesta vacía del servidor");
+      }
+
       reset();
     } catch (error) {
-      console.error("Error al agregar el cliente:", error);
+      console.error("Error al agregar el ingreso:", error);
 
       if (error.response) {
         console.log("Error response data:", error.response.data);
@@ -53,19 +57,17 @@ function RegistrarIngreso() {
           icon: "error",
           title: "Algo salió mal!",
           text:
-            "Hubo un error al agregar el cliente: " +
+            "Hubo un error al agregar el ingreso: " +
             (error.response.data.message || "Error desconocido"),
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Algo salió mal!",
-          text: "Hubo un error desconocido al agregar el cliente",
+          text: "Hubo un error desconocido al agregar el ingreso",
         });
       }
     }
-
-    console.log("Datos del formulario:", datosFormateados);
   };
 
   return (
@@ -83,144 +85,162 @@ function RegistrarIngreso() {
             className="h-100 d-flex flex-column justify-content-between"
           >
             <div>
-              <div className="form-row">
+              <h5>Datos del Paciente:</h5>
+              <div className="w-25 d-flex flex-column form-row">
+                <label>CUIL Paciente *:</label>
+                <input
+                  type="text"
+                  placeholder="CUIL de Paciente*"
+                  className="w-100"
+                  {...register("cuilPaciente", {
+                    required: "El CUIL es obligatorio",
+                  })}
+                />
+                {errors.cuilPaciente ? (
+                  <p className="text-danger">{errors.cuilPaciente.message}</p>
+                ) : (
+                  <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                )}
+              </div>
+            </div>
+            <h5>Datos de Ingreso</h5>
+            <div className="form-row d-flex">
+              <div className="w-75">
                 <div className="w-100">
-                  <input
-                    type="text"
-                    placeholder="CUIT*"
+                  <label>Informe Médico *:</label>
+                  <textarea
+                    placeholder="Informe Médico*"
                     className="w-100"
-                    {...register("cuitCliente", {
-                      required: "El CUIT es obligatorio",
-                      pattern: {
-                        value: /^\d{11}$/,
-                        message: "El formato del CUIL no es válido",
-                      },
+                    rows={4} // opcional, para controlar el alto
+                    {...register("informe", {
+                      required: "El informe es obligatorio",
                     })}
                   />
-                  {errors.cuitCliente ? (
-                    <p className="text-danger">{errors.cuitCliente.message}</p>
+
+                  {errors.informe ? (
+                    <p className="text-danger">{errors.informe.message}</p>
                   ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                    <p>&nbsp;</p>
                   )}
                 </div>
-                <div className="w-100">
-                  <input
-                    type="text"
-                    placeholder="Nombre completo*"
-                    className="w-100"
-                    {...register("nombreCliente", {
-                      required: "El nombre completo es obligatorio",
-                      pattern: {
-                        value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
-                        message:
-                          "El nombre completo solo puede contener letras y espacios",
-                      },
+              </div>
+              <div className="w-25 ps-3">
+                <label htmlFor="nivelEmergencia">Nivel de Emergencia *:</label>
+                <div>
+                  <select
+                    className="form-control"
+                    id="nivelEmergencia"
+                    {...register("nivelEmergencia", {
+                      required: "El nivel de emergencia es obligatorio",
+                      validate: (value) =>
+                        value !== "" ||
+                        "Debe seleccionar un nivel de emergencia válido",
                     })}
-                  />
-                  {errors.nombreCliente ? (
+                    defaultValue=""
+                  >
+                    <option value="">Selecciona un nivel</option>
+                    {nivelesEmergencia.map((nivel) => (
+                      <option key={nivel.id} value={nivel.nombre}>
+                        {nivel.nombre}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.nivelEmergencia ? (
                     <p className="text-danger">
-                      {errors.nombreCliente.message}
+                      {errors.nivelEmergencia.message}
                     </p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                   )}
                 </div>
               </div>
-
-              <div className="form-row"></div>
-              <div className="form-row">
-                <div className="w-100">
+            </div>
+            <div>
+              <div className="form-row gap-4">
+                <div className="w-25">
+                  <label>Temperatura</label>
                   <input
-                    type="email"
-                    placeholder="Email*"
+                    type="number"
+                    placeholder="Temperatura*"
                     className="w-100"
-                    {...register("correoCliente", {
-                      required: "El email es obligatorio",
-                      pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                        message: "El formato del email no es válido",
-                      },
+                    {...register("temperatura", {
+                      required: "La temperatura es obligatoria",
                     })}
                   />
-
-                  {errors.correoCliente ? (
+                  {errors.temperatura ? (
+                    <p className="text-danger">{errors.temperatura.message}</p>
+                  ) : (
+                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                  )}
+                </div>
+                <div className="w-25">
+                  <label>Frecuencia Cardiaca</label>
+                  <input
+                    type="number"
+                    placeholder="Frecuencia Cardiaca*"
+                    className="w-100"
+                    {...register("frecuenciaCardiaca", {
+                      required: "La Frec. Cardiaca es obligatoria",
+                    })}
+                  />
+                  {errors.frecuenciaCardiaca ? (
                     <p className="text-danger">
-                      {errors.correoCliente.message}
+                      {errors.frecuenciaCardiaca.message}
                     </p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                   )}
                 </div>
-                <div className="w-100">
+                <div className="w-25">
+                  <label>Frecuencia Respiratoria</label>
                   <input
-                    type="tel"
-                    placeholder="Número de teléfono*"
+                    type="number"
+                    placeholder="Frecuencia Respiratoria*"
                     className="w-100"
-                    {...register("telefonoCliente", {
-                      required: "El número de teléfono es obligatorio",
-                      pattern: {
-                        value: /^\d{10,15}$/,
-                        message: "El formato del teléfono no es válido",
-                      },
+                    {...register("frecuenciaRespiratoria", {
+                      required: "La Frec. Respiratoria es obligatoria",
                     })}
                   />
-
-                  {errors.telefonoCliente ? (
+                  {errors.frecuenciaRespiratoria ? (
                     <p className="text-danger">
-                      {errors.telefonoCliente.message}
+                      {errors.frecuenciaRespiratoria.message}
                     </p>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                   )}
                 </div>
-              </div>
-              <div className="form-row">
-                <div className="w-50">
-                  <input
-                    type="text"
-                    placeholder="Dirección*"
-                    className="w-100"
-                    {...register("direc", {
-                      required: "La dirección es obligatoria",
-                    })}
-                  />
-                  {errors.direc ? (
-                    <p className="text-danger">{errors.direc.message}</p>
-                  ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
-                  )}
-                </div>
-
-                <div className="d-flex w-50">
-                  <label htmlFor="provincia" className="mt-1 text-muted">
-                    Provincia:
-                  </label>
-                  <div className="ms-auto w-50">
-                    <select
-                      className="form-control"
-                      id="provincia"
-                      {...register("prov", {
-                        required: "La provincia es obligatoria",
-                        validate: (value) =>
-                          value !== "" ||
-                          "Debe seleccionar una provincia válida",
-                      })}
-                      defaultValue=""
-                    >
-                      <option value="">Selecciona una provincia</option>
-                      {provincias.map((provincia) => (
-                        <option key={provincia} value={provincia}>
-                          {provincia}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.prov ? (
-                      <p className="text-danger">{errors.prov.message}</p>
-                    ) : (
-                      <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
-                    )}
+                <div className="w-25">
+                  <label>Presion Arterial</label>
+                  <div className="d-flex gap-3">
+                    <div>
+                      <input
+                        type="number"
+                        placeholder="Sistólica*"
+                        className="inputPresionArterial w-100"
+                        {...register("presionSistolica", {
+                          required: "La Presión Arterial es obligatoria",
+                        })}
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        placeholder="Diastólica*"
+                        className="inputPresionArterial w-100"
+                        {...register("presionDiastolica", {
+                          required: "La Presión Arterial es obligatoria",
+                        })}
+                      />
+                    </div>
                   </div>
+                  {errors.presionDiastolica || errors.presionSistolica ? (
+                    <p className="text-danger">
+                      {errors.presionDiastolica?.message ||
+                        errors.presionSistolica?.message}
+                    </p>
+                  ) : (
+                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                  )}
                 </div>
               </div>
             </div>
@@ -236,7 +256,9 @@ function RegistrarIngreso() {
                 </p>
               )}
               <div>
-                <button type="submit" className="login-btn">Registrar Ingreso</button>
+                <button type="submit" className="login-btn">
+                  Registrar Ingreso
+                </button>
               </div>
             </div>
           </form>

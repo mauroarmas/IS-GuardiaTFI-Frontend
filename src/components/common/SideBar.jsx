@@ -12,7 +12,7 @@ const SideBar = () => {
   const rol = tokenObject ? tokenObject.rol : null;
 
   const handleMouseEnter = () => {
-    setIsMini(false); 
+    setIsMini(false);
   };
 
   const handleMouseLeave = () => {
@@ -21,7 +21,7 @@ const SideBar = () => {
 
   return (
     <>
-      {rol !== "enfermero" ? null : (
+      {rol !== "ENFERMERO" ? null : (
         <aside
           className={[
             isMini ? "mini" : "",
@@ -41,7 +41,11 @@ const SideBar = () => {
                 <NavLink
                   to="/"
                   end
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  className={({ isActive }) =>
+                    isActive || location.pathname === "/registrarIngreso"
+                      ? "active"
+                      : ""
+                  }
                 >
                   <i className="bi bi-clipboard2-pulse-fill"></i>
                   {!isMini && <label className="me-5">En espera</label>}
