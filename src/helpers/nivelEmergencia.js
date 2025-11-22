@@ -1,23 +1,23 @@
 export const nivelesEmergencia = [
   {
     "id": 1,
-    "nombre": "Critica"
+    "nombre": "🔴 Critica"
   },
   {
     "id": 2,
-    "nombre": "Emergencia"
+    "nombre": "🟠 Emergencia"
   },
   {
     "id": 3,
-    "nombre": "Urgencia"
+    "nombre": "🟡 Urgencia"
   },
   {
     "id": 4,
-    "nombre": "Urgencia Menor"
+    "nombre": "🟢 Urgencia Menor"
   },
   {
     "id": 5,
-    "nombre": "Sin Urgencia"
+    "nombre": "🔵 Sin Urgencia"
   },
 
 ];

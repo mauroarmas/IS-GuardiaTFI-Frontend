@@ -6,6 +6,7 @@ import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { getTokenObject } from "../../../helpers/functions";
+import { useState } from "react";
 
 function RegistrarIngreso() {
   const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -14,7 +15,52 @@ function RegistrarIngreso() {
     handleSubmit,
     formState: { errors },
     reset,
+    getValues,
   } = useForm();
+
+  const [paciente, setPaciente] = useState(null);
+  const [cargandoPaciente, setCargandoPaciente] = useState(false);
+  const [camposHabilitados, setCamposHabilitados] = useState(false);
+
+  const buscarPaciente = async () => {
+    const cuil = getValues("cuilPaciente"); // obtenemos el valor del input desde react-hook-form
+
+    if (!cuil || cuil.length < 11) {
+      Swal.fire({
+        icon: "warning",
+        title: "CUIL inválido",
+        text: "Debe ingresar un CUIL válido para buscar.",
+      });
+      return;
+    }
+
+    try {
+      setCargandoPaciente(true);
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/pacientes/${cuil}`
+      );
+
+      setPaciente(response.data);
+      setCamposHabilitados(true);
+      Swal.fire({
+        title: "Paciente encontrado",
+        icon: "success",
+        timer: 1000,
+      });
+    } catch (error) {
+      setPaciente(null);
+      setCamposHabilitados(false);
+
+      Swal.fire({
+        icon: "error",
+        title: "Paciente no encontrado",
+        text: "No existe un paciente registrado con ese CUIL.",
+      });
+    } finally {
+      setCargandoPaciente(false);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -86,29 +132,59 @@ function RegistrarIngreso() {
           >
             <div>
               <h5>Datos del Paciente:</h5>
-              <div className="w-25 d-flex flex-column form-row">
-                <label>CUIL Paciente *:</label>
-                <input
-                  type="text"
-                  placeholder="CUIL de Paciente*"
-                  className="w-100"
-                  {...register("cuilPaciente", {
-                    required: "El CUIL es obligatorio",
-                  })}
-                />
-                {errors.cuilPaciente ? (
-                  <p className="text-danger">{errors.cuilPaciente.message}</p>
-                ) : (
-                  <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
-                )}
+              <div className="form-row">
+                <div className="w-50 d-flex flex-column">
+                  <label>CUIL Paciente *:</label>
+                  <div className="d-flex align-items-center">
+                    <input
+                    disabled={camposHabilitados}
+                      type="text"
+                      placeholder="CUIL de Paciente*"
+                      className="w-50"
+                      {...register("cuilPaciente", {
+                        required: "El CUIL es obligatorio",
+                      })}
+                    />
+
+                    <button
+                    disabled={camposHabilitados}
+                      type="button"
+                      className="btn btn-primary mx-3 w-auto"
+                      onClick={buscarPaciente}
+                    >
+                      {cargandoPaciente ? "..." : "Buscar"}
+                    </button>
+                  </div>
+
+                  {errors.cuilPaciente ? (
+                    <p className="text-danger">{errors.cuilPaciente.message}</p>
+                  ) : (
+                    <p>&nbsp;</p>
+                  )}
+                </div>
+
+                <div className="w-50 ps-2 border rounded-2 bg-light d-flex flex-column justify-content-center p-2">
+                  <label>Paciente:</label>
+                  {paciente? 
+                  <ul>
+                    <li> <strong>Nombre:</strong> {paciente.apellido}, {paciente.nombre}</li>
+                    <li><strong>CUIL:</strong> {paciente.cuil}</li>
+                  </ul>
+                  
+                      : 
+                      <p>No buscado aún</p>}
+                </div>
               </div>
             </div>
+            <hr />
             <h5>Datos de Ingreso</h5>
             <div className="form-row d-flex">
               <div className="w-75">
                 <div className="w-100">
                   <label>Informe Médico *:</label>
                   <textarea
+                  disabled={!camposHabilitados}
+
                     placeholder="Informe Médico*"
                     className="w-100"
                     rows={4} // opcional, para controlar el alto
@@ -128,6 +204,8 @@ function RegistrarIngreso() {
                 <label htmlFor="nivelEmergencia">Nivel de Emergencia *:</label>
                 <div>
                   <select
+                  disabled={!camposHabilitados}
+
                     className="form-control"
                     id="nivelEmergencia"
                     {...register("nivelEmergencia", {
@@ -160,6 +238,8 @@ function RegistrarIngreso() {
                 <div className="w-25">
                   <label>Temperatura</label>
                   <input
+                  disabled={!camposHabilitados}
+
                     type="number"
                     placeholder="Temperatura*"
                     className="w-100"
@@ -176,6 +256,8 @@ function RegistrarIngreso() {
                 <div className="w-25">
                   <label>Frecuencia Cardiaca</label>
                   <input
+                  disabled={!camposHabilitados}
+
                     type="number"
                     placeholder="Frecuencia Cardiaca*"
                     className="w-100"
@@ -194,6 +276,8 @@ function RegistrarIngreso() {
                 <div className="w-25">
                   <label>Frecuencia Respiratoria</label>
                   <input
+                  disabled={!camposHabilitados}
+
                     type="number"
                     placeholder="Frecuencia Respiratoria*"
                     className="w-100"
@@ -214,6 +298,8 @@ function RegistrarIngreso() {
                   <div className="d-flex gap-3">
                     <div>
                       <input
+                      disabled={!camposHabilitados}
+
                         type="number"
                         placeholder="Sistólica*"
                         className="inputPresionArterial w-100"
@@ -224,6 +310,8 @@ function RegistrarIngreso() {
                     </div>
                     <div>
                       <input
+                      disabled={!camposHabilitados}
+
                         type="number"
                         placeholder="Diastólica*"
                         className="inputPresionArterial w-100"
@@ -256,7 +344,7 @@ function RegistrarIngreso() {
                 </p>
               )}
               <div>
-                <button type="submit" className="login-btn">
+                <button type="submit" className="login-btn" disabled={!camposHabilitados} >
                   Registrar Ingreso
                 </button>
               </div>
