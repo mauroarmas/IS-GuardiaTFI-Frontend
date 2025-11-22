@@ -7,6 +7,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { getTokenObject } from "../../../helpers/functions";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function RegistrarIngreso() {
   const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -122,10 +123,13 @@ function RegistrarIngreso() {
         {/* Titulo */}
         <div className="d-flex justify-content-between align-items-center mt-3">
           <h2>Registrar Ingreso</h2>
+          <Link className="cancel-btn w-auto " to="/">
+            <i className="bi bi-arrow-right-square me-2"></i> Volver
+          </Link>
         </div>
 
         {/* Formulario */}
-        <div className="form-container mt-2 w-100">
+        <div className="form-container mt-2 w-100 mb-5">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="h-100 d-flex flex-column justify-content-between"
@@ -137,7 +141,7 @@ function RegistrarIngreso() {
                   <label>CUIL Paciente *:</label>
                   <div className="d-flex align-items-center">
                     <input
-                    disabled={camposHabilitados}
+                      disabled={camposHabilitados}
                       type="text"
                       placeholder="CUIL de Paciente*"
                       className="w-50"
@@ -147,7 +151,7 @@ function RegistrarIngreso() {
                     />
 
                     <button
-                    disabled={camposHabilitados}
+                      disabled={camposHabilitados}
                       type="button"
                       className="btn btn-primary mx-3 w-auto"
                       onClick={buscarPaciente}
@@ -165,14 +169,20 @@ function RegistrarIngreso() {
 
                 <div className="w-50 ps-2 border rounded-2 bg-light d-flex flex-column justify-content-center p-2">
                   <label>Paciente:</label>
-                  {paciente? 
-                  <ul>
-                    <li> <strong>Nombre:</strong> {paciente.apellido}, {paciente.nombre}</li>
-                    <li><strong>CUIL:</strong> {paciente.cuil}</li>
-                  </ul>
-                  
-                      : 
-                      <p>No buscado aún</p>}
+                  {paciente ? (
+                    <ul>
+                      <li>
+                        {" "}
+                        <strong>Nombre:</strong> {paciente.apellido},{" "}
+                        {paciente.nombre}
+                      </li>
+                      <li>
+                        <strong>CUIL:</strong> {paciente.cuil}
+                      </li>
+                    </ul>
+                  ) : (
+                    <p>No buscado aún</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -183,8 +193,7 @@ function RegistrarIngreso() {
                 <div className="w-100">
                   <label>Informe Médico *:</label>
                   <textarea
-                  disabled={!camposHabilitados}
-
+                    disabled={!camposHabilitados}
                     placeholder="Informe Médico*"
                     className="w-100"
                     rows={4} // opcional, para controlar el alto
@@ -204,8 +213,7 @@ function RegistrarIngreso() {
                 <label htmlFor="nivelEmergencia">Nivel de Emergencia *:</label>
                 <div>
                   <select
-                  disabled={!camposHabilitados}
-
+                    disabled={!camposHabilitados}
                     className="form-control"
                     id="nivelEmergencia"
                     {...register("nivelEmergencia", {
@@ -238,8 +246,7 @@ function RegistrarIngreso() {
                 <div className="w-25">
                   <label>Temperatura</label>
                   <input
-                  disabled={!camposHabilitados}
-
+                    disabled={!camposHabilitados}
                     type="number"
                     placeholder="Temperatura*"
                     className="w-100"
@@ -256,8 +263,7 @@ function RegistrarIngreso() {
                 <div className="w-25">
                   <label>Frecuencia Cardiaca</label>
                   <input
-                  disabled={!camposHabilitados}
-
+                    disabled={!camposHabilitados}
                     type="number"
                     placeholder="Frecuencia Cardiaca*"
                     className="w-100"
@@ -276,8 +282,7 @@ function RegistrarIngreso() {
                 <div className="w-25">
                   <label>Frecuencia Respiratoria</label>
                   <input
-                  disabled={!camposHabilitados}
-
+                    disabled={!camposHabilitados}
                     type="number"
                     placeholder="Frecuencia Respiratoria*"
                     className="w-100"
@@ -298,8 +303,7 @@ function RegistrarIngreso() {
                   <div className="d-flex gap-3">
                     <div>
                       <input
-                      disabled={!camposHabilitados}
-
+                        disabled={!camposHabilitados}
                         type="number"
                         placeholder="Sistólica*"
                         className="inputPresionArterial w-100"
@@ -310,8 +314,7 @@ function RegistrarIngreso() {
                     </div>
                     <div>
                       <input
-                      disabled={!camposHabilitados}
-
+                        disabled={!camposHabilitados}
                         type="number"
                         placeholder="Diastólica*"
                         className="inputPresionArterial w-100"
@@ -344,7 +347,11 @@ function RegistrarIngreso() {
                 </p>
               )}
               <div>
-                <button type="submit" className="login-btn" disabled={!camposHabilitados} >
+                <button
+                  type="submit"
+                  className={`login-btn ${!camposHabilitados ? "disabled" : ""}`}
+                  disabled={!camposHabilitados}
+                >
                   Registrar Ingreso
                 </button>
               </div>
