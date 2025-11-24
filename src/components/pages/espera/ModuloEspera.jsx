@@ -112,10 +112,12 @@ function App() {
 
             {/* Gráfico */}
             <div className="contenedorGrafico" >
+
               <Grafico
                 arrayLabels={chartData.labels || []}
                 arrayData={chartData.data || []}
                 colores={nivelesEmergencia.map((n) => n.color)}
+                total={incomes.length}
               />
             </div>
 
