@@ -26,7 +26,9 @@ function RegistrarIngreso() {
   const [camposHabilitados, setCamposHabilitados] = useState(false);
 
   const buscarPaciente = async () => {
-    const cuil = getValues("cuilPaciente"); // obtenemos el valor del input desde react-hook-form
+    const cuil = getValues("cuilPaciente");
+    
+    console.log(cuil); // obtenemos el valor del input desde react-hook-form
 
     if (!cuil || cuil.length < 11) {
       Swal.fire({

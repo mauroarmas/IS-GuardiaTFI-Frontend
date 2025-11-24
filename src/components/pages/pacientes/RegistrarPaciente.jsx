@@ -7,7 +7,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Checkbox from "../../common/CheckBox";
 
 function RegistrarPaciente() {
   const {
@@ -18,42 +19,68 @@ function RegistrarPaciente() {
     setValue,
   } = useForm();
 
+  const [tieneObraSocial, setTieneObraSocial] = useState(false);
+  const [obrasSociales, setObrasSociales] = useState([]);
+
   const location = useLocation();
   const cuilInicial = location.state?.cuilBuscado || "";
 
   useEffect(() => {
     if (cuilInicial) {
-      setValue("cuilPaciente", cuilInicial);
+      setValue("cuil", cuilInicial);
     }
   }, [cuilInicial]);
 
-  const obrasSociales = [
-    {
-      id: 1,
-      nombre: "OSDE",
-    },
-    {
-      id: 2,
-      nombre: "Swiss Medical",
-    },
-    {
-      id: 3,
-      nombre: "Galeno",
-    },
-    {
-      id: 4,
-      nombre: "Medifé",
-    },
-    {
-      id: 5,
-      nombre: "Otra",
-    },
-  ];
+  const urlObrasSociales = `${import.meta.env.VITE_BACKEND_URL}/obra_social`;
+
+  const obtenerObrasSociales = async () => {
+    try {
+      const response = await axios.get(urlObrasSociales);
+      setObrasSociales(response.data);
+    } catch (error) {
+      setObrasSociales([]);
+    }
+  };
+
+  useEffect(() => {
+    if (tieneObraSocial) {
+      obtenerObrasSociales(); // ✅ solo cuando se activa
+    } else {
+      // Limpiar valores si se desactiva
+      setValue("obSoc", "");
+      setValue("numAfil", "");
+      setObrasSociales([]); // opcional para limpiar el select
+    }
+  }, [tieneObraSocial]);
 
   const onSubmit = async (pacienteData) => {
+    const domicilio = {
+      calle: pacienteData.calle,
+      numero: parseInt(pacienteData.numero, 10),
+      localidad: pacienteData.localidad,
+    };
+    delete pacienteData.calle;
+    delete pacienteData.numero;
+    delete pacienteData.localidad;
+    pacienteData = { ...pacienteData, domicilio };
+
+    if (tieneObraSocial) {
+      const obraSocial = {
+        nombre: pacienteData.obSoc,
+        numeroAfiliado: parseInt(pacienteData.numAfil, 10),
+      };
+      pacienteData = { ...pacienteData, obraSocial };
+
+    }
+          delete pacienteData.obSoc;
+      delete pacienteData.numAfil;
+
+    console.log(pacienteData);
+
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/pacientes",
+      const urlPacientes = `${import.meta.env.VITE_BACKEND_URL}/pacientes`
+      await axios.post(
+        urlPacientes,
         pacienteData
       );
 
@@ -103,24 +130,24 @@ function RegistrarPaciente() {
             onSubmit={handleSubmit(onSubmit)}
             className="h-100 d-flex flex-column justify-content-between"
           >
-            <h5>Datos de Persona</h5>
             <div>
+              <h5>Datos de Persona</h5>
               <div className="form-row">
                 <div className="w-50">
                   <input
                     type="text"
                     placeholder="CUIL*"
                     className="w-100"
-                    {...register("cuilPaciente", {
+                    {...register("cuil", {
                       required: "El CUIL es obligatorio",
                       pattern: {
-                        value: /^\d{11}$/,
+                        value: /^\d{2}-\d{8}-\d{1}$/,
                         message: "El formato del CUIL no es válido",
                       },
                     })}
                   />
-                  {errors.cuilPaciente ? (
-                    <p className="text-danger">{errors.cuilPaciente.message}</p>
+                  {errors.cuil ? (
+                    <p className="text-danger">{errors.cuil.message}</p>
                   ) : (
                     <p>&nbsp;</p>
                   )}
@@ -132,7 +159,7 @@ function RegistrarPaciente() {
                     type="text"
                     placeholder="Nombre *"
                     className="w-100"
-                    {...register("nombrePaciente", {
+                    {...register("nombre", {
                       required: "El nombre es obligatorio",
                       pattern: {
                         value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
@@ -141,10 +168,8 @@ function RegistrarPaciente() {
                       },
                     })}
                   />
-                  {errors.nombrePaciente ? (
-                    <p className="text-danger">
-                      {errors.nombrePaciente.message}
-                    </p>
+                  {errors.nombre ? (
+                    <p className="text-danger">{errors.nombre.message}</p>
                   ) : (
                     <p>&nbsp;</p>
                   )}
@@ -154,7 +179,7 @@ function RegistrarPaciente() {
                     type="text"
                     className="w-100"
                     placeholder="Apellido *"
-                    {...register("apellidoPaciente", {
+                    {...register("apellido", {
                       required: "El apellido es obligatorio",
                       pattern: {
                         value: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/,
@@ -163,10 +188,8 @@ function RegistrarPaciente() {
                       },
                     })}
                   />
-                  {errors.apellidoPaciente ? (
-                    <p className="text-danger">
-                      {errors.apellidoPaciente.message}
-                    </p>
+                  {errors.apellido ? (
+                    <p className="text-danger">{errors.apellido.message}</p>
                   ) : (
                     <p>&nbsp;</p>
                   )}
@@ -192,7 +215,7 @@ function RegistrarPaciente() {
                 </div>
                 <div>
                   <input
-                    type="text"
+                    type="number"
                     placeholder="Número*"
                     className="w-100"
                     {...register("numero", {
@@ -222,32 +245,61 @@ function RegistrarPaciente() {
                 </div>
               </div>
 
-              <h5>Obra Social</h5>
+              <div className="d-flex">
+                <h5>Obra Social</h5>
+                <Checkbox
+                  checked={tieneObraSocial}
+                  onChange={() => {
+                    setTieneObraSocial(!tieneObraSocial);
+                    if (tieneObraSocial) {
+                      // Limpiar valores si se desmarca
+                      setValue("obSoc", "");
+                      setValue("numAfil", "");
+                    }
+                  }}
+                />
+              </div>
               <div className="form-row ">
                 <div className="w-50">
                   <div>
                     <select
+                      disabled={!tieneObraSocial}
                       className="form-control"
-                      id="obraSocial"
-                      {...register("obraSocial", {})}
+                      id="obraSocialNombre"
+                      {...register("obSoc", {
+                        required: tieneObraSocial
+                          ? "La obra social es obligatoria"
+                          : false,
+                      })}
                       defaultValue=""
                     >
                       <option value="">Selecciona una Obra Social</option>
-                      {obrasSociales.map((obra) => (
-                        <option key={obra.id} value={obra.nombre}>
-                          {obra.nombre}
+                      {obrasSociales.map((obra, index) => (
+                        <option key={index} value={obra}>
+                          {obra}
                         </option>
                       ))}
                     </select>
+                    {errors.obSoc && (
+                      <p className="text-danger">{errors.obSoc.message}</p>
+                    )}
                   </div>
                 </div>
                 <div className="ps-3 w-50">
                   <input
+                    disabled={!tieneObraSocial}
                     type="text"
                     className="w-100"
                     placeholder="Número de Afiliado"
-                    {...register("numeroAfiliado", {})}
+                    {...register("numAfil", {
+                      required: tieneObraSocial
+                        ? "El número de afiliado es obligatorio"
+                        : false,
+                    })}
                   />
+                  {errors.numAfil && (
+                    <p className="text-danger">{errors.numAfil.message}</p>
+                  )}
                 </div>
               </div>
             </div>
