@@ -7,10 +7,12 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { getTokenObject } from "../../../helpers/functions";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegistrarIngreso() {
   const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
+
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -53,11 +55,36 @@ function RegistrarIngreso() {
       setPaciente(null);
       setCamposHabilitados(false);
 
-      Swal.fire({
-        icon: "error",
-        title: "Paciente no encontrado",
-        text: "No existe un paciente registrado con ese CUIL.",
-      });
+      if (error.response && error.response.status === 404) {
+        Swal.fire({
+          icon: "question",
+          title: "Paciente no encontrado",
+          text: "No existe un paciente registrado con ese CUIL. ¿Desea registrar el paciente?",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "rgba(156, 156, 156, 1)",
+          confirmButtonText: "Agregar Paciente",
+          cancelButtonText: "Cancelar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/moduloPacientes/registrarPaciente", {
+              state: { cuilBuscado: cuil }, // 👈 Aquí envías el CUIL
+            });
+          }
+        });
+      }
+
+      if (error.response && error.response.status !== 404) {
+        console.error("Error al buscar el paciente:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text:
+            "Error al buscar paciente " +
+            (error.response.data.message || "Error desconocido"),
+        });
+        return;
+      }
     } finally {
       setCargandoPaciente(false);
     }
@@ -351,7 +378,9 @@ function RegistrarIngreso() {
               <div>
                 <button
                   type="submit"
-                  className={`login-btn ${!camposHabilitados ? "disabled" : ""}`}
+                  className={`login-btn ${
+                    !camposHabilitados ? "disabled" : ""
+                  }`}
                   disabled={!camposHabilitados}
                 >
                   Registrar Ingreso

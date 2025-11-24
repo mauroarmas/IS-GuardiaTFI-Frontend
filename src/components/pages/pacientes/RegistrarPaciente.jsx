@@ -6,6 +6,8 @@ import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function RegistrarPaciente() {
   const {
@@ -13,7 +15,17 @@ function RegistrarPaciente() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
+
+  const location = useLocation();
+  const cuilInicial = location.state?.cuilBuscado || "";
+
+  useEffect(() => {
+    if (cuilInicial) {
+      setValue("cuilPaciente", cuilInicial);
+    }
+  }, [cuilInicial]);
 
   const obrasSociales = [
     {
