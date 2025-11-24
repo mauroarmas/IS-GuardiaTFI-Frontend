@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 function RegistrarPaciente() {
   const {
@@ -14,8 +15,30 @@ function RegistrarPaciente() {
     reset,
   } = useForm();
 
-  const onSubmit = async (pacienteData) => {
+  const obrasSociales = [
+    {
+      id: 1,
+      nombre: "OSDE",
+    },
+    {
+      id: 2,
+      nombre: "Swiss Medical",
+    },
+    {
+      id: 3,
+      nombre: "Galeno",
+    },
+    {
+      id: 4,
+      nombre: "Medifé",
+    },
+    {
+      id: 5,
+      nombre: "Otra",
+    },
+  ];
 
+  const onSubmit = async (pacienteData) => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/pacientes",
@@ -57,6 +80,9 @@ function RegistrarPaciente() {
         {/* Titulo */}
         <div className="d-flex justify-content-between align-items-center mt-3">
           <h2>Registrar Paciente</h2>
+          <Link className="cancel-btn w-auto " to="/moduloPacientes">
+            <i className="bi bi-arrow-right-square me-2"></i> Volver
+          </Link>
         </div>
 
         {/* Formulario */}
@@ -65,9 +91,10 @@ function RegistrarPaciente() {
             onSubmit={handleSubmit(onSubmit)}
             className="h-100 d-flex flex-column justify-content-between"
           >
-            {/* <div>
+            <h5>Datos de Persona</h5>
+            <div>
               <div className="form-row">
-                <div className="w-100">
+                <div className="w-50">
                   <input
                     type="text"
                     placeholder="CUIL*"
@@ -83,10 +110,12 @@ function RegistrarPaciente() {
                   {errors.cuilPaciente ? (
                     <p className="text-danger">{errors.cuilPaciente.message}</p>
                   ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                    <p>&nbsp;</p>
                   )}
                 </div>
-                <div className="w-100">
+              </div>
+              <div className="form-row">
+                <div className="w-25 pe-1">
                   <input
                     type="text"
                     placeholder="Nombre *"
@@ -105,14 +134,14 @@ function RegistrarPaciente() {
                       {errors.nombrePaciente.message}
                     </p>
                   ) : (
-                    <p>&nbsp;</p> 
+                    <p>&nbsp;</p>
                   )}
                 </div>
-                <div className="w-100">
+                <div className="w-25 ps-1">
                   <input
                     type="text"
-                    placeholder="Apellido *"
                     className="w-100"
+                    placeholder="Apellido *"
                     {...register("apellidoPaciente", {
                       required: "El apellido es obligatorio",
                       pattern: {
@@ -127,79 +156,91 @@ function RegistrarPaciente() {
                       {errors.apellidoPaciente.message}
                     </p>
                   ) : (
-                    <p>&nbsp;</p> 
+                    <p>&nbsp;</p>
                   )}
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="w-100">
-                  <input
-                    type="email"
-                    placeholder="Email*"
-                    className="w-100"
-                    {...register("correoPaciente", {
-                      required: "El email es obligatorio",
-                      pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                        message: "El formato del email no es válido",
-                      },
-                    })}
-                  />
-
-                  {errors.correoPaciente ? (
-                    <p className="text-danger">
-                      {errors.correoPaciente.message}
-                    </p>
-                  ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
-                  )}
-                </div>
-                <div className="w-100">
-                  <input
-                    type="tel"
-                    placeholder="Número de teléfono*"
-                    className="w-100"
-                    {...register("telefonoPaciente", {
-                      required: "El número de teléfono es obligatorio",
-                      pattern: {
-                        value: /^\d{10,15}$/,
-                        message: "El formato del teléfono no es válido",
-                      },
-                    })}
-                  />
-
-                  {errors.telefonoPaciente ? (
-                    <p className="text-danger">
-                      {errors.telefonoPaciente.message}
-                    </p>
-                  ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
-                  )}
-                </div>
-              </div>
-              <div className="form-row">
+              <h5>Domicilio</h5>
+              <div className="form-row gap-3">
                 <div className="w-50">
                   <input
                     type="text"
-                    placeholder="Domicilio*"
+                    placeholder="Calle*"
                     className="w-100"
-                    {...register("domicilio", {
-                      required: "El domicilio es obligatorio",
+                    {...register("calle", {
+                      required: "La calle es obligatoria",
                     })}
                   />
-                  {errors.domicilio ? (
-                    <p className="text-danger">{errors.domicilio.message}</p>
+                  {errors.calle ? (
+                    <p className="text-danger">{errors.calle.message}</p>
                   ) : (
-                    <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
+                    <p>&nbsp;</p>
                   )}
                 </div>
-
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Número*"
+                    className="w-100"
+                    {...register("numero", {
+                      required: "El numero es obligatorio",
+                    })}
+                  />
+                  {errors.numero ? (
+                    <p className="text-danger">{errors.numero.message}</p>
+                  ) : (
+                    <p>&nbsp;</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Localidad*"
+                    className="w-100"
+                    {...register("localidad", {
+                      required: "La localidad es obligatoria",
+                    })}
+                  />
+                  {errors.localidad ? (
+                    <p className="text-danger">{errors.localidad.message}</p>
+                  ) : (
+                    <p>&nbsp;</p>
+                  )}
+                </div>
               </div>
-            </div> */}
 
-            {/* <div className="d-flex justify-content-between">
+              <h5>Obra Social</h5>
+              <div className="form-row ">
+                <div className="w-50">
+                  <div>
+                    <select
+                      className="form-control"
+                      id="obraSocial"
+                      {...register("obraSocial", {})}
+                      defaultValue=""
+                    >
+                      <option value="">Selecciona una Obra Social</option>
+                      {obrasSociales.map((obra) => (
+                        <option key={obra.id} value={obra.nombre}>
+                          {obra.nombre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="ps-3 w-50">
+                  <input
+                    type="text"
+                    className="w-100"
+                    placeholder="Número de Afiliado"
+                    {...register("numeroAfiliado", {})}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="d-flex justify-content-between mt-5">
               {Object.keys(errors).length > 0 ? (
                 <p className="note error">
                   Hay errores en el formulario. Por favor verifica los campos.
@@ -210,9 +251,11 @@ function RegistrarPaciente() {
                 </p>
               )}
               <div>
-                <button type="submit" className="login-btn px-3"> <i className="bi bi-person-plus me-2"></i> Registrar Paciente</button>
+                <button type="submit" className="login-btn px-3">
+                  <i className="bi bi-person-plus me-2"></i> Registrar Paciente
+                </button>
               </div>
-            </div> */}
+            </div>
           </form>
         </div>
       </Container>

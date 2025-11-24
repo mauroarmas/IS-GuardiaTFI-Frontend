@@ -95,6 +95,8 @@ function RegistrarIngreso() {
       }
 
       reset();
+      setCamposHabilitados(false);
+      setPaciente(null);
     } catch (error) {
       console.error("Error al agregar el ingreso:", error);
 
@@ -156,7 +158,7 @@ function RegistrarIngreso() {
                       className="btn btn-primary mx-3 w-auto"
                       onClick={buscarPaciente}
                     >
-                      {cargandoPaciente ? "..." : "Buscar"}
+                      Buscar
                     </button>
                   </div>
 

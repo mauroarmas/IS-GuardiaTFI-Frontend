@@ -182,6 +182,7 @@ h3 {
   justify-content: center;
 }
 
+
 /* efecto de brillo animado */
 .login-btn::after {
   content: "";
