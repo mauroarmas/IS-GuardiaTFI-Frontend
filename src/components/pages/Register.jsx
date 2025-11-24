@@ -71,7 +71,7 @@ function Register() {
   return (
     <div className="backPrincipal d-flex justify-content-center align-items-center">
       <div className="w-50 d-flex justify-content-center">
-        <img src="/public/logo.png" alt="Logo" className="imgRegister" />
+        <img src="/logo.png" alt="Logo" className="imgRegister" />
       </div>
 
       <div className="contenidoLogin shadow p-4 rounded-4 bg-white">
