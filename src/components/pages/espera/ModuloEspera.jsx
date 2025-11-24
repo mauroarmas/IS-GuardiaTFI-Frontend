@@ -6,10 +6,10 @@ import axios from "axios";
 import Grafico from "../../common/Grafico";
 import { getTokenObject } from "../../../helpers/functions";
 import Swal from "sweetalert2";
+import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 
 function App() {
   const [incomes, setIncomes] = useState([]);
-  const [pacienteSiguiente, setPacienteSiguiente] = useState(null);
   const [chartData, setChartData] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [modalAtencionShow, setModalAtencionShow] = useState(false);
@@ -29,48 +29,40 @@ function App() {
     try {
       const response = await axios.get(endpoint);
       setIncomes(response.data);
-      const endpointPacienteSiguiente = `${
-        import.meta.env.VITE_BACKEND_URL
-      }/paciente/${response.data[0]?.pacienteId}`;
-      const responsePacienteSiguiente = await axios.get(
-        endpointPacienteSiguiente
-      );
-      setPacienteSiguiente(responsePacienteSiguiente.data);
 
       // Gráfico de niveles de urgencia
-      const resumen = response.data.reduce(
-        (acc, ingreso) => {
-          acc[ingreso.nivelEmergencia] =
-            (acc[ingreso.nivelEmergencia] || 0) + 1;
-          return acc;
-        },
-        {
-          Emergencia: 0,
-          Crítica: 0,
-          Urgencia: 0,
-          "Urgencia Menor": 0,
-          "Sin Urgencia": 0,
-        }
-      );
-      setChartData({
-        labels: ["Crítica", "Emergencia", "Urgencia", "Urg. Menor", "Sin Urg."],
-        data: [
-          resumen["Crítica"],
-          resumen["Emergencia"],
-          resumen["Urgencia"],
-          resumen["Urgencia Menor"],
-          resumen["Sin Urgencia"],
-        ],
-      });
+      armarGrafica(response);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 👇 Modificamos esta función para recibir un ingreso
   const handleShowModal = (income) => {
     setSelectedIncome(income);
     setModalShow(true);
+  };
+
+  const armarGrafica = (response) => {
+    // Convertir id -> nombre
+    const mapNiveles = Object.fromEntries(
+      nivelesEmergencia.map((n) => [n.id, n.nombre])
+    );
+
+    // Resumen inicial de 0
+    const resumen = Object.fromEntries(nivelesEmergencia.map((n) => [n.id, 0]));
+
+    // Contar ingresos
+    response.data.forEach((ingreso) => {
+      const id = Number(ingreso.nivelEmergencia);
+ 
+      if (resumen[id] !== undefined) resumen[id]++;
+    });
+
+    // Generar labels y data ordenadas por ID
+    const labels = nivelesEmergencia.map((n) => n.nombre);
+    const data = nivelesEmergencia.map((n) => resumen[n.id]);
+
+    setChartData({ labels, data });
   };
 
   const handleShowModalAtencion = (income) => {
@@ -91,42 +83,9 @@ function App() {
   };
 
   function getColorByUrgencyLevel(level) {
-    switch (level) {
-      case "Crítica":
-        return (
-          <span className="span-urgency">
-            <i className="bi bi-circle-fill" style={{ color: "red" }}></i> {level}
-          </span>
-        );
-      case "Emergencia":
-        return (
-          <span className="span-urgency">
-            <i className="bi bi-circle-fill" style={{ color: "orange" }}></i>{" "}
-            {level}
-          </span>
-        );
-      case "Urgencia":
-        return (
-          <span className="span-urgency">
-            <i className="bi bi-circle-fill" style={{ color: "yellow" }}></i>{" "}
-            {level}
-          </span>
-        );
-      case "Urgencia Menor":
-        return (
-          <span className="span-urgency">
-            <i className="bi bi-circle-fill" style={{ color: "green" }}></i> {level}
-          </span>
-        );
-      case "Sin Urgencia":
-        return (
-          <span className="span-urgency">
-            <i className="bi bi-circle-fill" style={{ color: "blue" }}></i> {level}
-          </span>
-        );
-      default:
-        return <p style={{ color: "black" }}>No definido</p>;
-    }
+    const nivel = nivelesEmergencia.find((n) => n.id === level);
+    const nombre = nivel ? (nivel.color + " " + nivel.nombre) : "Nivel Desconocido";
+    return nombre;
   }
 
   useEffect(() => {
@@ -139,27 +98,29 @@ function App() {
         <div>
           <div className="d-flex align-items-center">
             {/* Titulo */}
-            <div className="d-flex flex-column w-25">
+            <div className="d-flex flex-column" style={{ width: "230px"}}>
               <h2>Cola de Espera</h2>
               <div className="mt-4">
                 {rol !== "ENFERMERO" ? null : (
                   <Link className="login-btn w-50 " to="/registrarIngreso">
-                    <i className="bi bi-arrow-right-square me-2"></i> Nuevo Ingreso
+                    <i className="bi bi-arrow-right-square me-2"></i> Nuevo
+                    Ingreso
                   </Link>
                 )}
               </div>
             </div>
 
             {/* Gráfico */}
-            <div className="contenedorGrafico w-25">
+            <div className="contenedorGrafico" >
               <Grafico
                 arrayLabels={chartData.labels || []}
                 arrayData={chartData.data || []}
+                colores={nivelesEmergencia.map((n) => n.color)}
               />
             </div>
 
             {/* Card */}
-            <div className="card w-50">
+            <div className="my-4 ms-auto card w-50">
               <div className="card-header">
                 <strong>Siguiente en Espera: </strong>
                 {getColorByUrgencyLevel(incomes[0]?.nivelEmergencia)}
@@ -170,7 +131,7 @@ function App() {
                 ) : (
                   <div>
                     <h5 className="card-title">
-                      {pacienteSiguiente?.nombre} {pacienteSiguiente?.apellido}
+                      {incomes[0].paciente.nombre} {incomes[0].paciente.apellido}
                     </h5>
                     <p className="card-text">{incomes[0]?.informe}</p>
                     <div className="d-flex justify-content-between">
@@ -202,18 +163,24 @@ function App() {
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>
-                    <th style={{ width: "5%" }}>ID</th>
-                    <th style={{ width: "15%" }}>Triage</th>
+                    <th style={{ width: "15%" }}>Nivel de Emergencia</th>
+                    <th style={{ width: "15%" }}>Paciente</th>
+                    <th style={{ width: "15%" }}>Enfermera</th>
                     <th style={{ width: "15%" }}>Datos de Ingreso</th>
                     <th>Informe</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {incomes.map((ingreso) => (
-                    <tr key={ingreso.id}>
-                      <td>{ingreso.pacienteId}</td>
+                  {incomes.map((ingreso, index) => (
+                    <tr key={index}>
                       <td>
                         {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
+                      </td>
+                      <td>
+                        {ingreso.paciente.nombre} {ingreso.paciente.apellido}
+                      </td>
+                      <td>
+                        {ingreso.enfermera.nombre} {ingreso.enfermera.apellido}
                       </td>
                       <td className="text-center">
                         <a
@@ -258,20 +225,32 @@ function ModalDatos({ show, onHide, income }) {
           <Table striped bordered hover>
             <tbody>
               <tr>
-                <td>Temperatura</td>
+                <td>
+                  <i class="bi bi-thermometer-half"></i> Temperatura
+                </td>
                 <td>{income.temperatura}</td>
               </tr>
               <tr>
-                <td>Frecuencia Cardiaca</td>
-                <td>{income.frecuenciaCardiaca}</td>
+                <td>
+                  <i class="bi bi-heart-pulse-fill"></i> Frecuencia Cardiaca
+                </td>
+                <td>{income.frecuenciaCardiaca.valor}</td>
               </tr>
               <tr>
-                <td>Frecuencia Respiratoria</td>
-                <td>{income.frecuenciaRespiratoria}</td>
+                <td>
+                  <i class="bi bi-lungs-fill"></i> Frecuencia Respiratoria
+                </td>
+                <td>{income.frecuenciaRespiratoria.valor}</td>
               </tr>
               <tr>
-                <td>Tensión Arterial</td>
-                <td>{income.tensionArterial}</td>
+                <td>
+                  <i class="bi bi-droplet-half"></i>
+                  Tensión Arterial
+                </td>
+                <td>
+                  {income.tensionArterial.sistolica.valor} /{" "}
+                  {income.tensionArterial.diastolica.valor}
+                </td>
               </tr>
             </tbody>
           </Table>
@@ -280,8 +259,8 @@ function ModalDatos({ show, onHide, income }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onHide} className="mx-auto login-btn">
-          Cerrar
+        <button onClick={onHide} className="w-25 mx-auto login-btn">
+          Aceptar
         </button>
       </Modal.Footer>
     </Modal>

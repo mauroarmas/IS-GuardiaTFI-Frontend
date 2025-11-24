@@ -222,10 +222,10 @@ function RegistrarIngreso() {
             <div className="form-row d-flex">
               <div className="w-75">
                 <div className="w-100">
-                  <label>Informe Médico *:</label>
+                  <label>Informe*:</label>
                   <textarea
                     disabled={!camposHabilitados}
-                    placeholder="Informe Médico*"
+                    placeholder="Informe de ingreso*"
                     className="w-100"
                     rows={4} // opcional, para controlar el alto
                     {...register("informe", {
@@ -258,7 +258,7 @@ function RegistrarIngreso() {
                     <option value="">Selecciona un nivel</option>
                     {nivelesEmergencia.map((nivel) => (
                       <option key={nivel.id} value={nivel.nombre}>
-                        {nivel.nombre}
+                        {nivel.color} {nivel.nombre}
                       </option>
                     ))}
                   </select>
@@ -340,6 +340,10 @@ function RegistrarIngreso() {
                         className="inputPresionArterial w-100"
                         {...register("presionSistolica", {
                           required: "La Presión Arterial es obligatoria",
+                          validate: (value) =>
+                            parseInt(value, 10) >
+                            parseInt(getValues("presionDiastolica") || "0", 10) ||
+                            "La presión sistólica debe ser mayor que la diastólica",
                         })}
                       />
                     </div>
@@ -351,6 +355,10 @@ function RegistrarIngreso() {
                         className="inputPresionArterial w-100"
                         {...register("presionDiastolica", {
                           required: "La Presión Arterial es obligatoria",
+                          validate: (value) =>
+                            parseInt(value, 10) <
+                            parseInt(getValues("presionSistolica") || "0", 10) ||
+                            "La presión diastólica debe ser menor que la sistólica",
                         })}
                       />
                     </div>
