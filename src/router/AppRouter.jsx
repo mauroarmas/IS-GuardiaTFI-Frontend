@@ -9,6 +9,7 @@ import Register from "../components/pages/Register";
 import RegistrarIngreso from "../components/pages/espera/RegistrarIngreso";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import Unauthorized from "../components/common/Unauthorized";
+import RegistrarAtencion from "../components/pages/atencion/RegistrarAtencion";
 
 const AppRouter = () => {
   return (
@@ -54,6 +55,15 @@ const AppRouter = () => {
           element={
             <ProtectedRoute allowedRoles={["ENFERMERO"]}>
               <RegistrarIngreso></RegistrarIngreso>
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          exact
+          path="/registrarAtencion"
+          element={
+            <ProtectedRoute allowedRoles={["MEDICO"]}>
+              <RegistrarAtencion></RegistrarAtencion>
             </ProtectedRoute>
           }
         ></Route>

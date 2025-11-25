@@ -25,7 +25,7 @@ const NavBar = () => {
   };
 
   // Ocultar NavBar en login/signup
-  if (location.pathname === "/login" || location.pathname === "/signup") {
+  if (location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/unauthorized" || location.pathname === "/registrarAtencion") {
     return <Outlet />;
   }
 
@@ -34,9 +34,11 @@ const NavBar = () => {
       <div className="d-flex justify-content-between align-items-center">
         {/* Logo */}
         <div className="img-fluid">
-          <Link to="/">
-            <img src="/logo.png" alt="logo" className="imgNavbar" />
-          </Link>
+          {location.pathname === "/registrarAtencion" ? null : (
+            <Link to="/">
+              <img src="/logo.png" alt="logo" className="imgNavbar" />
+            </Link>
+          )}
         </div>
 
         {/* Usuario */}
@@ -50,6 +52,7 @@ const NavBar = () => {
         )}
 
         {/* Botón login/logout */}
+
         <div>
           {rol ? (
             <Link
