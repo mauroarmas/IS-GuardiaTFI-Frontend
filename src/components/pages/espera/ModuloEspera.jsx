@@ -12,16 +12,11 @@ function App() {
   const [incomes, setIncomes] = useState([]);
   const [chartData, setChartData] = useState({});
   const [modalShow, setModalShow] = useState(false);
-  const [modalAtencionShow, setModalAtencionShow] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState(null);
   const navigate = useNavigate();
 
   const rol = getTokenObject()?.rol;
 
-  const cerrarConsulta = () => {
-    setModalAtencionShow(false);
-    navigate(0);
-  };
 
   const fetchIncomes = async () => {
     const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
@@ -65,7 +60,7 @@ function App() {
     setChartData({ labels, data });
   };
 
-  const handleShowModalAtencion = (income) => {
+  const nuevaAtencion = (income) => {
     Swal.fire({
       title: "¿Desea atender a este paciente?",
       text: "Quitará al paciente de la lista de espera y no podrá cancelar la atención una vez iniciada.",
@@ -76,8 +71,7 @@ function App() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        setSelectedIncome(income);
-        setModalAtencionShow(true);
+        navigate(`/registrarAtencion`);
       }
     });
   };
@@ -136,9 +130,9 @@ function App() {
                     <p className="card-text">{incomes[0]?.informe}</p>
                     <div className="d-flex justify-content-between">
                       {rol !== "MEDICO" ? null : (
-                        <a
+                        <a 
                           className="login-btn"
-                          onClick={() => handleShowModalAtencion(incomes[0])}
+                          onClick={() => nuevaAtencion(incomes[0])}
                         >
                           <i className="bi bi-clipboard-plus me-2"></i> Atender
                         </a>
@@ -203,11 +197,6 @@ function App() {
             onHide={() => setModalShow(false)}
             income={selectedIncome}
           />
-          <ModalAtencion
-            show={modalAtencionShow}
-            onHide={cerrarConsulta}
-            income={selectedIncome}
-          />
         </div>
       </Container>
     </div>
@@ -261,21 +250,6 @@ function ModalDatos({ show, onHide, income }) {
       <Modal.Footer>
         <button onClick={onHide} className="w-25 mx-auto login-btn">
           Aceptar
-        </button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
-function ModalAtencion({ show, onHide, income }) {
-  return (
-    <Modal show={show} onHide={onHide} fullscreen={true}>
-      <Modal.Header>
-        <Modal.Title className="text-center">Nueva Atención</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="d-flex flex-column align-items-center"></Modal.Body>
-      <Modal.Footer>
-        <button onClick={onHide} className="ms-auto login-btn w-auto">
-          Cerrar
         </button>
       </Modal.Footer>
     </Modal>
