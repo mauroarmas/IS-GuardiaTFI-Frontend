@@ -69,7 +69,7 @@ function App() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         navigate(`/registrarAtencion`, { state: { ingreso: income } });
-        // await axiosClient.get("/ingreso/reclamar-ingreso");
+        await axiosClient.get("/ingreso/reclamar-ingreso");
       }
     });
   };
@@ -149,7 +149,7 @@ function App() {
 
           <div className="d-flex">
             {/* Tabla */}
-            <div className="table-responsive table-container w-100">
+            <div className="table-responsive table-container w-100 ">
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>

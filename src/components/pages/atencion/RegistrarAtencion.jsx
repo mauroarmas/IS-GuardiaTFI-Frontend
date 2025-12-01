@@ -70,7 +70,7 @@ function RegistrarAtencion() {
             </span>
           </div>
           <div className="card-body d-flex justify-content-between">
-            <div className="w-75">
+            <div className="w-100">
               <h5 className="card-title">
                 {ingreso.paciente.apellido} {ingreso.paciente.nombre}
               </h5>
@@ -80,7 +80,7 @@ function RegistrarAtencion() {
               </p>
               <div className="d-flex justify-content-between"></div>
             </div>
-            <Table hover className="w-25 my-auto">
+            <Table hover className="w-50 my-auto">
               <tbody> 
                 <tr>
                   <td>
