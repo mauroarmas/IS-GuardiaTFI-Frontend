@@ -3,7 +3,7 @@ import "../../../styles/modulos.css";
 import "../../../styles/registroForm.css";
 import { useForm } from "react-hook-form";
 import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
-import axios from "axios";
+import axiosClient from "../../../utils/axiosClient";
 import Swal from "sweetalert2";
 import { getTokenObject } from "../../../helpers/functions";
 import { useState } from "react";
@@ -42,8 +42,8 @@ function RegistrarIngreso() {
     try {
       setCargandoPaciente(true);
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/pacientes/${cuil}`
+      const response = await axiosClient.get(
+        `/pacientes/${cuil}`
       );
 
       setPaciente(response.data);
@@ -111,7 +111,7 @@ function RegistrarIngreso() {
         presionDiastolica: parseInt(data.presionDiastolica, 10),
       };
       console.log("Datos a enviar", datosEnviar);
-      const response = await axios.post(endpoint, datosEnviar);
+      const response = await axiosClient.post("/ingreso", datosEnviar);
 
       if (response && response.data) {
         Swal.fire({
@@ -279,6 +279,7 @@ function RegistrarIngreso() {
                   <input
                     disabled={!camposHabilitados}
                     type="number"
+                    step="any"
                     placeholder="Temperatura*"
                     className="w-100"
                     {...register("temperatura", {
@@ -296,6 +297,7 @@ function RegistrarIngreso() {
                   <input
                     disabled={!camposHabilitados}
                     type="number"
+                    step="any"
                     placeholder="Frecuencia Cardiaca*"
                     className="w-100"
                     {...register("frecuenciaCardiaca", {
@@ -315,6 +317,7 @@ function RegistrarIngreso() {
                   <input
                     disabled={!camposHabilitados}
                     type="number"
+                    step="any"
                     placeholder="Frecuencia Respiratoria*"
                     className="w-100"
                     {...register("frecuenciaRespiratoria", {
@@ -336,6 +339,7 @@ function RegistrarIngreso() {
                       <input
                         disabled={!camposHabilitados}
                         type="number"
+                        step="any"
                         placeholder="Sistólica*"
                         className="inputPresionArterial w-100"
                         {...register("presionSistolica", {
@@ -351,6 +355,7 @@ function RegistrarIngreso() {
                       <input
                         disabled={!camposHabilitados}
                         type="number"
+                        step="any"
                         placeholder="Diastólica*"
                         className="inputPresionArterial w-100"
                         {...register("presionDiastolica", {

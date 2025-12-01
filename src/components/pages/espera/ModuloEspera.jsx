@@ -2,7 +2,7 @@ import { Container, Table, Modal } from "react-bootstrap";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
-import axios from "axios";
+import axiosClient from "../../../utils/axiosClient";
 import Grafico from "../../common/Grafico";
 import { getTokenObject } from "../../../helpers/functions";
 import Swal from "sweetalert2";
@@ -19,13 +19,10 @@ function App() {
 
 
   const fetchIncomes = async () => {
-    const endpoint = `${import.meta.env.VITE_BACKEND_URL}/ingreso`;
-
     try {
-      const response = await axios.get(endpoint);
+      const response = await axiosClient.get("/ingreso");
       setIncomes(response.data);
 
-      // Gráfico de niveles de urgencia
       armarGrafica(response);
     } catch (error) {
       console.error(error);
@@ -95,7 +92,7 @@ function App() {
             <div className="d-flex flex-column" style={{ width: "230px"}}>
               <h2>Cola de Espera</h2>
               <div className="mt-4">
-                {rol !== "ENFERMERO" ? null : (
+                {rol !== "enfermero" ? null : (
                   <Link className="login-btn w-50 " to="/registrarIngreso">
                     <i className="bi bi-arrow-right-square me-2"></i> Nuevo
                     Ingreso
@@ -129,7 +126,7 @@ function App() {
                     </h5>
                     <p className="card-text">{incomes[0]?.informe}</p>
                     <div className="d-flex justify-content-between">
-                      {rol !== "MEDICO" ? null : (
+                      {rol !== "medico" ? null : (
                         <a 
                           className="login-btn"
                           onClick={() => nuevaAtencion(incomes[0])}

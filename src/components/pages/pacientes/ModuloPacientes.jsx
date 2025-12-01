@@ -6,7 +6,7 @@ import {
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
-import axios from "axios";
+import axiosClient from "../../../utils/axiosClient";
 
 function ModuloPacientes() {
   const [pacientes, setPacientes] = useState([]);
@@ -14,8 +14,8 @@ function ModuloPacientes() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/paciente`
+      const response = await axiosClient.get(
+        `/paciente`
       );
 
       setPacientes(response.data);

@@ -21,7 +21,7 @@ const SideBar = () => {
 
   return (
     <>
-      {rol !== "ENFERMERO" ? null : (
+      {rol !== "enfermero" ? null : (
         <aside
           className={[
             isMini ? "mini" : "",

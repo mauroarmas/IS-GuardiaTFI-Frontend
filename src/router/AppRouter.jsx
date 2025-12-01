@@ -35,7 +35,7 @@ const AppRouter = () => {
           exact
           path="/moduloPacientes"
           element={
-            <ProtectedRoute allowedRoles={["ENFERMERO"]}>
+            <ProtectedRoute allowedRoles={["enfermero"]}>
               <ModuloPacientes></ModuloPacientes>
             </ProtectedRoute>
           }
@@ -44,7 +44,7 @@ const AppRouter = () => {
           exact
           path="/moduloPacientes/registrarPaciente"
           element={
-            <ProtectedRoute allowedRoles={["ENFERMERO"]}>
+            <ProtectedRoute allowedRoles={["enfermero"]}>
               <RegistrarPaciente></RegistrarPaciente>
             </ProtectedRoute>
           }
@@ -53,7 +53,7 @@ const AppRouter = () => {
           exact
           path="/registrarIngreso"
           element={
-            <ProtectedRoute allowedRoles={["ENFERMERO"]}>
+            <ProtectedRoute allowedRoles={["enfermero"]}>
               <RegistrarIngreso></RegistrarIngreso>
             </ProtectedRoute>
           }
@@ -62,7 +62,7 @@ const AppRouter = () => {
           exact
           path="/registrarAtencion"
           element={
-            <ProtectedRoute allowedRoles={["MEDICO"]}>
+            <ProtectedRoute allowedRoles={["medico"]}>
               <RegistrarAtencion></RegistrarAtencion>
             </ProtectedRoute>
           }

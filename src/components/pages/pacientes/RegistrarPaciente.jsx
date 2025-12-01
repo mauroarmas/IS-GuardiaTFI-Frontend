@@ -3,12 +3,12 @@ import "../../../styles/modulos.css";
 import "../../../styles/registroForm.css";
 import { useForm } from "react-hook-form";
 import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Checkbox from "../../common/CheckBox";
+import axiosClient from "../../../utils/axiosClient";
 
 function RegistrarPaciente() {
   const {
@@ -31,11 +31,9 @@ function RegistrarPaciente() {
     }
   }, [cuilInicial]);
 
-  const urlObrasSociales = `${import.meta.env.VITE_BACKEND_URL}/obra_social`;
-
   const obtenerObrasSociales = async () => {
     try {
-      const response = await axios.get(urlObrasSociales);
+      const response = await axiosClient.get("/obra_social");
       setObrasSociales(response.data);
     } catch (error) {
       setObrasSociales([]);
@@ -78,12 +76,11 @@ function RegistrarPaciente() {
     console.log(pacienteData);
 
     try {
-      const urlPacientes = `${import.meta.env.VITE_BACKEND_URL}/pacientes`
-      await axios.post(
-        urlPacientes,
+      await axiosClient.post(
+        "/pacientes",
         pacienteData
       );
-
+      
       Swal.fire({
         title: "Paciente agregado",
         text: "El paciente se agregó exitosamente.",
