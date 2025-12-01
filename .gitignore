@@ -23,3 +23,5 @@ correcciones.txt
 *.njsproj
 *.sln
 *.sw?
+
+.env
