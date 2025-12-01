@@ -25,3 +25,5 @@ correcciones.txt
 *.sw?
 
 .env
+.env.local
+.env.*.local
