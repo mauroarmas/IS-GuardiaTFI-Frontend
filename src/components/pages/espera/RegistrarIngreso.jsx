@@ -27,7 +27,7 @@ function RegistrarIngreso() {
 
   const buscarPaciente = async () => {
     const cuil = getValues("cuilPaciente");
-    
+
     console.log(cuil); // obtenemos el valor del input desde react-hook-form
 
     if (!cuil || cuil.length < 11) {
@@ -284,6 +284,14 @@ function RegistrarIngreso() {
                     className="w-100"
                     {...register("temperatura", {
                       required: "La temperatura es obligatoria",
+                      min: {
+                        value: 30,
+                        message: "La temperatura debe ser al menos 30°C",
+                      },
+                      max: {
+                        value: 45,
+                        message: "La temperatura debe ser como máximo 45°C",
+                      },
                     })}
                   />
                   {errors.temperatura ? (
@@ -302,6 +310,16 @@ function RegistrarIngreso() {
                     className="w-100"
                     {...register("frecuenciaCardiaca", {
                       required: "La Frec. Cardiaca es obligatoria",
+                      min: {
+                        value: 30,
+                        message:
+                          "La frecuencia cardiaca debe ser al menos 30 bpm",
+                      },
+                      max: {
+                        value: 200,
+                        message:
+                          "La frecuencia cardiaca debe ser como máximo 200 bpm",
+                      },
                     })}
                   />
                   {errors.frecuenciaCardiaca ? (
@@ -322,6 +340,16 @@ function RegistrarIngreso() {
                     className="w-100"
                     {...register("frecuenciaRespiratoria", {
                       required: "La Frec. Respiratoria es obligatoria",
+                      min: {
+                        value: 5,
+                        message:
+                          "La frecuencia respiratoria debe ser al menos 10 rpm",
+                      },
+                      max: {
+                        value: 60,
+                        message:
+                          "La frecuencia respiratoria debe ser como máximo 40 rpm",
+                      },
                     })}
                   />
                   {errors.frecuenciaRespiratoria ? (
@@ -344,9 +372,22 @@ function RegistrarIngreso() {
                         className="inputPresionArterial w-100"
                         {...register("presionSistolica", {
                           required: "La Presión Arterial es obligatoria",
+                          min: {
+                            value: 50,
+                            message:
+                              "La presión sistólica debe ser al menos 50",
+                          },
+                          max: {
+                            value: 250,
+                            message:
+                              "La presión sistólica debe ser como máximo 250",
+                          },
                           validate: (value) =>
                             parseInt(value, 10) >
-                            parseInt(getValues("presionDiastolica") || "0", 10) ||
+                              parseInt(
+                                getValues("presionDiastolica") || "0",
+                                10
+                              ) ||
                             "La presión sistólica debe ser mayor que la diastólica",
                         })}
                       />
@@ -360,9 +401,22 @@ function RegistrarIngreso() {
                         className="inputPresionArterial w-100"
                         {...register("presionDiastolica", {
                           required: "La Presión Arterial es obligatoria",
+                          min: {
+                            value: 30,
+                            message:
+                              "La presión diastólica debe ser al menos 30",
+                          },
+                          max: {
+                            value: 150,
+                            message:
+                              "La presión diastólica debe ser como máximo 150",
+                          },
                           validate: (value) =>
                             parseInt(value, 10) <
-                            parseInt(getValues("presionSistolica") || "0", 10) ||
+                              parseInt(
+                                getValues("presionSistolica") || "0",
+                                10
+                              ) ||
                             "La presión diastólica debe ser menor que la sistólica",
                         })}
                       />

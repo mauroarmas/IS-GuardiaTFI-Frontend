@@ -4,7 +4,7 @@ import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
-const Grafico = ({ arrayLabels = [], arrayData = [], colores=[] }) => {
+const Grafico = ({ arrayLabels = [], arrayData = [], colores=[], total }) => {
   const labelsWithCounts = arrayLabels.map((label, idx) => {
     const val = arrayData[idx] ?? 0;
     return `${label} ${val}`;
@@ -40,7 +40,9 @@ const Grafico = ({ arrayLabels = [], arrayData = [], colores=[] }) => {
 
   return (
     <div style={{ width: "380px", height: "150px", display: "flex" }} className="d-flex align-items-center justify-content-center">
+      
       <ul style={{ marginRight: "20px" }}>
+        <h5>Total: {total}</h5>
         {arrayLabels.map((label, idx) => (
           <li key={idx} style={{ fontSize: "15px", marginBottom: "2px", fontWeight: "500" }}>
             <bold className="me-2">{colores[idx]}</bold>
