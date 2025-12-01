@@ -6,7 +6,7 @@ import axiosClient from "../../../utils/axiosClient";
 import Grafico from "../../common/Grafico";
 import { getTokenObject } from "../../../helpers/functions";
 import Swal from "sweetalert2";
-import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
+import { getColorByUrgencyLevel, nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 
 function App() {
   const [incomes, setIncomes] = useState([]);
@@ -66,18 +66,15 @@ function App() {
       confirmButtonColor: "#3085d6",
       confirmButtonText: "Sí, atender paciente",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        navigate(`/registrarAtencion`);
+        navigate(`/registrarAtencion`, { state: { ingreso: income } });
+        // await axiosClient.get("/ingreso/reclamar-ingreso");
       }
     });
   };
 
-  function getColorByUrgencyLevel(level) {
-    const nivel = nivelesEmergencia.find((n) => n.id === level);
-    const nombre = nivel ? (nivel.color + " " + nivel.nombre) : "Nivel Desconocido";
-    return nombre;
-  }
+
 
   useEffect(() => {
     fetchIncomes();
@@ -216,19 +213,19 @@ function ModalDatos({ show, onHide, income }) {
                 <td>
                   <i class="bi bi-thermometer-half"></i> Temperatura
                 </td>
-                <td>{income.temperatura}</td>
+                <td>{income.temperatura} [°C]</td>
               </tr>
               <tr>
                 <td>
                   <i class="bi bi-heart-pulse-fill"></i> Frecuencia Cardiaca
                 </td>
-                <td>{income.frecuenciaCardiaca.valor}</td>
+                <td>{income.frecuenciaCardiaca.valor} [lpm]</td>
               </tr>
               <tr>
                 <td>
                   <i class="bi bi-lungs-fill"></i> Frecuencia Respiratoria
                 </td>
-                <td>{income.frecuenciaRespiratoria.valor}</td>
+                <td>{income.frecuenciaRespiratoria.valor} [rpm]</td>
               </tr>
               <tr>
                 <td>
@@ -237,7 +234,7 @@ function ModalDatos({ show, onHide, income }) {
                 </td>
                 <td>
                   {income.tensionArterial.sistolica.valor} /{" "}
-                  {income.tensionArterial.diastolica.valor}
+                  {income.tensionArterial.diastolica.valor} [mmHg]
                 </td>
               </tr>
             </tbody>

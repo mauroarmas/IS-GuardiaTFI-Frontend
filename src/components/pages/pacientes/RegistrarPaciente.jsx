@@ -2,7 +2,6 @@ import { Container } from "react-bootstrap";
 import "../../../styles/modulos.css";
 import "../../../styles/registroForm.css";
 import { useForm } from "react-hook-form";
-import { nivelesEmergencia } from "../../../helpers/nivelEmergencia";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -68,19 +67,15 @@ function RegistrarPaciente() {
         numeroAfiliado: parseInt(pacienteData.numAfil, 10),
       };
       pacienteData = { ...pacienteData, obraSocial };
-
     }
-          delete pacienteData.obSoc;
-      delete pacienteData.numAfil;
+    delete pacienteData.obSoc;
+    delete pacienteData.numAfil;
 
     console.log(pacienteData);
 
     try {
-      await axiosClient.post(
-        "/pacientes",
-        pacienteData
-      );
-      
+      await axiosClient.post("/pacientes", pacienteData);
+
       Swal.fire({
         title: "Paciente agregado",
         text: "El paciente se agregó exitosamente.",
@@ -93,6 +88,15 @@ function RegistrarPaciente() {
 
       if (error.response) {
         console.log("Error response data:", error.response.data);
+        if (error.response.status === 500) {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salió mal!",
+            text:
+              "Ya existe un paciente con el CUIL ingresado.",
+          });
+          return;
+        }
         Swal.fire({
           icon: "error",
           title: "Algo salió mal!",

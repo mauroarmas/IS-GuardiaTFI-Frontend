@@ -41,7 +41,7 @@ h2, h3, h4, h5{
   max-height: 225px;
   min-width: 300px;
 }
-.span-urgency{
+.span-urgency, .spanCardAtencion{
   color: #212529;
   text-decoration: none;
 }

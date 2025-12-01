@@ -1,8 +1,4 @@
-import {
-  Container,
-  Table,
-  Form,
-} from "react-bootstrap";
+import { Container, Table, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../../../styles/modulos.css";
@@ -14,9 +10,9 @@ function ModuloPacientes() {
 
   const fetchData = async () => {
     try {
-      const response = await axiosClient.get(
-        `/paciente`
-      );
+      const response = await axiosClient.get(`/pacientes`);
+
+      console.log("Fetched patients:", response.data);
 
       setPacientes(response.data);
     } catch (error) {
@@ -30,7 +26,7 @@ function ModuloPacientes() {
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const patientsPerPage = 10;
+  const patientsPerPage = 5;
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
 
@@ -87,21 +83,30 @@ function ModuloPacientes() {
           <Table responsive striped bordered hover>
             <thead>
               <tr>
-                <th>CUIL</th>
-                <th>Apellido</th>
-                <th>Nombre</th>
-                <th>Obra Social</th>
-                <th>Domicilio</th>
+                <th style={{ width: "10%" }}>CUIL</th>
+                <th style={{ width: "25%" }}>Nombre Completo</th>
+                <th style={{ width: "15%" }}>Obra Social</th>
+                <th style={{ width: "30%" }}>Domicilio</th>
               </tr>
             </thead>
             <tbody>
               {currentPatients.map((paciente) => (
-                <tr key={paciente.id}>
+                <tr key={paciente.cuil}>
                   <td>{paciente.cuil}</td>
-                  <td>{paciente.apellido}</td>
-                  <td>{paciente.nombre}</td>
-                  <td>{paciente.obraSocial}</td>
-                  <td>{paciente.domicilio}</td>
+                  <td>
+                    {paciente.apellido} {paciente.nombre}
+                  </td>
+
+                  <td>
+                    {paciente.obraSocial
+                      ? `${paciente.obraSocial.obraSocial?.nombre} (${paciente.obraSocial.numeroAfiliado})`
+                      : "Sin Obra Social"}
+                  </td>
+
+                  <td>
+                    {paciente.domicilio.calle} {paciente.domicilio.numero} -{" "}
+                    {paciente.domicilio.localidad}
+                  </td>
                 </tr>
               ))}
             </tbody>

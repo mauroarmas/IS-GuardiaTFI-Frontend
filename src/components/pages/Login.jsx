@@ -50,7 +50,7 @@ function Login() {
           icon: "success",
           title: "Inicio de sesión exitoso",
           showConfirmButton: false,
-          timer: 1100,
+          timer: 620,
         });
       } else {
         throw new Error("El servidor no respondió con los datos esperados");

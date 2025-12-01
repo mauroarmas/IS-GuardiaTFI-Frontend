@@ -42,16 +42,15 @@ function RegistrarIngreso() {
     try {
       setCargandoPaciente(true);
 
-      const response = await axiosClient.get(
-        `/pacientes/${cuil}`
-      );
+      const response = await axiosClient.get(`/pacientes/${cuil}`);
 
       setPaciente(response.data);
       setCamposHabilitados(true);
       Swal.fire({
         title: "Paciente encontrado",
         icon: "success",
-        timer: 1000,
+        showConfirmButton: false,
+        timer: 620,
       });
     } catch (error) {
       setPaciente(null);
@@ -280,7 +279,7 @@ function RegistrarIngreso() {
                     disabled={!camposHabilitados}
                     type="number"
                     step="any"
-                    placeholder="Temperatura*"
+                    placeholder="Temperatura [°C]*"
                     className="w-100"
                     {...register("temperatura", {
                       required: "La temperatura es obligatoria",
@@ -306,19 +305,19 @@ function RegistrarIngreso() {
                     disabled={!camposHabilitados}
                     type="number"
                     step="any"
-                    placeholder="Frecuencia Cardiaca*"
+                    placeholder="Frecuencia Cardiaca [lpm]*"
                     className="w-100"
                     {...register("frecuenciaCardiaca", {
                       required: "La Frec. Cardiaca es obligatoria",
                       min: {
                         value: 30,
                         message:
-                          "La frecuencia cardiaca debe ser al menos 30 bpm",
+                          "La frecuencia cardiaca debe ser al menos 30 [lpm]",
                       },
                       max: {
                         value: 200,
                         message:
-                          "La frecuencia cardiaca debe ser como máximo 200 bpm",
+                          "La frecuencia cardiaca debe ser como máximo 200 [lpm]",
                       },
                     })}
                   />
@@ -336,7 +335,7 @@ function RegistrarIngreso() {
                     disabled={!camposHabilitados}
                     type="number"
                     step="any"
-                    placeholder="Frecuencia Respiratoria*"
+                    placeholder="Frecuencia Respiratoria [rpm]*"
                     className="w-100"
                     {...register("frecuenciaRespiratoria", {
                       required: "La Frec. Respiratoria es obligatoria",
@@ -361,7 +360,7 @@ function RegistrarIngreso() {
                   )}
                 </div>
                 <div className="w-25">
-                  <label>Presion Arterial</label>
+                  <label>Presion Arterial [mmHg]</label>
                   <div className="d-flex gap-3">
                     <div>
                       <input
