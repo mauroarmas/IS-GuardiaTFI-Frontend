@@ -347,7 +347,7 @@ function RegistrarIngreso() {
                       max: {
                         value: 60,
                         message:
-                          "La frecuencia respiratoria debe ser como máximo 40 rpm",
+                          "La frecuencia respiratoria debe ser como máximo 60 rpm",
                       },
                     })}
                   />

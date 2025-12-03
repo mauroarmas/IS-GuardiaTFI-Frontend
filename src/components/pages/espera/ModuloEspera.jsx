@@ -76,7 +76,9 @@ function App() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const response = await axiosClient.get(`/atencion/${idMedico}`);
-          navigate(`/registrarAtencion`, { state: { ingreso: response.data.ingreso} });
+          navigate(`/registrarAtencion`, {
+            state: { ingreso: response.data.ingreso },
+          });
         }
       });
     } else {
@@ -150,41 +152,58 @@ function App() {
             </div>
 
             {/* Card */}
-            <div className="my-4 ms-auto card w-50">
-              <div className="card-header">
-                <strong>Siguiente en Espera: </strong>
-                {getColorByUrgencyLevel(incomes[0]?.nivelEmergencia)}
-              </div>
-              <div className="card-body">
-                {incomes.length === 0 ? (
+
+            {incomes.length === 0 ? (
+              <div className="my-4 ms-auto card w-50">
+                <div className="card-header">
+                  <strong>No hay pacientes en espera</strong>
+                </div>
+                <div className="card-body">
                   <p>No hay pacientes en espera.</p>
-                ) : rol === "medico" && atencionPendiente ? (
-                  <div>
-                    <h5 className="card-title text-center"> <i className="bi bi-exclamation-triangle"></i> Tiene una Atención en curso</h5>
-                    <p>
-                      
-                      Debe finalizar la atención actual antes de iniciar una
-                      nueva.
-                    </p>
-                    <strong>Paciente pendiente</strong>
-                    <p>{pacientePendiente}</p>
-                    <a
-                      className="login-btn mx-auto w-50"
-                      onClick={() => nuevaAtencion()}
-                    >
-                      <i className="bi bi-clipboard-plus me-2"></i> Continuar Atención
-                    </a>
-                  </div>
-                ) : (
+                </div>
+              </div>
+            ) : rol === "medico" && atencionPendiente ? (
+              <div className="my-4 ms-auto card w-50">
+                <div className="card-header">
+                  <strong>Atención en Curso</strong>
+                </div>
+                <div className="card-body">
+                  <h5 className="card-title text-center">
+                    <i className="bi bi-exclamation-triangle"></i> Tiene una
+                    Atención en curso
+                  </h5>
+                  <p>
+                    Debe finalizar la atención actual antes de iniciar una
+                    nueva.
+                  </p>
+                  <strong>Paciente pendiente:</strong>
+                  <p>{pacientePendiente}</p>
+                  <a
+                    className="login-btn mx-auto w-50"
+                    onClick={() => nuevaAtencion()}
+                  >
+                    <i className="bi bi-clipboard-plus me-2"></i> Continuar
+                    Atención
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <div className="my-4 ms-auto card w-50">
+                <div className="card-header">
+                  <strong>Siguiente en Espera: </strong>
+                  {getColorByUrgencyLevel(incomes[0]?.nivelEmergencia)}
+                </div>
+                <div className="card-body">
                   <CardProximoIngreso
                     ingreso={incomes[0]}
                     rol={rol}
                     nuevaAtencion={nuevaAtencion}
                     handleShowModal={handleShowModal}
                   />
-                )}
+                </div>
               </div>
-            </div>
+            )}
+
           </div>
 
           <div className="d-flex">
