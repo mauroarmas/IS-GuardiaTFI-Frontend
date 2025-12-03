@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { getColorByUrgencyLevel } from "../../../helpers/nivelEmergencia";
+import axiosClient from "../../../utils/axiosClient";
+import { getTokenObject } from "../../../helpers/functions";
 
 function RegistrarAtencion() {
   const {
@@ -17,38 +19,53 @@ function RegistrarAtencion() {
 
   const location = useLocation();
   const ingreso = location.state?.ingreso || "";
+  const idMedico = getTokenObject()?.idProfesional;
 
   const navigate = useNavigate();
 
   const onSubmit = async (atencionData) => {
-    try {
-      Swal.fire({
-        title: "Informe agregado",
-        text: "El informe se agregó exitosamente.",
-        icon: "success",
-      }).then(() => {
-        navigate(`/`);
-      });
-    } catch (error) {
-      console.error("Error al agregar el paciente:", error);
-
-      if (error.response) {
-        console.log("Error response data:", error.response.data);
-        Swal.fire({
-          icon: "error",
-          title: "Algo salió mal!",
-          text:
-            "Hubo un error al registrar la atencion: " +
-            (error.response.data.message || "Error desconocido"),
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salió mal!",
-          text: "Hubo un error desconocido al registrar la atencion",
-        });
+    Swal.fire({
+      title: "¿Desea Finalizar la atención?",
+      text: "Una vez finalizada, no podrá modificarse el informe cerrando la atención.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Sí, finalizar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosClient.patch(`/atencion`, {
+            idMedico: idMedico,
+            informe: atencionData.informe,
+          });
+          Swal.fire({
+            title: "Atención Finalizada",
+            text: "El informe se agregó exitosamente a la atención.",
+            icon: "success",
+          }).then(() => {
+            navigate(`/`);
+          });
+        } catch (error) {
+          if (error.response) {
+            console.log("Error response data:", error.response.data);
+            Swal.fire({
+              icon: "error",
+              title: "Algo salió mal!",
+              text:
+                "Hubo un error al registrar la atencion: " +
+                (error.response.data.message || "Error desconocido"),
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Algo salió mal!",
+              text: "Hubo un error desconocido al registrar la atencion",
+            });
+          }
+        }
       }
-    }
+    });
   };
 
   return (
@@ -81,28 +98,28 @@ function RegistrarAtencion() {
               <div className="d-flex justify-content-between"></div>
             </div>
             <Table hover className="w-50 my-auto">
-              <tbody> 
+              <tbody>
                 <tr>
                   <td>
-                    <i class="bi bi-thermometer-half"></i> Temperatura
+                    <i className="bi bi-thermometer-half"></i> Temperatura
                   </td>
                   <td>{ingreso.temperatura} [°C]</td>
                 </tr>
                 <tr>
                   <td>
-                    <i class="bi bi-heart-pulse-fill"></i> Frecuencia Cardiaca
+                    <i className="bi bi-heart-pulse-fill"></i> Frecuencia Cardiaca
                   </td>
                   <td>{ingreso.frecuenciaCardiaca.valor} [lpm]</td>
                 </tr>
                 <tr>
                   <td>
-                    <i class="bi bi-lungs-fill"></i> Frecuencia Respiratoria
+                    <i className="bi bi-lungs-fill"></i> Frecuencia Respiratoria
                   </td>
                   <td>{ingreso.frecuenciaRespiratoria.valor} [rpm]</td>
                 </tr>
                 <tr>
                   <td>
-                    <i class="bi bi-droplet-half"></i>
+                    <i className="bi bi-droplet-half"></i>
                     Tensión Arterial
                   </td>
                   <td>
