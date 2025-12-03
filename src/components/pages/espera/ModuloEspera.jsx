@@ -6,17 +6,23 @@ import axiosClient from "../../../utils/axiosClient";
 import Grafico from "../../common/Grafico";
 import { getTokenObject } from "../../../helpers/functions";
 import Swal from "sweetalert2";
-import { getColorByUrgencyLevel, nivelesEmergencia } from "../../../helpers/nivelEmergencia";
+import {
+  getColorByUrgencyLevel,
+  nivelesEmergencia,
+} from "../../../helpers/nivelEmergencia";
+import CardProximoIngreso from "./CardProximoIngreso";
 
 function App() {
   const [incomes, setIncomes] = useState([]);
   const [chartData, setChartData] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [selectedIncome, setSelectedIncome] = useState(null);
+  const [atencionPendiente, setAtencionPendiente] = useState(null);
+  const [pacientePendiente, setPacientePendiente] = useState("");
   const navigate = useNavigate();
 
   const rol = getTokenObject()?.rol;
-
+  const idMedico = getTokenObject()?.idProfesional;
 
   const fetchIncomes = async () => {
     try {
@@ -46,7 +52,7 @@ function App() {
     // Contar ingresos
     response.data.forEach((ingreso) => {
       const id = Number(ingreso.nivelEmergencia);
- 
+
       if (resumen[id] !== undefined) resumen[id]++;
     });
 
@@ -58,26 +64,61 @@ function App() {
   };
 
   const nuevaAtencion = (income) => {
-    Swal.fire({
-      title: "¿Desea atender a este paciente?",
-      text: "Quitará al paciente de la lista de espera y no podrá cancelar la atención una vez iniciada.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "Sí, atender paciente",
-      cancelButtonText: "Cancelar",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        navigate(`/registrarAtencion`, { state: { ingreso: income } });
-        await axiosClient.get("/ingreso/reclamar-ingreso");
-      }
-    });
+    if (atencionPendiente) {
+      Swal.fire({
+        title: "¿Desea continuar la atención?",
+        text: "Debe finalizar su atención actual antes de iniciar una nueva.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Sí, continuar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await axiosClient.get(`/atencion/${idMedico}`);
+          navigate(`/registrarAtencion`, { state: { ingreso: response.data.ingreso} });
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "¿Desea atender a este paciente?",
+        text: "Quitará al paciente de la lista de espera y no podrá cancelar la atención una vez iniciada.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Sí, atender paciente",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          navigate(`/registrarAtencion`, { state: { ingreso: income } });
+          await axiosClient.get(`/ingreso/reclamar-ingreso/${idMedico}`);
+        }
+      });
+    }
   };
 
-
+  const verificarAtencionPendiente = async () => {
+    try {
+      const response = await axiosClient.get(`/atencion/${idMedico}`);
+      if (response.status === 404) {
+        console.log("No hay atencion pendiente");
+        setAtencionPendiente(false);
+      } else {
+        console.log("Hay atencion pendiente");
+        const paciente = `${response.data.ingreso.paciente.nombre} ${response.data.ingreso.paciente.apellido} (${response.data.ingreso.paciente.cuil})`;
+        setPacientePendiente(paciente);
+        setAtencionPendiente(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     fetchIncomes();
+    if (rol === "medico") {
+      verificarAtencionPendiente();
+    }
   }, []);
 
   return (
@@ -86,7 +127,7 @@ function App() {
         <div>
           <div className="d-flex align-items-center">
             {/* Titulo */}
-            <div className="d-flex flex-column" style={{ width: "230px"}}>
+            <div className="d-flex flex-column" style={{ width: "230px" }}>
               <h2>Cola de Espera</h2>
               <div className="mt-4">
                 {rol !== "enfermero" ? null : (
@@ -99,8 +140,7 @@ function App() {
             </div>
 
             {/* Gráfico */}
-            <div className="contenedorGrafico" >
-
+            <div className="contenedorGrafico">
               <Grafico
                 arrayLabels={chartData.labels || []}
                 arrayData={chartData.data || []}
@@ -118,30 +158,30 @@ function App() {
               <div className="card-body">
                 {incomes.length === 0 ? (
                   <p>No hay pacientes en espera.</p>
-                ) : (
+                ) : rol === "medico" && atencionPendiente ? (
                   <div>
-                    <h5 className="card-title">
-                      {incomes[0].paciente.nombre} {incomes[0].paciente.apellido}
-                    </h5>
-                    <p className="card-text">{incomes[0]?.informe}</p>
-                    <div className="d-flex justify-content-between">
-                      {rol !== "medico" ? null : (
-                        <a 
-                          className="login-btn"
-                          onClick={() => nuevaAtencion(incomes[0])}
-                        >
-                          <i className="bi bi-clipboard-plus me-2"></i> Atender
-                        </a>
-                      )}
-
-                      <a
-                        className="login-btn"
-                        onClick={() => handleShowModal(incomes[0])}
-                      >
-                        <i className="bi bi-activity me-2"></i> Ver Datos
-                      </a>
-                    </div>
+                    <h5 className="card-title text-center"> <i className="bi bi-exclamation-triangle"></i> Tiene una Atención en curso</h5>
+                    <p>
+                      
+                      Debe finalizar la atención actual antes de iniciar una
+                      nueva.
+                    </p>
+                    <strong>Paciente pendiente</strong>
+                    <p>{pacientePendiente}</p>
+                    <a
+                      className="login-btn mx-auto w-50"
+                      onClick={() => nuevaAtencion()}
+                    >
+                      <i className="bi bi-clipboard-plus me-2"></i> Continuar Atención
+                    </a>
                   </div>
+                ) : (
+                  <CardProximoIngreso
+                    ingreso={incomes[0]}
+                    rol={rol}
+                    nuevaAtencion={nuevaAtencion}
+                    handleShowModal={handleShowModal}
+                  />
                 )}
               </div>
             </div>
@@ -211,25 +251,25 @@ function ModalDatos({ show, onHide, income }) {
             <tbody>
               <tr>
                 <td>
-                  <i class="bi bi-thermometer-half"></i> Temperatura
+                  <i className="bi bi-thermometer-half"></i> Temperatura
                 </td>
                 <td>{income.temperatura} [°C]</td>
               </tr>
               <tr>
                 <td>
-                  <i class="bi bi-heart-pulse-fill"></i> Frecuencia Cardiaca
+                  <i className="bi bi-heart-pulse-fill"></i> Frecuencia Cardiaca
                 </td>
                 <td>{income.frecuenciaCardiaca.valor} [lpm]</td>
               </tr>
               <tr>
                 <td>
-                  <i class="bi bi-lungs-fill"></i> Frecuencia Respiratoria
+                  <i className="bi bi-lungs-fill"></i> Frecuencia Respiratoria
                 </td>
                 <td>{income.frecuenciaRespiratoria.valor} [rpm]</td>
               </tr>
               <tr>
                 <td>
-                  <i class="bi bi-droplet-half"></i>
+                  <i className="bi bi-droplet-half"></i>
                   Tensión Arterial
                 </td>
                 <td>
