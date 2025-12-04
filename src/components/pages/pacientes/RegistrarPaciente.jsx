@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Checkbox from "../../common/CheckBox";
+import Checkbox from "../../common/Checkbox";
 import axiosClient from "../../../utils/axiosClient";
 
 function RegistrarPaciente() {
