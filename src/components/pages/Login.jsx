@@ -21,7 +21,7 @@ function Login() {
     try {
       setLoading(true);
       const datos = {
-        email: data.email,
+        email: data.email.trim().toLowerCase(),
         password: data.password,
       };
       const response = await axios.post(endpoint, datos);
