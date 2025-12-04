@@ -215,71 +215,82 @@ function App() {
           <div className="d-flex">
             {/* Tabla */}
             <div className="table-responsive table-container w-100 ">
-              {incomes.length === 0 ? (
-                <h4 className="text-center mt-4">
-                  No hay pacientes en la cola de espera.
-                </h4>
-              ) : (
+              {loading ? (
+                // 👉 PRIMERO EL SKELETON
                 <Table responsive striped bordered hover>
                   <thead>
                     <tr>
-                      <th style={{ width: "15%" }}>Nivel de Emergencia</th>
-                      <th style={{ width: "15%" }}>Paciente</th>
-                      <th style={{ width: "15%" }}>Enfermera</th>
-                      <th style={{ width: "15%" }}>Datos de Ingreso</th>
+                      <th>Nivel de Emergencia</th>
+                      <th>Paciente</th>
+                      <th>Enfermera</th>
+                      <th>Datos de Ingreso</th>
                       <th>Informe</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {loading
-                      ? skeletonRows.map((_, i) => (
-                          <tr key={i}>
-                            <td>
-                              <div className="skeleton skeleton-text"></div>
-                            </td>
-                            <td>
-                              <div className="skeleton skeleton-text"></div>
-                            </td>
-                            <td>
-                              <div className="skeleton skeleton-text"></div>
-                            </td>
-                            <td>
-                              <div className="skeleton skeleton-btn"></div>
-                            </td>
-                            <td>
-                              <div className="skeleton skeleton-text"></div>
-                            </td>
-                          </tr>
-                        ))
-                      : incomes.map((ingreso, index) => (
-                          <tr key={index}>
-                            <td>
-                              {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
-                            </td>
-
-                            <td>
-                              {ingreso.paciente.nombre}{" "}
-                              {ingreso.paciente.apellido}
-                            </td>
-
-                            <td>
-                              {ingreso.enfermera.nombre}{" "}
-                              {ingreso.enfermera.apellido}
-                            </td>
-
-                            <td className="text-center">
-                              <a
-                                className="btnDatosTabla"
-                                onClick={() => handleShowModal(ingreso)}
-                              >
-                                Ver
-                              </a>
-                            </td>
-
-                            <td>{ingreso.informe}</td>
-                          </tr>
-                        ))}
+                    {skeletonRows.map((_, i) => (
+                      <tr key={i}>
+                        <td>
+                          <div className="skeleton skeleton-text"></div>
+                        </td>
+                        <td>
+                          <div className="skeleton skeleton-text"></div>
+                        </td>
+                        <td>
+                          <div className="skeleton skeleton-text"></div>
+                        </td>
+                        <td>
+                          <div className="skeleton skeleton-btn"></div>
+                        </td>
+                        <td>
+                          <div className="skeleton skeleton-text"></div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              ) : incomes.length === 0 ? (
+                // 👉 SEGUNDO: MENSAJE CUANDO NO HAY DATOS
+                <h4 className="text-center mt-4">
+                  No hay pacientes en la cola de espera.
+                </h4>
+              ) : (
+                // 👉 TERCERO: TABLA NORMAL
+                <Table responsive striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Nivel de Emergencia</th>
+                      <th>Paciente</th>
+                      <th>Enfermera</th>
+                      <th>Datos de Ingreso</th>
+                      <th>Informe</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {incomes.map((ingreso, index) => (
+                      <tr key={index}>
+                        <td>
+                          {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
+                        </td>
+                        <td>
+                          {ingreso.paciente.nombre} {ingreso.paciente.apellido}
+                        </td>
+                        <td>
+                          {ingreso.enfermera.nombre}{" "}
+                          {ingreso.enfermera.apellido}
+                        </td>
+                        <td className="text-center">
+                          <a
+                            className="btnDatosTabla"
+                            onClick={() => handleShowModal(ingreso)}
+                          >
+                            Ver
+                          </a>
+                        </td>
+                        <td>{ingreso.informe}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
               )}

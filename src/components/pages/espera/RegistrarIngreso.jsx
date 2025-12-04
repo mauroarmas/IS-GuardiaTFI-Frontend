@@ -24,9 +24,10 @@ function RegistrarIngreso() {
   const [paciente, setPaciente] = useState(null);
   const [cargandoPaciente, setCargandoPaciente] = useState(false);
   const [camposHabilitados, setCamposHabilitados] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const buscarPaciente = async () => {
-    const cuil = getValues("cuilPaciente");
+    const cuil = getValues("cuilPaciente").trim();
 
     console.log(cuil); // obtenemos el valor del input desde react-hook-form
 
@@ -45,6 +46,7 @@ function RegistrarIngreso() {
       const response = await axiosClient.get(`/pacientes/${cuil}`);
 
       setPaciente(response.data);
+      console.log("Paciente encontrado:", response.data);
       setCamposHabilitados(true);
       Swal.fire({
         title: "Paciente encontrado",
@@ -93,13 +95,14 @@ function RegistrarIngreso() {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const idEnfermera = getTokenObject()?.idProfesional;
       const nivelEmergenciaSeleccionado = nivelesEmergencia.find(
         (nivel) => nivel.nombre === data.nivelEmergencia
       );
 
       const datosEnviar = {
-        cuilPaciente: data.cuilPaciente,
+        cuilPaciente: paciente.cuil,
         idEnfermera: idEnfermera,
         nivelEmergencia: nivelEmergenciaSeleccionado.id,
         informe: data.informe,
@@ -144,6 +147,8 @@ function RegistrarIngreso() {
           text: "Hubo un error desconocido al agregar el ingreso",
         });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -422,10 +427,14 @@ function RegistrarIngreso() {
                     </div>
                   </div>
                   {errors.presionDiastolica || errors.presionSistolica ? (
-                    <p className="text-danger">
-                      {errors.presionDiastolica?.message ||
-                        errors.presionSistolica?.message}
-                    </p>
+                    <div>
+                      <p className="text-danger">
+                        {errors.presionSistolica?.message}
+                      </p>
+                      <p className="text-danger">
+                        {errors.presionDiastolica?.message}
+                      </p>
+                    </div>
                   ) : (
                     <p>&nbsp;</p> // El espacio no rompe el flujo y mantiene el espacio visual
                   )}
@@ -446,12 +455,13 @@ function RegistrarIngreso() {
               <div>
                 <button
                   type="submit"
-                  className={`login-btn ${
-                    !camposHabilitados ? "disabled" : ""
-                  }`}
-                  disabled={!camposHabilitados}
+                  className={`login-btn 
+                    ${!camposHabilitados ? "disabled" : ""} 
+                    ${loading ? "loading" : ""}
+                  `}
+                  disabled={!camposHabilitados || loading}
                 >
-                  Registrar Ingreso
+                  {loading ? "Cargando..." : "Registrar Ingreso"}
                 </button>
               </div>
             </div>
