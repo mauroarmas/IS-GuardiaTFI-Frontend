@@ -45,7 +45,7 @@ const Grafico = ({ arrayLabels = [], arrayData = [], colores=[], total }) => {
         <h5>Total: {total}</h5>
         {arrayLabels.map((label, idx) => (
           <li key={idx} style={{ fontSize: "15px", marginBottom: "2px", fontWeight: "500" }}>
-            <bold className="me-2">{colores[idx]}</bold>
+            <b className="me-2">{colores[idx]}</b>
             {label}: {arrayData[idx] || 0}
           </li>
         ))}

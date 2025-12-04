@@ -7,16 +7,18 @@ import axiosClient from "../../../utils/axiosClient";
 function ModuloPacientes() {
   const [pacientes, setPacientes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const skeletonRows = Array.from({ length: 5 }); // 5 filas de placeholder
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axiosClient.get(`/pacientes`);
-
-      console.log("Fetched patients:", response.data);
-
       setPacientes(response.data);
     } catch (error) {
       console.error("Error fetching patients:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,25 +92,44 @@ function ModuloPacientes() {
               </tr>
             </thead>
             <tbody>
-              {currentPatients.map((paciente) => (
-                <tr key={paciente.cuil}>
-                  <td>{paciente.cuil}</td>
-                  <td>
-                    {paciente.apellido} {paciente.nombre}
-                  </td>
-
-                  <td>
-                    {paciente.obraSocial
-                      ? `${paciente.obraSocial.obraSocial?.nombre} (${paciente.obraSocial.numeroAfiliado})`
-                      : "Sin Obra Social"}
-                  </td>
-
-                  <td>
-                    {paciente.domicilio.calle} {paciente.domicilio.numero} -{" "}
-                    {paciente.domicilio.localidad}
-                  </td>
-                </tr>
-              ))}
+              {loading
+                ? // 5 filas de skeleton
+                  skeletonRows.map((_, i) => (
+                    <tr key={i}>
+                      <td>
+                        <div className="skeleton skeleton-text"></div>
+                      </td>
+                      <td>
+                        <div className="skeleton skeleton-text"></div>
+                      </td>
+                      <td>
+                        <div className="skeleton skeleton-text"></div>
+                      </td>
+                      <td>
+                        <div className="skeleton skeleton-btn"></div>
+                      </td>
+                      <td>
+                        <div className="skeleton skeleton-text"></div>
+                      </td>
+                    </tr>
+                  ))
+                : currentPatients.map((paciente) => (
+                    <tr key={paciente.cuil}>
+                      <td>{paciente.cuil}</td>
+                      <td>
+                        {paciente.apellido} {paciente.nombre}
+                      </td>
+                      <td>
+                        {paciente.obraSocial
+                          ? `${paciente.obraSocial.obraSocial?.nombre} (${paciente.obraSocial.numeroAfiliado})`
+                          : "Sin Obra Social"}
+                      </td>
+                      <td>
+                        {paciente.domicilio.calle} {paciente.domicilio.numero} -{" "}
+                        {paciente.domicilio.localidad}
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </Table>
         </div>

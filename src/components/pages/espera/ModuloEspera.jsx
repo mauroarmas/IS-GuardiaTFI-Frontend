@@ -19,6 +19,8 @@ function App() {
   const [selectedIncome, setSelectedIncome] = useState(null);
   const [atencionPendiente, setAtencionPendiente] = useState(null);
   const [pacientePendiente, setPacientePendiente] = useState("");
+  const [loading, setLoading] = useState(true);
+  const skeletonRows = Array.from({ length: 3 });
   const navigate = useNavigate();
 
   const rol = getTokenObject()?.rol;
@@ -26,12 +28,15 @@ function App() {
 
   const fetchIncomes = async () => {
     try {
+      setLoading(true);
       const response = await axiosClient.get("/ingreso");
       setIncomes(response.data);
 
       armarGrafica(response);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false); // finaliza loading
     }
   };
 
@@ -143,12 +148,14 @@ function App() {
 
             {/* Gráfico */}
             <div className="contenedorGrafico">
-              <Grafico
-                arrayLabels={chartData.labels || []}
-                arrayData={chartData.data || []}
-                colores={nivelesEmergencia.map((n) => n.color)}
-                total={incomes.length}
-              />
+              {incomes.length === 0 ? null : (
+                <Grafico
+                  arrayLabels={chartData.labels || []}
+                  arrayData={chartData.data || []}
+                  colores={nivelesEmergencia.map((n) => n.color)}
+                  total={incomes.length}
+                />
+              )}
             </div>
 
             {/* Card */}
@@ -203,47 +210,79 @@ function App() {
                 </div>
               </div>
             )}
-
           </div>
 
           <div className="d-flex">
             {/* Tabla */}
             <div className="table-responsive table-container w-100 ">
-              <Table responsive striped bordered hover>
-                <thead>
-                  <tr>
-                    <th style={{ width: "15%" }}>Nivel de Emergencia</th>
-                    <th style={{ width: "15%" }}>Paciente</th>
-                    <th style={{ width: "15%" }}>Enfermera</th>
-                    <th style={{ width: "15%" }}>Datos de Ingreso</th>
-                    <th>Informe</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {incomes.map((ingreso, index) => (
-                    <tr key={index}>
-                      <td>
-                        {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
-                      </td>
-                      <td>
-                        {ingreso.paciente.nombre} {ingreso.paciente.apellido}
-                      </td>
-                      <td>
-                        {ingreso.enfermera.nombre} {ingreso.enfermera.apellido}
-                      </td>
-                      <td className="text-center">
-                        <a
-                          className="btnDatosTabla"
-                          onClick={() => handleShowModal(ingreso)}
-                        >
-                          Ver
-                        </a>
-                      </td>
-                      <td>{ingreso.informe}</td>
+              {incomes.length === 0 ? (
+                <h4 className="text-center mt-4">
+                  No hay pacientes en la cola de espera.
+                </h4>
+              ) : (
+                <Table responsive striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "15%" }}>Nivel de Emergencia</th>
+                      <th style={{ width: "15%" }}>Paciente</th>
+                      <th style={{ width: "15%" }}>Enfermera</th>
+                      <th style={{ width: "15%" }}>Datos de Ingreso</th>
+                      <th>Informe</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+
+                  <tbody>
+                    {loading
+                      ? skeletonRows.map((_, i) => (
+                          <tr key={i}>
+                            <td>
+                              <div className="skeleton skeleton-text"></div>
+                            </td>
+                            <td>
+                              <div className="skeleton skeleton-text"></div>
+                            </td>
+                            <td>
+                              <div className="skeleton skeleton-text"></div>
+                            </td>
+                            <td>
+                              <div className="skeleton skeleton-btn"></div>
+                            </td>
+                            <td>
+                              <div className="skeleton skeleton-text"></div>
+                            </td>
+                          </tr>
+                        ))
+                      : incomes.map((ingreso, index) => (
+                          <tr key={index}>
+                            <td>
+                              {getColorByUrgencyLevel(ingreso?.nivelEmergencia)}
+                            </td>
+
+                            <td>
+                              {ingreso.paciente.nombre}{" "}
+                              {ingreso.paciente.apellido}
+                            </td>
+
+                            <td>
+                              {ingreso.enfermera.nombre}{" "}
+                              {ingreso.enfermera.apellido}
+                            </td>
+
+                            <td className="text-center">
+                              <a
+                                className="btnDatosTabla"
+                                onClick={() => handleShowModal(ingreso)}
+                              >
+                                Ver
+                              </a>
+                            </td>
+
+                            <td>{ingreso.informe}</td>
+                          </tr>
+                        ))}
+                  </tbody>
+                </Table>
+              )}
             </div>
           </div>
 
