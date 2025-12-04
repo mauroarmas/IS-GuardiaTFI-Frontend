@@ -13,8 +13,15 @@ export const getTokenObject = () => {
   if (!token) return null;
 
   try {
-    return jwtDecode(token) || null;
+    const decoded = jwtDecode(token) || null;
+    if (!decoded) return null;
+
+    return {
+      ...decoded,
+      rol: decoded.rol?.toLowerCase() // normalización
+    };
   } catch {
     return null;
   }
 };
+
