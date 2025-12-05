@@ -5,36 +5,26 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Barlow", sans-serif;
+  transition: all 0.5s ease;
 }
 
 aside {
   background: linear-gradient(135deg, #3fa4e7, #00306e);
   color: white;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 6rem 1fr 8rem;
   padding: 0.75rem;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-  
-  /* Positioning and Sizing */
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  width: 11.5rem; /* Expanded width */
-  overflow: hidden;
-  z-index: 1000;
-  
-  /* Smooth Transition */
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.5s ease, padding 0.5s ease;
 }
-
-/* Override Bootstrap fixed positioning if present in JSX */
-.listDiv, .mainList {
-  position: static !important;
-  width: 100%;
-  height: 100%;
+.listDiv {
+  min-height: 100vh;
+}
+.mainList {
   display: flex;
   flex-direction: column;
+  height: 100%;
   justify-content: center;
 }
 
@@ -47,40 +37,37 @@ a {
 ul {
   list-style: none;
   padding: 0;
-  width: 100%;
 }
 
 ul li a {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem 0;
   border-radius: 0.75rem;
   cursor: pointer;
   margin-block: 0.35rem;
   padding: 0.75rem;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.5s ease-in-out;
   background-color: transparent;
   position: relative;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
-/* Hover Effect */
+/* Efecto hover suave */
 ul li a:hover {
   background-color: rgba(255, 255, 255, 0.15);
   transform: translateX(5px);
 }
 
-/* Active State */
+/* Estado activo más moderno */
 ul li a.active {
   background-color: rgb(241, 245, 249);
   color: #000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Icons */
+/* Ícono */
 ul li a i {
-  min-width: 2.5rem;
+  width: 2.5rem;
   height: 2.5rem;
   font-size: 1.3rem;
   display: flex;
@@ -89,113 +76,162 @@ ul li a i {
   transition: transform 0.3s ease;
 }
 
+/* Ícono con efecto hover */
 ul li a:hover i {
   transform: scale(1.15);
 }
 
-/* Labels */
+/* Etiqueta */
 ul li a label {
+  flex: 1;
   font-weight: 500;
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
-  cursor: pointer;
+  opacity: 0.95;
 }
 
-/* --- Mini (Collapsed) State --- */
+/* --- Versión mini (colapsada) --- */
 .mini {
   width: 5rem;
+  padding: 0.5rem;
 }
 
 .mini ul li a {
   justify-content: center;
-  padding-inline: 0;
 }
 
 .mini ul li a label {
   opacity: 0;
-  transform: translateX(20px);
-  position: absolute;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  visibility: hidden;
+  width: 0;
 }
 
-/* --- Mobile Devices --- */
+.mini ul li a:hover {
+  border-radius: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+aside,
+.mini {
+  transition: width 0.4s ease-in-out;
+}
+
+ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 0.75rem;
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+ul li a:hover::after {
+  width: 100%;
+}
+
 @media screen and (max-width: 737px) {
+  /* ❌ DESACTIVAR HOVER EN MOBILE */
+  aside ul li a:hover,
+  aside ul li a:hover i,
+  aside ul li a:hover::after {
+    background-color: transparent !important;
+    transform: none !important;
+    box-shadow: none !important;
+    width: auto !important;
+  }
+
+  /* ❌ DESACTIVAR EFECTOS DE TRANSICIÓN EN ICONOS Y LINKS */
+  aside ul li a,
+  aside ul li a i,
   aside {
-    position: fixed;
-    bottom: 0;
-    top: auto;
-    left: 0;
-    width: 100% !important; /* Force full width */
-    height: 70px; /* Fixed height for bottom bar */
-    flex-direction: row;
-    padding: 0;
-    border-right: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
-    transition: none; /* Disable width transition on mobile */
+    transition: none !important;
   }
 
-  .listDiv {
-    flex-direction: row;
-    width: 100%;
+  /* ❌ QUE EL ASIDE NO CAMBIE DE TAMAÑO EN MOBILE */
+  aside {
+    width: 100% !important;
   }
 
-  .mainList {
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  ul {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-    margin: 0;
-  }
-
-  ul li {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    height: 100%;
-  }
-
-  ul li a {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    border-radius: 0;
-    height: 100%;
-    width: 100%;
-    gap: 0;
-  }
-
-  ul li a:hover {
-    transform: none;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  ul li a i {
-    font-size: 1.5rem;
-    margin-bottom: 2px;
-    height: auto;
-    min-width: auto;
-  }
-
-  /* Hide labels on mobile for a cleaner look */
-  ul li a label {
-    display: none;
-  }
-
-  /* Ensure mini class doesn't break mobile */
+  /* ❌ MODO MINI DESACTIVADO COMPLETAMENTE EN MOBILE */
   .mini {
     width: 100% !important;
   }
+
+  .mini ul li a label {
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: auto !important;
+  }
+
+  aside {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    height: 74px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+  }
+  aside ul {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .listDiv {
+    min-height: 100% !important;
+  }
+  .mainList {
+    min-height: 100% !important;
+    justify-content: space-around !important;
+    flex-direction: row !important;
+  }
+
+  /* El wrapper ya no ocupa toda la pantalla */
+
+  aside ul li a {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 0;
+    border-radius: 0;
+    height: 100%;
+  }
+
+  /* El mini no aplica en mobile */
+  .mini {
+    width: 100% !important;
+    padding: 0;
+  }
+  a{
+    margin: 0 !important;
+  }
+  a label{
+    display: none !important;
+  }
+  .navLinksIcon{
+    padding: 20px;
+    font-size: 1.8rem !important;
+    margin: 0 30px;
+  }
+  .listDiv{
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
 }

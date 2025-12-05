@@ -31,6 +31,7 @@ const SideBar = () => {
               ? "d-none"
               : "",
           ].join(" ")}
+          style={{ width: isMini ? "4.17rem" : "11.5rem" }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -47,7 +48,7 @@ const SideBar = () => {
                   }
                 >
                   <i className="bi bi-clipboard2-pulse-fill navLinksIcon"></i>
-                  <label className="me-5">En espera</label>
+                  {!isMini && <label className="me-5">En espera</label>}
                 </NavLink>
               </li>
 
@@ -57,7 +58,7 @@ const SideBar = () => {
                   className={({ isActive }) => (isActive ? "active" : "")}
                 >
                   <i className="bi bi-people-fill navLinksIcon"></i>
-                  <label className="me-5">Pacientes</label>
+                  {!isMini && <label className="me-5">Pacientes</label>}
                 </NavLink>
               </li>
             </ul>
