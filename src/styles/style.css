@@ -89,3 +89,77 @@ h2, h3, h4, h5{
   }
 }
 
+.card{
+  margin: 20px 0 20px auto;
+  width: 50%;
+}
+
+.pagination{
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+@media screen and (max-width: 737px) {
+
+    .userIcon{
+        visibility: hidden;
+    }
+    #cerrarSesionText{
+      display: none;
+    }
+    .contenedorPrincipal{
+        flex-direction: column-reverse;
+    }
+    .contenedorTituloGrafico{
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+    }
+    #elemento1{
+      flex-direction: row !important;
+      justify-content: center !important;
+      align-items: center !important;
+      margin: 10px auto;
+      width: 80% !important;
+    }
+    #elemento1 h2{
+      display: none;
+    }
+    #btnIngreso{
+      margin: 0 !important;
+    }
+    .card{
+      width: 80%;
+      margin: 20px 0 40px 0;
+    }
+    #mbTable{
+      margin-bottom: 60px;
+    }
+
+    /* formularios */
+    .form-container{
+      margin-bottom: 200px !important;
+    }
+    .form-row{
+      flex-direction: column;
+    }
+    .form-row .w-50{
+      width: 100% !important;
+    }
+    .form-row .w-75{
+      width: 100% !important;
+    }
+    .form-row .w-25{
+      width: 100% !important;
+      padding: 0 !important;
+    }
+
+    .pagination{
+      margin: 0 0 40px 0 !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px){
+    
+}
+

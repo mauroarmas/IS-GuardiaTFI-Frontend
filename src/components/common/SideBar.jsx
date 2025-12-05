@@ -31,12 +31,12 @@ const SideBar = () => {
               ? "d-none"
               : "",
           ].join(" ")}
-          style={{ width: isMini ? "4.17rem" : "13rem" }}
+          style={{ width: isMini ? "4.17rem" : "11.5rem" }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="link d-flex flex-column justify-content-between min-vh-100 position-fixed">
-            <ul className="min-vh-100 d-flex flex-column justify-content-center position-fixed">
+          <div className="link d-flex flex-column justify-content-between min-vh-100 position-fixed listDiv">
+            <ul className="min-vh-100 d-flex flex-column justify-content-center position-fixed mainList">
               <li>
                 <NavLink
                   to="/"
@@ -47,7 +47,7 @@ const SideBar = () => {
                       : ""
                   }
                 >
-                  <i className="bi bi-clipboard2-pulse-fill"></i>
+                  <i className="bi bi-clipboard2-pulse-fill navLinksIcon"></i>
                   {!isMini && <label className="me-5">En espera</label>}
                 </NavLink>
               </li>
@@ -57,7 +57,7 @@ const SideBar = () => {
                   to="/moduloPacientes"
                   className={({ isActive }) => (isActive ? "active" : "")}
                 >
-                  <i className="bi bi-people-fill"></i>
+                  <i className="bi bi-people-fill navLinksIcon"></i>
                   {!isMini && <label className="me-5">Pacientes</label>}
                 </NavLink>
               </li>

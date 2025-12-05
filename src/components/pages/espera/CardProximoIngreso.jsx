@@ -7,7 +7,7 @@ const CardProximoIngreso = ({ ingreso, rol, nuevaAtencion, handleShowModal }) =>
         {ingreso.paciente.nombre} {ingreso.paciente.apellido}
       </h5>
       <p className="card-text">{ingreso?.informe}</p>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between" id="cardButtonsDiv">
         {rol !== "medico" ? null : (
           <a className="login-btn" onClick={() => nuevaAtencion(ingreso)}>
             <i className="bi bi-clipboard-plus me-2"></i> Atender

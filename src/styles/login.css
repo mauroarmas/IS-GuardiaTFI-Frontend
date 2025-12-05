@@ -19,7 +19,8 @@ h3 {
   color: rgb(7, 103, 153);
 }
 
-.formularioLogin label ,.login-icon{
+.formularioLogin label,
+.login-icon {
   color: rgb(7, 103, 153);
 }
 .imgLogin {
@@ -46,74 +47,75 @@ h3 {
   border-color: rgb(222, 226, 230);
 }
 
- .form__group {
-    position: relative;
-    padding: 20px 0 0;
-    width: 100%;
-  }
+.form__group {
+  position: relative;
+  padding: 20px 0 0;
+  width: 100%;
+}
 
-  .form__field {
-    font-family: inherit;
-    width: 100%;
-    border: none;
-    border-bottom: 2px solid #9b9b9b;
-    outline: 0;
-    font-size: 17px;
-    color: #212529;
-    padding: 7px 0;
-    background: transparent;
-    transition: border-color 0.2s;
-  }
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 17px;
+  color: #212529;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
 
-  .form__field::placeholder {
-    color: transparent;
-  }
+.form__field::placeholder {
+  color: transparent;
+}
 
-  .form__field:placeholder-shown ~ .form__label {
-    font-size: 17px;
-    cursor: text;
-    top: 20px;
-  }
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 17px;
+  cursor: text;
+  top: 20px;
+}
 
-  .form__label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 17px;
-    color: rgb(7, 103, 153);
-    pointer-events: none;
-  }
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: rgb(7, 103, 153);
+  pointer-events: none;
+}
 
-  .form__field:focus {
-    padding-bottom: 6px;
-    border-width: 3px;
-    border-image: linear-gradient(to right, #6fc5ffff, rgb(7, 103, 153));
-    border-image-slice: 1;
-  }
+.form__field:focus {
+  padding-bottom: 6px;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #6fc5ffff, rgb(7, 103, 153));
+  border-image-slice: 1;
+}
 
-  .form__field:focus ~ .form__label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 17px;
-    color: rgb(7, 103, 153);
-    font-weight: 700;
-  }
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 17px;
+  color: rgb(7, 103, 153);
+  font-weight: 700;
+}
 
-  /* reset input */
-  .form__field:required, .form__field:invalid {
-    box-shadow: none;
-  }
+/* reset input */
+.form__field:required,
+.form__field:invalid {
+  box-shadow: none;
+}
 
-  .span1{
-        font-size: 17px;
-    color: rgb(7, 103, 153);
-    text-decoration: none;
-  }
+.span1 {
+  font-size: 17px;
+  color: rgb(7, 103, 153);
+  text-decoration: none;
+}
 
-  /* === Selector moderno de rol === */
+/* === Selector moderno de rol === */
 .role-toggle {
   position: relative;
   display: flex;
@@ -181,7 +183,6 @@ h3 {
   align-items: center;
   justify-content: center;
 }
-
 
 /* efecto de brillo animado */
 .login-btn::after {
@@ -281,4 +282,34 @@ h3 {
   background: #f3b8b8;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+@media screen and (max-width: 737px) {
+  .contenidoLogin {
+    width: 80%;
+  }
+  .backPrincipal{
+    display: flex;
+    flex-direction: column;
+  }
+  .imgRegister {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 40px;
+  }
+}
+
+@media screen and (min-width: 737px) and (max-width: 920px) {
+    .contenidoLogin {
+    width: 80%;
+  }
+  .backPrincipal{
+    display: flex;
+    flex-direction: column;
+  }
+  .imgRegister {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 40px;
+  }
 }
