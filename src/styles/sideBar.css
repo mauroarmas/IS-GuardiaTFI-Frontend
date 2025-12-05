@@ -132,6 +132,14 @@ ul li a:hover::after {
 }
 
 @media screen and (max-width: 737px) {
+  .mainList {
+
+    height: 20%;
+  }
+  .listDiv{
+    max-height: auto !important;
+  }
+
   /* ❌ DESACTIVAR HOVER EN MOBILE */
   aside ul li a:hover,
   aside ul li a:hover i,
@@ -191,10 +199,10 @@ ul li a:hover::after {
     margin: 0;
   }
   .listDiv {
-    min-height: 100% !important;
+    min-height: 19.65% !important;
   }
   .mainList {
-    min-height: 100% !important;
+    min-height: 19% !important;
     justify-content: space-around !important;
     flex-direction: row !important;
   }
