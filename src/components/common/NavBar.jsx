@@ -43,7 +43,7 @@ const NavBar = () => {
 
         {/* Usuario */}
         {rol ? (
-          <div className="d-flex align-items-center flex-column ms-5">
+          <div className="d-flex align-items-center flex-column ms-5 userIcon">
             <i className="bi bi-person-circle" id="loginButtom"></i>
             <h6>Bienvenido {rol}</h6>
           </div>
@@ -60,7 +60,7 @@ const NavBar = () => {
               className="btn text-dark text-decoration-none d-flex align-items-center"
             >
               <i className="bi bi-box-arrow-right me-2" id="loginButtom"></i>
-              <span>Cerrar Sesión</span>
+              <span id="cerrarSesionText">Cerrar Sesión</span>
             </Link>
           ) : (
             <Link

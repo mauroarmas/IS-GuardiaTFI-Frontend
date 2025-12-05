@@ -132,13 +132,13 @@ function App() {
     <div className="backPrincipal">
       <Container>
         <div>
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center contenedorTituloGrafico ">
             {/* Titulo */}
-            <div className="d-flex flex-column" style={{ width: "230px" }}>
+            <div className="d-flex flex-column" style={{ width: "230px" }} id="elemento1">
               <h2>Cola de Espera</h2>
               <div className="mt-4">
                 {rol !== "enfermero" ? null : (
-                  <Link className="login-btn w-50 " to="/registrarIngreso">
+                  <Link className="login-btn w-50 " to="/registrarIngreso" id="btnIngreso">
                     <i className="bi bi-arrow-right-square me-2"></i> Nuevo
                     Ingreso
                   </Link>
@@ -161,7 +161,7 @@ function App() {
             {/* Card */}
 
             {incomes.length === 0 ? (
-              <div className="my-4 ms-auto card w-50">
+              <div className="card">
                 <div className="card-header">
                   <strong>No hay pacientes en espera</strong>
                 </div>
@@ -170,7 +170,7 @@ function App() {
                 </div>
               </div>
             ) : rol === "medico" && atencionPendiente ? (
-              <div className="my-4 ms-auto card w-50">
+              <div className="card">
                 <div className="card-header">
                   <strong>Atención en Curso</strong>
                 </div>
@@ -195,7 +195,7 @@ function App() {
                 </div>
               </div>
             ) : (
-              <div className="my-4 ms-auto card w-50">
+              <div className="card">
                 <div className="card-header">
                   <strong>Siguiente en Espera: </strong>
                   {getColorByUrgencyLevel(incomes[0]?.nivelEmergencia)}
@@ -214,10 +214,10 @@ function App() {
 
           <div className="d-flex">
             {/* Tabla */}
-            <div className="table-responsive table-container w-100 ">
+            <div className="table-responsive table-container w-100 " id="mbTable">
               {loading ? (
                 // 👉 PRIMERO EL SKELETON
-                <Table responsive striped bordered hover>
+                <Table responsive striped bordered hover >
                   <thead>
                     <tr>
                       <th>Nivel de Emergencia</th>

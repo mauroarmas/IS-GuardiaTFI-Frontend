@@ -164,7 +164,7 @@ function RegistrarIngreso() {
         </div>
 
         {/* Formulario */}
-        <div className="form-container mt-2 w-100 mb-5">
+        <div className="form-container ">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="h-100 d-flex flex-column justify-content-between"

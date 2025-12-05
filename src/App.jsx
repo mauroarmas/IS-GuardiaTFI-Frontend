@@ -11,7 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop></ScrollToTop>
-      <div className="d-flex">
+      <div className="d-flex contenedorPrincipal">
         <SideBar></SideBar>
         <div className="d-flex flex-column w-100 contenido">
           <AppRouter 
