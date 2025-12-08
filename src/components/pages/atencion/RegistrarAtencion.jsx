@@ -149,6 +149,15 @@ function RegistrarAtencion() {
                     className="w-100"
                     {...register("informe", {
                       required: "El informe es obligatorio",
+                      minLength: {
+                        value: 5,
+                        message: "El informe debe tener al menos 5 caracteres",
+                      },
+                      maxLength: {
+                        value: 500,
+                        message:
+                          "El informe no puede exceder los 500 caracteres",
+                      },
                     })}
                   />
                   {errors.informe ? (
