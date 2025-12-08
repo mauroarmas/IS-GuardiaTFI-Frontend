@@ -133,7 +133,6 @@ ul li a:hover::after {
 
 @media screen and (max-width: 737px) {
   .mainList {
-
     height: 20%;
   }
   .listDiv{
