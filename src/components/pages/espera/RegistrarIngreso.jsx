@@ -229,6 +229,15 @@ function RegistrarIngreso() {
                     rows={4} // opcional, para controlar el alto
                     {...register("informe", {
                       required: "El informe es obligatorio",
+                      minLength: {
+                        value: 5,
+                        message: "El informe debe tener al menos 5 caracteres",
+                      },
+                      maxLength: {
+                        value: 500,
+                        message:
+                          "El informe no debe exceder los 500 caracteres",
+                      },
                     })}
                   />
 
